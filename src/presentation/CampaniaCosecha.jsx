@@ -59,12 +59,25 @@ export function CampaniaCosecha({
   pendiente,
   puedeTrabajadores
 }) {
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
   const catalogo = useCarga(() => servicio.campanias(), [servicio])
   const campania =
     params.get('campania') ||
     (catalogo.datos?.find((c) => c.estado === 'ACTIVA') ?? catalogo.datos?.[0])?.id ||
     ''
+  useEffect(() => {
+    if (
+      pendiente ||
+      catalogo.cargando ||
+      catalogo.error ||
+      !campania ||
+      params.get('campania')
+    )
+      return
+    const siguientes = new URLSearchParams(params)
+    siguientes.set('campania', campania)
+    setParams(siguientes, { replace: true })
+  }, [pendiente, catalogo.cargando, catalogo.error, campania, params, setParams])
   const query = campania ? `?campania=${encodeURIComponent(campania)}` : ''
   const generar = contexto.permite('harvest.manage')
   const trabajadores = SECCIONES_TRABAJADORES.find((t) => t.id === seccion)
@@ -199,7 +212,9 @@ export function CampaniaCosecha({
           {trabajadores && <h2>{trabajadores.label}</h2>}
           <Carga
             consulta={pendiente ? { cargando: true } : catalogo}
-            skeleton={esReporte ? 'report' : seccion === 'generar' ? 'generation' : 'table'}
+            skeleton={
+              esReporte ? 'report' : seccion === 'generar' ? 'generation' : 'table'
+            }
           >
             {(campanias) => {
               const elegida = campanias.find((c) => c.id === campania)
