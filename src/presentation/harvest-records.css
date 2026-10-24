@@ -1,0 +1,336 @@
+/* Registros: frame 31:472 del módulo Cosecha de Figma. */
+.records-layout {
+  --records-border: #303030;
+  --records-head: var(--portal-table-head);
+  --records-table-text: #e2e2e2;
+}
+[data-theme='light'] .records-layout {
+  --records-border: #d0d9ca;
+  --records-table-text: #15271b;
+}
+.records-layout .content {
+  position: relative;
+  margin-top: calc(-1 * var(--home-header-height));
+  padding: 47px 48px 80px;
+  min-height: 2236px;
+}
+.harvest-records-page {
+  position: relative;
+}
+.harvest-records-page > h1 {
+  font-size: 96px;
+  line-height: 120px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.harvest-primary-tabs {
+  display: flex;
+  gap: 18px;
+  margin-top: 72px;
+  overflow-x: auto;
+}
+.harvest-primary-tab {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  flex: 0 0 179px;
+  height: 65px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+.harvest-primary-tab-tickets {
+  flex-basis: 166px;
+}
+.harvest-primary-tab.workers-tab {
+  flex-basis: 200px;
+}
+.harvest-primary-tab > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.harvest-primary-tab:hover {
+  text-decoration: none;
+  filter: brightness(1.1);
+}
+.harvest-records {
+  margin-top: 30px;
+}
+.harvest-record-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.harvest-record-select {
+  position: relative;
+  display: block;
+  width: 190px;
+  min-width: 0;
+}
+.harvest-record-toolbar > .harvest-record-select {
+  width: 280px;
+}
+.harvest-records :is(select, input) {
+  height: 48px;
+  min-height: 48px;
+  width: 100%;
+  padding: 0 38px 0 18px;
+  border: 3px solid var(--home-border);
+  border-radius: 42px;
+  background: var(--home-shell);
+  color: var(--home-text);
+  font-size: 17px;
+  font-weight: 600;
+}
+.harvest-records select {
+  appearance: none;
+  text-overflow: ellipsis;
+}
+.harvest-record-select > .home-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.harvest-record-updated {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.harvest-record-updated p {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.harvest-record-updated button {
+  padding: 0;
+  width: 36px;
+  min-height: 39px;
+  background: transparent;
+  border: 0;
+}
+.harvest-record-filters {
+  margin-top: 18px;
+  display: grid;
+  gap: 18px;
+}
+.harvest-record-search {
+  display: block;
+  max-width: 476px;
+}
+.harvest-record-search input {
+  padding-right: 18px;
+}
+.harvest-record-search input::placeholder {
+  color: var(--home-text);
+  opacity: 0.61;
+}
+.harvest-record-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 26px;
+}
+.harvest-record-date {
+  display: block;
+  position: relative;
+  width: 190px;
+}
+.harvest-record-date > img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 14px;
+  pointer-events: none;
+  filter: var(--home-icon-filter);
+}
+.harvest-record-date input {
+  color-scheme: dark;
+  padding-left: 15px;
+  padding-right: 38px;
+}
+.harvest-record-date:not(.has-value) input:not(:focus) {
+  color: transparent;
+}
+.harvest-record-date:focus-within .harvest-date-placeholder {
+  display: none;
+}
+.harvest-date-placeholder {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 18px;
+  pointer-events: none;
+  color: var(--home-text);
+  opacity: 0.61;
+  font-size: 17px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.harvest-record-date input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 12px;
+  opacity: 0;
+  cursor: pointer;
+}
+.harvest-records .harvest-clear-filters {
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: var(--home-muted);
+  font-size: 17px;
+  padding: 0;
+}
+.harvest-record-count {
+  color: var(--home-muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 34px 0 15px;
+}
+.harvest-records .harvest-record-table-scroll {
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+}
+.harvest-records .harvest-record-table {
+  table-layout: fixed;
+  min-width: 1092px;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arimo, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--records-table-text);
+}
+.harvest-record-table :is(th, td) {
+  height: 33px;
+  padding: 4px 6px;
+  border-right: 1px solid var(--records-border);
+  border-bottom: 1px solid var(--records-border);
+  background: transparent;
+  font-size: 20px;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.harvest-record-table th {
+  background: var(--records-head);
+  color: #e2e2e2;
+  font-style: italic;
+  font-weight: 700;
+}
+.harvest-record-table :is(th, td):last-child {
+  border-right: 0;
+}
+.harvest-record-table tr:last-child td {
+  border-bottom: 0;
+}
+.harvest-record-table td:nth-child(6) {
+  text-align: right;
+}
+.harvest-record-table tbody tr:hover td {
+  background: var(--home-shell);
+}
+.harvest-record-table a {
+  color: inherit;
+}
+.harvest-records > .loading-state,
+.harvest-records > [role='alert'] {
+  margin-top: 34px;
+}
+.harvest-records [role='alert'] {
+  color: var(--home-text);
+}
+.harvest-records-mark {
+  position: absolute;
+  right: 76px;
+  top: 1561px;
+  display: block;
+  max-width: none;
+  filter: var(--home-icon-filter);
+}
+@media (max-width: 1279px) {
+  .records-layout .content {
+    margin-top: 0;
+    padding: 40px 20px 64px;
+    min-height: calc(100dvh - var(--home-header-height));
+  }
+  .harvest-records-page > h1 {
+    font-size: 72px;
+    line-height: 90px;
+  }
+  .harvest-primary-tabs {
+    margin-top: 40px;
+  }
+  .harvest-records-mark {
+    display: none;
+  }
+}
+@media (max-width: 1023px) {
+  .records-layout .content {
+    min-height: calc(100dvh - 72px);
+    padding-inline: 28px;
+  }
+  .harvest-records-page > h1 {
+    font-size: 60px;
+    line-height: 72px;
+  }
+  .harvest-record-toolbar {
+    flex-wrap: wrap;
+  }
+  .harvest-record-updated {
+    margin-left: auto;
+  }
+}
+@media (max-width: 767px) {
+  .records-layout .content {
+    padding: 28px 20px 48px;
+  }
+  .harvest-records-page > h1 {
+    font-size: 48px;
+    line-height: 60px;
+  }
+  .harvest-primary-tabs {
+    margin-top: 28px;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+  .harvest-records {
+    margin-top: 22px;
+  }
+  .harvest-record-toolbar {
+    gap: 12px;
+  }
+  .harvest-record-updated {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .harvest-record-updated p {
+    font-size: 10px;
+  }
+  .harvest-record-filter-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .harvest-record-filter-row > :is(.harvest-record-select, .harvest-record-date) {
+    width: 100%;
+  }
+  .harvest-record-filter-row > .harvest-record-date {
+    grid-column: 1 / -1;
+  }
+}

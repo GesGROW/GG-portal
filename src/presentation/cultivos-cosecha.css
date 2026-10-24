@@ -1,0 +1,964 @@
+/* Paneles de referencia 1920: 678 + 13 + 712. El contenedor aporta su posición. */
+.cultivos-cosecha {
+  --cc-unit: var(--owner-scale, 1px);
+  --cc-ink: #022f2a;
+  color: var(--cc-ink);
+  color-scheme: light;
+  width: calc(1403 * var(--cc-unit));
+  max-width: 100%;
+  margin-left: calc(-9 * var(--cc-unit));
+  font-family: 'Google Sans Flex', 'Inter Variable', sans-serif;
+  font-size: calc(18 * var(--cc-unit));
+  line-height: 1.4;
+}
+.cultivos-cosecha,
+.cultivos-cosecha * {
+  box-sizing: border-box;
+}
+.cultivos-cosecha :is(button, input, select, summary) {
+  font: inherit;
+}
+.cultivos-cosecha button {
+  cursor: pointer;
+  box-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.cultivos-cosecha button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.cultivos-cosecha .cc-tabs {
+  display: flex;
+  gap: calc(10 * var(--cc-unit));
+  height: calc(56 * var(--cc-unit));
+  margin-bottom: calc(-14 * var(--cc-unit));
+  padding-left: calc(27 * var(--cc-unit));
+  position: relative;
+  z-index: 1;
+}
+.cultivos-cosecha .cc-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: calc(124 * var(--cc-unit));
+  height: calc(56 * var(--cc-unit));
+  padding: calc(10 * var(--cc-unit));
+  background: #d9d9d9;
+  border: 0;
+  border-radius: calc(30 * var(--cc-unit)) calc(30 * var(--cc-unit)) 0 0;
+  color: var(--cc-ink);
+}
+.cultivos-cosecha .cc-tabs button[aria-selected='true'] {
+  background: #eff0e2;
+}
+.cultivos-cosecha .cc-tabs button:is(:hover, :active, :focus-visible):not([aria-selected='true']) {
+  background: #d9d9d9;
+  color: var(--cc-ink);
+}
+.cultivos-cosecha .cc-tabs button span:last-child {
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-tabs button > :is(.cc-globo, .owner-icon) {
+  transform: translateY(calc(-6 * var(--cc-unit)));
+}
+.cultivos-cosecha :is(.owner-icon, .cc-globo) {
+  display: block;
+  flex: 0 0 auto;
+  width: calc(24 * var(--cc-unit));
+  height: calc(24 * var(--cc-unit));
+}
+.cultivos-cosecha .owner-icon img {
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+.cultivos-cosecha .cc-plus {
+  display: block;
+  flex: 0 0 auto;
+  width: calc(15 * var(--cc-unit));
+  height: calc(15 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-tabs .cc-plus {
+  margin-left: 0;
+  transform: translateY(calc(2 * var(--cc-unit)));
+}
+.cultivos-cosecha .cc-panels {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 678fr) minmax(0, 712fr);
+  gap: calc(13 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-panel {
+  min-width: 0;
+  height: calc(803 * var(--cc-unit));
+  padding: calc(44 * var(--cc-unit)) calc(48 * var(--cc-unit));
+  background: #eff0e2;
+}
+.cultivos-cosecha .cc-editor {
+  border-radius: calc(30 * var(--cc-unit)) 0 0 calc(30 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-discovery {
+  border-radius: 0 calc(30 * var(--cc-unit)) calc(30 * var(--cc-unit)) 0;
+  padding: calc(50 * var(--cc-unit)) calc(109 * var(--cc-unit))
+    calc(44 * var(--cc-unit)) calc(53 * var(--cc-unit));
+}
+.cultivos-cosecha :is(h2, h3, h4, p) {
+  color: inherit;
+}
+.cultivos-cosecha h2 {
+  margin: 0 0 calc(48 * var(--cc-unit));
+  font-size: calc(32 * var(--cc-unit));
+  font-weight: 600;
+  line-height: 1.2;
+}
+.cultivos-cosecha .cc-editor-title {
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-editor-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: calc(16 * var(--cc-unit));
+  margin-bottom: calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-editor-heading h2 {
+  margin: 0;
+}
+.cultivos-cosecha .cc-cancel {
+  flex: 0 0 auto;
+  min-height: calc(46 * var(--cc-unit));
+  padding: calc(8 * var(--cc-unit)) calc(30 * var(--cc-unit));
+  border: 0;
+  border-radius: calc(30 * var(--cc-unit));
+  background: #ff292d;
+  color: var(--cc-ink);
+  font-size: calc(20 * var(--cc-unit));
+  font-weight: 600;
+}
+.cultivos-cosecha .cc-cancel:hover:not(:disabled) {
+  background: #ef2025;
+}
+.cultivos-cosecha .cc-title-icons {
+  display: flex;
+  align-items: center;
+  width: calc(37 * var(--cc-unit));
+  flex-shrink: 0;
+}
+.cultivos-cosecha .cc-title-icons .owner-icon-avocado {
+  width: calc(24 * var(--cc-unit));
+  height: calc(24 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-title-icons .cc-plus {
+  margin: calc(10 * var(--cc-unit)) 0 0 calc(-2 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-join-arrow {
+  width: calc(14 * var(--cc-unit));
+  height: calc(14 * var(--cc-unit));
+  margin: calc(10 * var(--cc-unit)) 0 0 calc(-2 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-discovery-title {
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--cc-unit));
+  white-space: nowrap;
+}
+.cultivos-cosecha h3 {
+  margin: calc(20 * var(--cc-unit)) 0 calc(10 * var(--cc-unit));
+  font-size: calc(22 * var(--cc-unit));
+  font-weight: 600;
+}
+.cultivos-cosecha .cc-help {
+  margin: 0 0 calc(18 * var(--cc-unit));
+  color: #52635a;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(69 * var(--cc-unit));
+}
+.cultivos-cosecha form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.cultivos-cosecha fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.cultivos-cosecha fieldset:disabled {
+  background: transparent;
+  color: inherit;
+}
+.cultivos-cosecha .cc-form-fields {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+.cultivos-cosecha .cc-form-fields > label,
+.cultivos-cosecha .cc-campania-fields > label,
+.cultivos-cosecha .cc-fechas > label,
+.cultivos-cosecha .cc-colores legend,
+.cultivos-cosecha .cc-varieties-label {
+  font-size: calc(24 * var(--cc-unit));
+  font-weight: 500;
+  line-height: 1.2;
+}
+.cultivos-cosecha label {
+  display: block;
+  margin: 0;
+  color: inherit;
+}
+.cultivos-cosecha :is(input:not([type='radio'], [type='checkbox']), select) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: calc(48 * var(--cc-unit));
+  margin: calc(10 * var(--cc-unit)) 0 calc(36 * var(--cc-unit));
+  padding: calc(10 * var(--cc-unit)) calc(20 * var(--cc-unit));
+  border: 0;
+  border-radius: calc(25 * var(--cc-unit));
+  background: #d9d9d9;
+  color: var(--cc-ink);
+  box-shadow: none;
+}
+.cultivos-cosecha input:disabled,
+.cultivos-cosecha select:disabled {
+  opacity: 0.6;
+}
+.cultivos-cosecha .cc-colores {
+  margin-block: calc(36 * var(--cc-unit)) calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-colores > div {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: calc(8 * var(--cc-unit));
+  margin-top: calc(10 * var(--cc-unit));
+  padding: calc(5 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-color {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: calc(44 * var(--cc-unit));
+  aspect-ratio: 1;
+}
+.cultivos-cosecha .cc-color input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.cultivos-cosecha .cc-color span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--cc-color);
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 3px #000;
+}
+.cultivos-cosecha .cc-color input:checked + span {
+  box-shadow: 0 0 0 2px #022f2a;
+}
+.cultivos-cosecha .cc-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(10 * var(--cc-unit));
+  list-style: none;
+  padding: 0;
+  margin: 0 0 calc(26 * var(--cc-unit));
+  font-size: calc(15 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-steps li {
+  display: flex;
+  gap: calc(8 * var(--cc-unit));
+  align-items: center;
+  color: #52635a;
+}
+.cultivos-cosecha .cc-steps li > span {
+  display: grid;
+  place-items: center;
+  width: calc(30 * var(--cc-unit));
+  height: calc(30 * var(--cc-unit));
+  border-radius: 50%;
+  background: #dadcc9;
+}
+.cultivos-cosecha .cc-steps [aria-current] {
+  color: var(--cc-ink);
+  font-weight: 600;
+}
+.cultivos-cosecha .cc-steps [aria-current] > span {
+  background: #95b52c;
+}
+.cultivos-cosecha .cc-rows {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-right: calc(8 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-variedades {
+  height: calc(186 * var(--cc-unit));
+  margin-top: calc(8 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-numbered-row {
+  display: flex;
+  align-items: center;
+  gap: calc(20 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-numbered-row > span:first-child {
+  width: calc(82 * var(--cc-unit));
+  flex: 0 0 auto;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-numbered-row input {
+  width: calc(300 * var(--cc-unit));
+  max-width: 100%;
+  flex-shrink: 1;
+  margin-block: calc(8 * var(--cc-unit));
+  height: calc(46 * var(--cc-unit));
+  background: #e3e4d6;
+}
+.cultivos-cosecha .cc-lotes {
+  height: calc(450 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-lots-label {
+  margin: 0 0 calc(20 * var(--cc-unit));
+  font-size: calc(24 * var(--cc-unit));
+  font-weight: 500;
+}
+.cultivos-cosecha .cc-lote {
+  display: grid;
+  grid-template-columns: minmax(calc(46 * var(--cc-unit)), max-content) minmax(0, 1fr);
+  column-gap: calc(20 * var(--cc-unit));
+  padding-bottom: calc(80 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-lote > label {
+  align-self: center;
+  font-size: calc(16 * var(--cc-unit));
+  white-space: nowrap;
+}
+.cultivos-cosecha .cc-lote > input {
+  width: calc(300 * var(--cc-unit));
+  height: calc(46 * var(--cc-unit));
+  margin: 0;
+  background: #e3e4d6;
+}
+.cultivos-cosecha .cc-lot-varieties {
+  grid-column: 2;
+  margin-top: calc(18 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-lot-varieties-label {
+  display: block;
+  margin-bottom: calc(10 * var(--cc-unit));
+  font-size: calc(18 * var(--cc-unit));
+  font-weight: 500;
+}
+.cultivos-cosecha .cc-multiselect {
+  position: relative;
+  background: #e3e4d6;
+  border: 0;
+  border-radius: calc(25 * var(--cc-unit));
+  color: var(--cc-ink);
+}
+.cultivos-cosecha .cc-multiselect[open] {
+  z-index: 3;
+}
+.cultivos-cosecha summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: calc(46 * var(--cc-unit));
+  padding: calc(10 * var(--cc-unit)) calc(28 * var(--cc-unit));
+  color: var(--cc-ink);
+  list-style: none;
+  cursor: pointer;
+  font-size: calc(15 * var(--cc-unit));
+}
+.cultivos-cosecha summary::-webkit-details-marker {
+  display: none;
+}
+.cultivos-cosecha summary > span:not(.owner-icon) {
+  grid-column: 1;
+  overflow-wrap: anywhere;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha summary > .owner-icon {
+  grid-column: 2;
+  grid-row: 1;
+}
+.cultivos-cosecha .cc-multiselect fieldset {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 8px);
+  max-height: calc(180 * var(--cc-unit));
+  overflow: auto;
+  background: #e3e4d6;
+  border-radius: 24px;
+  padding: calc(12 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-multiselect label {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--cc-unit));
+  padding: calc(8 * var(--cc-unit));
+  overflow-wrap: anywhere;
+  position: relative;
+  margin-block: 4px;
+  border-radius: 999px;
+  color: #022f2a;
+}
+.cultivos-cosecha .cc-multiselect label:has(input:checked) {
+  background: #c1f13d;
+}
+.cultivos-cosecha .cc-multiselect label:hover:not(:has(input:checked)) {
+  background: #d3d8c4;
+}
+.cultivos-cosecha .cc-multiselect label:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  inset-inline: 12px;
+  bottom: -3px;
+  height: 1px;
+  background: #022f2a;
+}
+.cultivos-cosecha input[type='checkbox'] {
+  width: calc(20 * var(--cc-unit));
+  height: calc(20 * var(--cc-unit));
+  flex: 0 0 auto;
+  accent-color: #137d15;
+}
+.cultivos-cosecha .cc-fechas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(96 * var(--cc-unit));
+  margin-top: calc(26 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-fechas input {
+  background: #e3e4d6;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-date-control {
+  position: relative;
+  display: block;
+  margin: calc(10 * var(--cc-unit)) 0 calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-date-control input {
+  position: relative;
+  margin: 0;
+  padding-left: calc(32 * var(--cc-unit) + 24px);
+  padding-right: calc(12 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-date-icon,
+.cultivos-cosecha .cc-date-control input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: calc(20 * var(--cc-unit));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
+.cultivos-cosecha .cc-date-icon {
+  pointer-events: none;
+}
+.cultivos-cosecha .cc-date-control input::-webkit-calendar-picker-indicator {
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.cultivos-cosecha .cc-review {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--cc-unit));
+  flex-wrap: wrap;
+  margin-bottom: calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-review > span:last-child {
+  width: 100%;
+  color: #52635a;
+}
+.cultivos-cosecha .cc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: calc(12 * var(--cc-unit));
+  padding-top: calc(24 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-actions button,
+.cultivos-cosecha .cc-card button,
+.cultivos-cosecha .cc-request button,
+.cultivos-cosecha .cc-notice button {
+  padding: calc(13 * var(--cc-unit)) calc(24 * var(--cc-unit));
+  min-height: calc(49 * var(--cc-unit));
+  border: 0;
+  border-radius: calc(16 * var(--cc-unit));
+  background: #95b52c;
+  color: #022f2a;
+  font-weight: 600;
+}
+.cultivos-cosecha .cc-request .cc-reject {
+  background: #f92d2d;
+  color: #fff;
+}
+.cultivos-cosecha .cc-actions .cc-next {
+  width: calc(274 * var(--cc-unit));
+  height: calc(58 * var(--cc-unit));
+  border-radius: calc(30 * var(--cc-unit));
+  font-size: calc(24 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(18 * var(--cc-unit));
+  margin: 0 0 calc(12 * var(--cc-unit));
+  padding: calc(12 * var(--cc-unit));
+  background: #eff0e2;
+  border-radius: calc(12 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-error {
+  margin: calc(12 * var(--cc-unit)) 0 0;
+  color: #a51919;
+  overflow-wrap: anywhere;
+}
+.cultivos-cosecha .cc-discovery {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.cultivos-cosecha .cc-discovery-scroll {
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: calc(8 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-cards {
+  display: grid;
+  gap: calc(18 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-card {
+  padding: calc(30 * var(--cc-unit)) calc(35 * var(--cc-unit));
+  border-radius: calc(30 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-card h3 {
+  margin: 0 0 calc(16 * var(--cc-unit));
+  overflow-wrap: anywhere;
+  font-size: calc(24 * var(--cc-unit));
+  font-weight: 500;
+}
+.cultivos-cosecha .cc-card-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(14 * var(--cc-unit));
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-card-columns h4 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 500;
+}
+.cultivos-cosecha .cc-card-columns ul {
+  margin: 0;
+  padding-left: calc(18 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-card-columns li {
+  overflow-wrap: anywhere;
+}
+.cultivos-cosecha .cc-card-columns p {
+  margin: 0;
+}
+.cultivos-cosecha .cc-current-campaign {
+  margin: calc(24 * var(--cc-unit)) 0;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-crop-dot {
+  display: block;
+  width: calc(26 * var(--cc-unit));
+  height: calc(26 * var(--cc-unit));
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--cc-color, #d9d9d9);
+  border: 1px solid #0002;
+}
+.cultivos-cosecha dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: calc(8 * var(--cc-unit)) calc(18 * var(--cc-unit));
+  margin: 0 0 calc(20 * var(--cc-unit));
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha dt {
+  font-weight: 600;
+}
+.cultivos-cosecha dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.cultivos-cosecha .cc-card button {
+  display: block;
+  width: calc(400 * var(--cc-unit));
+  max-width: 100%;
+  height: calc(48 * var(--cc-unit));
+  margin-inline: auto;
+  border-radius: calc(30 * var(--cc-unit));
+  font-size: calc(24 * var(--cc-unit));
+  padding-block: 0;
+}
+.cultivos-cosecha .cc-template {
+  padding: calc(16 * var(--cc-unit));
+  margin-bottom: calc(24 * var(--cc-unit));
+  border-radius: calc(18 * var(--cc-unit));
+  background: #e2e4d2;
+  color: var(--cc-ink);
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-template h3 {
+  margin-top: 0;
+}
+.cultivos-cosecha .cc-template p {
+  margin: 0;
+}
+.cultivos-cosecha .cc-selected-crop {
+  font-size: calc(24 * var(--cc-unit));
+  font-weight: 600;
+  margin-top: 0;
+}
+.cultivos-cosecha .cc-requests {
+  border-top: 1px solid #c6c9b8;
+  margin-top: calc(28 * var(--cc-unit));
+  padding-top: calc(8 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-request {
+  border-radius: calc(18 * var(--cc-unit));
+  background: #fff;
+  padding: calc(20 * var(--cc-unit));
+  margin-top: calc(12 * var(--cc-unit));
+  overflow-wrap: anywhere;
+}
+.cultivos-cosecha .cc-request h4 {
+  margin: 0;
+  font-size: calc(20 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-request p {
+  margin: calc(5 * var(--cc-unit)) 0;
+  font-size: calc(16 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-request > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(10 * var(--cc-unit));
+  margin-top: calc(14 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(20 * var(--cc-unit));
+  min-width: 0;
+  height: calc(298 * var(--cc-unit));
+  padding: calc(30 * var(--cc-unit));
+  border-radius: calc(30 * var(--cc-unit));
+  background: #d9d9d9;
+  color: #829896;
+}
+.cultivos-cosecha .cc-empty svg {
+  width: 70px;
+  height: 70px;
+  flex: 0 0 auto;
+}
+.cultivos-cosecha .cc-empty p {
+  max-width: calc(330 * var(--cc-unit));
+  margin: 0;
+  color: #829896;
+  font-size: calc(32 * var(--cc-unit));
+  line-height: 1.15;
+  font-weight: 500;
+}
+.cultivos-cosecha .cc-refresh {
+  position: absolute;
+  top: calc(16 * var(--cc-unit));
+  right: calc(12 * var(--cc-unit));
+  min-height: 32px;
+  padding: 4px;
+  border: 0;
+  background: #e3e4d6;
+  color: var(--cc-ink);
+  opacity: 0;
+}
+.cultivos-cosecha .cc-refresh .home-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) opacity(0.8);
+}
+.cultivos-cosecha .cc-refresh:is(:hover, :active, :focus-visible) {
+  background: #c1f13d;
+}
+.cultivos-cosecha .cc-discovery:is(:hover, :focus-within) .cc-refresh {
+  opacity: 1;
+}
+.cultivos-cosecha .cc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cultivos-cosecha.cc-is-loading .cc-panel > :not(.cc-panel-skeleton) {
+  visibility: hidden;
+}
+.cultivos-cosecha .cc-panel-skeleton {
+  --skeleton-fill: #dfe2d3;
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  pointer-events: none;
+}
+.cultivos-cosecha .cc-skeleton-heading {
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--cc-unit));
+  margin-bottom: calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-icon {
+  width: calc(24 * var(--cc-unit));
+  height: calc(24 * var(--cc-unit));
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cultivos-cosecha .cc-skeleton-title {
+  width: 65%;
+  height: calc(38 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-field {
+  display: grid;
+  gap: calc(10 * var(--cc-unit));
+  margin-bottom: calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-label {
+  width: 55%;
+  height: calc(24 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-control {
+  height: calc(48 * var(--cc-unit));
+  border-radius: calc(25 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(96 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-template {
+  height: calc(142 * var(--cc-unit));
+  border-radius: calc(18 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-variety {
+  display: flex;
+  gap: calc(20 * var(--cc-unit));
+  height: calc(186 * var(--cc-unit));
+  align-items: flex-start;
+  padding-top: calc(18 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-variety .cc-skeleton-label {
+  width: 15%;
+  margin-top: calc(12 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-variety .cc-skeleton-control {
+  width: 60%;
+}
+.cultivos-cosecha .cc-skeleton-palette {
+  display: flex;
+  gap: calc(8 * var(--cc-unit));
+  margin-top: calc(36 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-palette .skeleton-block {
+  flex: 1;
+  height: auto;
+  max-width: calc(44 * var(--cc-unit));
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.cultivos-cosecha .cc-skeleton-submit {
+  position: absolute;
+  bottom: calc(69 * var(--cc-unit));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, calc(274 * var(--cc-unit)));
+  height: calc(58 * var(--cc-unit));
+  border-radius: calc(30 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: calc(24 * var(--cc-unit));
+  height: calc(298 * var(--cc-unit));
+  padding: calc(30 * var(--cc-unit));
+  border-radius: calc(30 * var(--cc-unit));
+  background: #f3f4eb;
+}
+.cultivos-cosecha .cc-skeleton-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(14 * var(--cc-unit));
+  flex: 1;
+}
+.cultivos-cosecha .cc-skeleton-columns > div {
+  display: grid;
+  align-content: start;
+  gap: calc(12 * var(--cc-unit));
+}
+.cultivos-cosecha .cc-skeleton-columns .skeleton-block {
+  height: calc(16 * var(--cc-unit));
+}
+@media (max-width: 1023px) {
+  .cultivos-cosecha {
+    --cc-unit: 1px;
+    width: 100%;
+    margin-left: 0;
+  }
+  .cultivos-cosecha .cc-panels {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .cultivos-cosecha .cc-panel {
+    height: auto;
+    min-height: 600px;
+    padding: 28px;
+    border-radius: 0 30px 30px 30px;
+  }
+  .cultivos-cosecha .cc-discovery {
+    border-radius: 30px;
+  }
+  .cultivos-cosecha .cc-editor {
+    min-height: 740px;
+  }
+  .cultivos-cosecha .cc-form-fields {
+    overflow: visible;
+  }
+  .cultivos-cosecha .cc-discovery-scroll {
+    max-height: 760px;
+  }
+  .cultivos-cosecha .cc-actions {
+    margin-top: auto;
+  }
+  .cultivos-cosecha .cc-discovery-title {
+    white-space: normal;
+    padding-right: 32px;
+  }
+  .cultivos-cosecha .cc-refresh {
+    opacity: 1;
+  }
+}
+@media (hover: none) {
+  .cultivos-cosecha .cc-refresh {
+    opacity: 1;
+  }
+}
+@media (max-width: 480px) {
+  .cultivos-cosecha .cc-empty {
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .cultivos-cosecha .cc-empty p {
+    font-size: 24px;
+  }
+  .cultivos-cosecha .cc-colores > div {
+    gap: 4px;
+  }
+  .cultivos-cosecha .cc-color span {
+    font-size: 14px;
+  }
+  .cultivos-cosecha .cc-panel {
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+  .cultivos-cosecha h2 {
+    font-size: 28px;
+  }
+  .cultivos-cosecha .cc-tabs {
+    gap: 8px;
+  }
+  .cultivos-cosecha .cc-tabs button {
+    padding: 10px;
+  }
+  .cultivos-cosecha .cc-editor-title {
+    font-size: 25px;
+    gap: 8px;
+  }
+  .cultivos-cosecha .cc-numbered-row {
+    gap: 10px;
+    font-size: 16px;
+  }
+  .cultivos-cosecha .cc-numbered-row > span:first-child {
+    width: 100px;
+  }
+  .cultivos-cosecha .cc-numbered-row input {
+    flex: 1;
+    width: 0;
+  }
+  .cultivos-cosecha .cc-actions {
+    padding-bottom: 30px;
+  }
+  .cultivos-cosecha .cc-card {
+    padding: 20px 16px;
+  }
+  .cultivos-cosecha .cc-card-columns {
+    gap: 8px;
+    font-size: 13px;
+  }
+  .cultivos-cosecha .cc-card button {
+    font-size: 20px;
+  }
+  .cultivos-cosecha .cc-next {
+    max-width: 100%;
+  }
+  .cultivos-cosecha .cc-fechas {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .cultivos-cosecha .cc-skeleton-dates {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .cultivos-cosecha .cc-steps {
+    gap: 6px;
+    font-size: 13px;
+  }
+  .cultivos-cosecha .cc-steps li {
+    gap: 5px;
+  }
+  .cultivos-cosecha .cc-steps li > span {
+    width: 24px;
+    height: 24px;
+  }
+  .cultivos-cosecha .cc-actions button {
+    padding-inline: 16px;
+  }
+  .cultivos-cosecha dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .cultivos-cosecha dd {
+    margin-bottom: 8px;
+  }
+}

@@ -1,0 +1,40 @@
+/* Use the same grid and breakpoints as the loaded Home, in every loading phase. */
+.loading-state.home-skeleton { padding: 0; }
+.home-skeleton .home-feature-cards,
+.home-skeleton .home-stats { display: grid; }
+.home-skeleton .home-stat { display: flex; align-items: center; }
+.home-skeleton-feature {
+  display: grid;
+  align-content: start;
+  gap: calc(48 * var(--owner-scale, 1px));
+  height: calc(341 * var(--owner-scale, 1px));
+  padding: calc(32 * var(--owner-scale, 1px)) calc(40 * var(--owner-scale, 1px));
+  border-radius: calc(30 * var(--owner-scale, 1px));
+  background: var(--skeleton-surface);
+}
+.loading-state.home-skeleton .home-campaign-panel,
+.loading-state.home-skeleton .home-stats { background: var(--skeleton-surface); }
+.loading-state.home-skeleton .home-stat + .home-stat { border-color: var(--skeleton-fill); }
+.home-skeleton .home-stat > div { display: grid; gap: 12px; flex: 1; }
+.home-skeleton .home-stat .skeleton-value { height: 28px; }
+.home-skeleton .home-stat .skeleton-circle { width: calc(50 * var(--owner-scale, 1px)); height: calc(50 * var(--owner-scale, 1px)); }
+.home-skeleton .home-campaign-panel h3 { position: relative; }
+.home-skeleton-text { visibility: hidden; }
+.home-skeleton .home-campaign-panel h3 .skeleton-block { position: absolute; inset: 0 12px; width: calc(100% - 24px); height: 100%; }
+.home-skeleton-title { width: min(280px, 75%); height: calc(64 * var(--owner-scale, 1px)); }
+.home-skeleton-summary-title { height: calc(84 * var(--owner-scale, 1px)); }
+.home-skeleton-module-label { height: calc(29 * var(--owner-scale, 1px)); }
+.harvest-supervisor-home .home-skeleton-summary-title { height: calc(120 * var(--owner-scale, 1px)); }
+.home-skeleton-greeting { display: grid; gap: calc(30 * var(--owner-scale, 1px)); }
+.home-skeleton-greeting .skeleton-value { width: 70%; max-width: 300px; height: calc(40 * var(--owner-scale, 1px)); }
+.home-summary-content-embedded > .home-skeleton-data { display: contents; }
+@media (max-width: 1023px) {
+  .home-skeleton .owner-home-title { height: 48px; }
+  .home-skeleton-title { height: 40px; }
+  .home-skeleton .home-skeleton-summary-title { height: 48px; margin-bottom: 24px; }
+  .home-skeleton.harvest-supervisor-home .home-skeleton-summary-title { margin-bottom: 40px; }
+}
+@media (max-width: 599px) {
+  .home-skeleton-feature { height: 300px; padding: 28px 24px; gap: 38px; }
+  .home-skeleton .home-stat .skeleton-circle { width: 40px; height: 40px; }
+}

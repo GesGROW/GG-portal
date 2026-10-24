@@ -1,0 +1,189 @@
+/* Lienzo claro con los mismos acentos y controles del tema oscuro. */
+html[data-theme='light'] {
+  --portal-surface: var(--white);
+  --portal-surface-border: #d0d9ca;
+  --portal-control-border: #7b8b7c;
+  --portal-surface-muted: var(--neutral-100);
+  --portal-selection: var(--green-100);
+  --portal-accent: #166d37;
+  --portal-shadow-card: 0 2px 8px rgb(21 39 27 / 4%);
+  --portal-shadow-panel: 0 8px 24px rgb(21 39 27 / 10%);
+  --color-border-subtle: var(--portal-surface-border);
+  --color-border-focus: #022f2a;
+}
+
+html[data-theme='light'] .portal-shell {
+  --home-border: var(--portal-surface-border);
+  --records-border: var(--portal-surface-border);
+  --users-table-border: var(--portal-surface-border);
+}
+
+/* Estas superficies conservan fondo, texto e iconos en ambos temas. */
+html[data-theme='light']
+  .portal-shell
+  :is(
+    .header,
+    .figma-navigation,
+    .home-production,
+    .home-top-worker,
+    .home-activity,
+    .home-report-select,
+    .home-campaign-select,
+    .harvest-record-select,
+    .harvest-record-search,
+    .harvest-record-date,
+    .workers-search,
+    .workers-filter,
+    .users-search,
+    .users-filter,
+    .harvest-ticket-search,
+    .harvest-ticket-date,
+    .harvest-ticket-state,
+    .harvest-ticket-inventory-filters,
+    .harvest-ticket-tabs,
+    .harvest-step-number,
+    .harvest-number-control
+  ) {
+  --home-shell: var(--portal-chrome-shell);
+  --home-border: var(--portal-chrome-border);
+  --home-card: var(--portal-chrome-card);
+  --home-text: var(--portal-chrome-text);
+  --home-muted: var(--portal-chrome-muted);
+  --home-link: var(--portal-chrome-link);
+  --home-gold: var(--portal-chrome-gold);
+  --home-winner: var(--portal-chrome-winner);
+  --home-icon-filter: none;
+  --portal-control-border: var(--portal-chrome-border);
+  --color-text-secondary: var(--dark-300);
+  color: var(--home-text);
+  color-scheme: dark;
+}
+
+/* El trazo de los pasos y las pestañas tampoco se aclara con el lienzo. */
+html[data-theme='light'] .harvest-generation-step::after {
+  background: var(--portal-chrome-border);
+}
+
+html[data-theme='light'] .portal-shell :is(.header, .user-menu-panel) {
+  border-color: var(--home-border);
+  box-shadow: none;
+}
+
+/* Contenedores: superficie blanca, delimitación y una sola elevación suave. */
+html[data-theme='light']
+  .portal-shell
+  :is(
+    .content-card,
+    .chart-card,
+    .subscription-card,
+    .access-account-card,
+    .access-editor-card
+  ) {
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-surface-border);
+  box-shadow: var(--portal-shadow-card);
+}
+
+html[data-theme='light'] .portal-shell .content-card .content-card {
+  box-shadow: none;
+}
+
+html[data-theme='light'] .worker-drawer {
+  background: var(--portal-surface);
+  border-color: var(--portal-surface-border);
+  box-shadow: var(--portal-shadow-panel);
+}
+
+/* Tablas: cuerpo claro y cabeceras oliva compartidas, siempre en cursiva. */
+html[data-theme='light'] .portal-shell .table-scroll {
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-surface-border);
+  box-shadow: var(--portal-shadow-card);
+}
+
+html[data-theme='light'] .portal-shell .table-scroll :is(th, td) {
+  border-color: var(--portal-surface-border);
+}
+
+html[data-theme='light'] .portal-shell .table-scroll td {
+  background: var(--portal-surface);
+}
+
+html[data-theme='light'] .portal-shell .table-scroll tbody tr:hover td {
+  background: var(--green-050);
+}
+
+/* Campos: un borde propio evita oscurecer también los bordes de tarjetas. */
+html[data-theme='light']
+  :is(.portal-shell, .worker-drawer)
+  :is(input, select, textarea):not(:is([type='checkbox'], [type='radio'])) {
+  border-color: var(--portal-control-border);
+  border-width: 1.5px;
+}
+
+html[data-theme='light']
+  :is(.portal-shell, .worker-drawer)
+  :is(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--error-fg);
+}
+
+html[data-theme='light']
+  :is(.portal-shell, .worker-drawer)
+  :is(input, textarea)::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+html[data-theme='light']
+  .portal-shell
+  :is(.harvest-record-search, .harvest-ticket-search)
+  input::placeholder {
+  color: var(--home-text);
+  opacity: 0.61;
+}
+
+html[data-theme='light'] .portal-shell .users-search input::placeholder {
+  color: var(--home-text);
+}
+
+html[data-theme='light'] .portal-shell .harvest-ticket-date > span {
+  color: var(--home-text);
+}
+
+/* Las acciones heredan exactamente los colores del tema oscuro. */
+html[data-theme='light']
+  :is(.portal-shell, .worker-drawer)
+  :is(button, .primary, .users-invite, .access-submit) {
+  --home-shell: var(--portal-chrome-shell);
+  --home-border: var(--portal-chrome-border);
+  --home-text: var(--portal-chrome-text);
+  --home-muted: var(--portal-chrome-muted);
+  --home-link: var(--portal-chrome-link);
+  --home-icon-filter: none;
+  --color-brand-primary: #56b77a;
+  --color-brand-primary-hover: #6ac68b;
+  --color-brand-primary-pressed: #83d19d;
+  --color-brand-soft: color-mix(in srgb, var(--green-500) 18%, transparent);
+  --color-text-primary: var(--dark-050);
+  --color-text-secondary: var(--dark-300);
+  --color-text-inverse: var(--dark-950);
+  --color-text-disabled: var(--dark-500);
+  --color-surface-card: var(--dark-800);
+  --color-surface-subtle: var(--dark-750);
+  --color-surface-disabled: var(--dark-750);
+  --color-border-default: var(--dark-600);
+  --color-border-strong: rgb(223 231 226 / 24%);
+}
+
+html[data-theme='light']
+  :is(.portal-shell, .worker-drawer)
+  :is(input, select, textarea):disabled {
+  border-color: var(--portal-surface-border);
+  background: var(--color-surface-disabled);
+  color: var(--color-text-secondary);
+}
+
+html[data-theme='light'] .portal-shell .access-account-status {
+  background: var(--portal-selection);
+  color: var(--portal-accent);
+}

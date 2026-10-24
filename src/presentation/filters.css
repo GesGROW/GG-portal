@@ -1,0 +1,30 @@
+/* Una sola densidad para los filtros de todos los listados. */
+.portal-layout
+  :is(
+    .home-report-select,
+    .home-campaign-select,
+    .harvest-records,
+    .harvest-ticket-filters,
+    .harvest-ticket-inventory-filters,
+    .users-access-toolbar,
+    .management-filterbar,
+    .search-form,
+    .report-filters,
+    .report-context,
+    .ranking-controls
+  )
+  :is(input:not([type='checkbox']):not([type='radio']), select) {
+  height: var(--portal-filter-height);
+  min-height: var(--portal-filter-height);
+  padding-left: var(--portal-filter-padding-x);
+  font-size: var(--portal-filter-font-size);
+  line-height: var(--portal-filter-line-height);
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+.portal-layout
+  :is(.management-filterbar, .search-form, .harvest-ticket-inventory-filters)
+  button {
+  min-height: var(--portal-filter-height);
+  font-size: var(--portal-filter-font-size);
+}

@@ -1,0 +1,109 @@
+/* PNG del Home de Cosecha: misma bienvenida y resumen, sin selector de módulos. */
+.harvest-supervisor-home.owner-home-harvest .owner-summary-heading {
+  display: block;
+  min-height: calc(120 * var(--owner-scale));
+}
+.harvest-supervisor-home.owner-home-harvest .owner-summary-heading h2 {
+  height: calc(120 * var(--owner-scale));
+}
+.supervisor-setup-empty {
+  position: relative;
+  display: grid;
+  align-items: center;
+  width: 100%;
+  min-height: calc(376 * var(--owner-scale));
+  margin-left: calc(-3 * var(--owner-scale));
+  padding: 32px;
+  border-radius: calc(30 * var(--owner-scale));
+  background: var(--owner-summary-surface);
+  color: var(--owner-muted);
+}
+.supervisor-setup-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(45 * var(--owner-scale));
+}
+.supervisor-setup-icons {
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--owner-scale));
+}
+.supervisor-setup-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: calc(100 * var(--owner-scale));
+  height: calc(100 * var(--owner-scale));
+}
+.supervisor-setup-icon img {
+  display: block;
+  max-width: none;
+  transform: scale(calc(var(--owner-scale) / 1px));
+  transform-origin: top left;
+}
+.supervisor-setup-message p {
+  flex: 0 1 calc(543 * var(--owner-scale));
+  margin: 0;
+  font-size: calc(40 * var(--owner-scale));
+  line-height: calc(45 * var(--owner-scale));
+  font-weight: 600;
+}
+.supervisor-setup-refresh {
+  position: absolute;
+  right: 24px;
+  bottom: 16px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+  opacity: 0;
+}
+.supervisor-setup-empty:is(:hover, :focus-within) .supervisor-setup-refresh {
+  opacity: 1;
+}
+@media (max-width: 1023px) {
+  .harvest-supervisor-home .home-campaign-panel h3 {
+    padding-right: 40px;
+  }
+  .harvest-supervisor-home.owner-home-harvest .owner-summary-heading {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+  .harvest-supervisor-home.owner-home-harvest .owner-summary-heading h2 {
+    height: auto;
+    margin-bottom: 40px;
+  }
+  .supervisor-setup-message {
+    flex-direction: column;
+    gap: 28px;
+  }
+  .supervisor-setup-message p {
+    flex-basis: auto;
+    text-align: center;
+    font-size: 32px;
+    line-height: 1.2;
+  }
+  .supervisor-setup-empty {
+    margin-left: 0;
+    padding: 40px 24px 72px;
+  }
+  .supervisor-setup-refresh {
+    opacity: 1;
+  }
+}
+@media (max-width: 599px) {
+  .supervisor-setup-icon {
+    width: 72px;
+    height: 72px;
+  }
+  .supervisor-setup-icon img {
+    transform: scale(0.72);
+  }
+  .supervisor-setup-message p {
+    font-size: 28px;
+  }
+  .supervisor-setup-message p br {
+    display: none;
+  }
+}

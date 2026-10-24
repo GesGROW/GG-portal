@@ -1,0 +1,166 @@
+/* Medidas compartidas por todos los listados del Portal. */
+.portal-shell .table-scroll thead th {
+  background: var(--portal-table-head);
+  color: #fff;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+}
+
+.portal-shell .table-scroll {
+  width: 100%;
+  max-width: var(--portal-table-width);
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.portal-shell .table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arimo, Arial, sans-serif;
+  font-size: var(--portal-table-font-size);
+  line-height: var(--portal-table-line-height);
+  color: var(--white);
+}
+.portal-layout .table-scroll :is(th, td) {
+  height: var(--portal-table-row-height);
+  padding: var(--portal-table-cell-padding);
+  font-size: var(--portal-table-font-size);
+  line-height: var(--portal-table-line-height);
+  border-right: 1px solid #303030;
+  border-bottom: 1px solid #303030;
+  vertical-align: middle;
+}
+.portal-shell .table-scroll :is(th, td):last-child {
+  border-right: 0;
+}
+.portal-shell .table-scroll tbody tr:last-child > :is(th, td) {
+  border-bottom: 0;
+}
+.portal-shell .table-scroll tbody > tr > :is(th, td) {
+  background: transparent;
+  color: var(--white);
+  font-weight: 400;
+  font-style: normal;
+  text-align: left;
+}
+.portal-shell .table-scroll tbody :is(a, strong, .worker-name, .ranking-position) {
+  color: inherit;
+  font-weight: 400;
+}
+.portal-shell .table-scroll tbody :is(time, .ranking-last-activity) {
+  font-size: inherit;
+}
+.portal-shell .table-scroll tbody tr:hover > :is(td, th),
+.portal-shell .table-scroll tbody tr.is-selected > :is(td, th) {
+  background: var(--color-surface-subtle);
+}
+.portal-shell .table-scroll tbody :is(td, th).numeric {
+  text-align: right;
+}
+.portal-shell .table-scroll tbody > tr > [data-status='true'],
+.portal-shell .table-scroll tbody td:has(> .status-badge) {
+  text-align: center;
+}
+.portal-shell .table-scroll tbody > tr > [data-muted='true'],
+.portal-shell .table-scroll .table-placeholder {
+  color: var(--dark-400);
+}
+.portal-shell .table-scroll .status-badge.has-indicator {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+.portal-shell .table-scroll .ranking-checkbox {
+  min-height: 24px;
+}
+.portal-layout .table-scroll :is(.badge, .context-pill, td button) {
+  height: var(--portal-table-line-height);
+  min-height: var(--portal-table-line-height);
+  margin-block: 0;
+  padding-block: 0;
+  line-height: 20px;
+  vertical-align: top;
+}
+.portal-layout .table-scroll tr[data-interactive='true'] {
+  cursor: pointer;
+}
+.portal-layout
+  .table-scroll
+  tr[data-interactive='true']:is(:hover, :focus-visible)
+  > :is(th, td) {
+  background: var(--color-surface-subtle);
+}
+
+.table-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+.table-pagination-summary {
+  margin-right: auto;
+  color: var(--home-muted);
+  font-size: 14px;
+}
+.table-pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 100%;
+  gap: 6px;
+}
+.portal-shell .table-pagination .table-pagination-button,
+.table-pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  background: var(--home-shell);
+  color: var(--home-text);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+}
+.portal-shell .table-pagination .table-pagination-button:hover:not(:disabled) {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border-strong);
+}
+.portal-shell .table-pagination .table-pagination-button[aria-current='page'] {
+  background: var(--color-surface-raised);
+  border-color: transparent;
+}
+.portal-shell .table-pagination .table-pagination-arrow {
+  border-color: transparent;
+  background: transparent;
+}
+.portal-shell .table-pagination .table-pagination-button:disabled {
+  color: var(--color-text-disabled);
+  cursor: default;
+}
+@media (max-width: 479px) {
+  .table-pagination-summary {
+    flex-basis: 100%;
+  }
+  .table-pagination-controls {
+    gap: 4px;
+  }
+  .portal-shell .table-pagination .table-pagination-button,
+  .table-pagination-ellipsis {
+    min-width: 30px;
+    padding-inline: 6px;
+  }
+}

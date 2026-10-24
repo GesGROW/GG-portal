@@ -1,0 +1,108 @@
+.campaign-table-total {
+  margin: 0 0 16px;
+  color: #022f2a;
+  font-size: 16px;
+  font-weight: 500;
+}
+.campaign-table-filters {
+  position: relative;
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 16px 13px;
+  margin-bottom: 26px;
+  color: #022f2a;
+  font-size: 16px;
+}
+.campaign-table-filters > label,
+.campaign-table-period {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  color: inherit;
+  font-weight: 500;
+}
+.campaign-table-search {
+  flex: 1 1 280px;
+  max-width: 420px;
+}
+.campaign-table-filters .campaign-table-search input,
+.campaign-table-filters select {
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  min-height: 46px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 30px;
+  background: #e3e4d6;
+  color: #022f2a;
+  font: inherit;
+}
+.campaign-table-search input::placeholder {
+  color: #526d67;
+  opacity: 1;
+}
+.campaign-table-state {
+  flex: 0 1 230px;
+}
+:root .campaign-table-state select:not([multiple]):not([size]) {
+  gap: 8px;
+}
+.campaign-table-period {
+  flex: 0 1 242px;
+  grid-template-columns: minmax(0, 1fr);
+}
+.campaign-table-filters .campaign-report-period {
+  position: relative;
+}
+.campaign-table-filters .campaign-report-period summary {
+  height: 46px;
+  min-width: 0;
+  padding-inline: 24px;
+  font-size: 16px;
+}
+.campaign-table-filters > button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 30px;
+  padding: 10px 24px;
+  background: #95b52c;
+  color: #022f2a;
+}
+.campaign-table-filters > .campaign-filter-clear-button {
+  background: #e3e4d6;
+}
+.campaign-table-filters > .campaign-table-refresh {
+  flex: 0 0 32px;
+  align-self: flex-end;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  margin-left: auto;
+  margin-bottom: 7px;
+  padding: 4px;
+  border-radius: 10px;
+  background: #e3e4d6;
+}
+.campaign-table-refresh .home-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) opacity(0.8);
+}
+.campaign-table-refresh:disabled {
+  opacity: 0.5;
+}
+.campaign-table-filters > button:is(:hover, :active, :focus-visible):not(:disabled) {
+  background: #c1f13d;
+  color: #022f2a;
+}
+@media (max-width: 580px) {
+  .campaign-table-search,
+  .campaign-table-state,
+  .campaign-table-period {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}

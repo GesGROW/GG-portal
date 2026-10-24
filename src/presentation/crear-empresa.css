@@ -1,0 +1,61 @@
+.crear-empresa .account-content h1 {
+  height: auto;
+}
+.crear-empresa .empresa-intro {
+  margin: 18px 0 26px;
+  line-height: 1.5;
+}
+.account-screen.crear-empresa .account-submit {
+  margin-top: 30px;
+  min-height: 44px;
+}
+.crear-empresa .empresa-invitacion {
+  margin: 30px 0 10px;
+  text-align: center;
+}
+.crear-empresa .empresa-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 24px;
+}
+.crear-empresa .empresa-link {
+  display: block;
+  min-height: 44px;
+  margin: 0 auto;
+  border: 0;
+  background: transparent;
+  color: var(--account-ink);
+  text-decoration: underline;
+  font: inherit;
+  padding: 8px;
+}
+.crear-empresa .empresa-link:hover:not(:disabled) {
+  background: #eef0e4;
+}
+@media (min-width: 800px) {
+  .crear-empresa .account-panel {
+    width: max(470px, calc(822 * var(--account-scale)));
+  }
+  .crear-empresa .account-content {
+    width: 76%;
+  }
+  .crear-empresa .account-logo {
+    max-width: 80%;
+    height: auto;
+  }
+  .crear-empresa .account-content h1 {
+    font-size: clamp(28px, 2.1vw, 40px);
+    line-height: 1.2;
+  }
+  .crear-empresa .account-field label {
+    font-size: clamp(16px, 1.25vw, 24px);
+  }
+  .crear-empresa .account-field input {
+    min-height: 44px;
+  }
+  .account-screen.crear-empresa .account-submit {
+    width: min(100%, 367px);
+    font-size: clamp(18px, 1.25vw, 24px);
+  }
+}

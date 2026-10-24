@@ -1,0 +1,83 @@
+.cosecha-heading {
+  display: flex;
+  align-items: center;
+  gap: calc(64 * var(--owner-scale));
+}
+.owner-layout .cosecha-heading > h1 {
+  margin: 0;
+  color: var(--owner-ink);
+  font-size: calc(64 * var(--owner-scale));
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+.cosecha-campaign-selector {
+  position: relative;
+  width: calc(446 * var(--owner-scale));
+  max-width: 100%;
+}
+.cosecha-campaign-selector select {
+  width: 100%;
+  height: calc(46 * var(--owner-scale));
+  padding: 0 calc(56 * var(--owner-scale)) 0 calc(28 * var(--owner-scale));
+  border: 0;
+  border-radius: 40px;
+  appearance: none;
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+  font-family: inherit;
+  font-size: calc(16 * var(--owner-scale));
+  font-weight: 500;
+}
+.cosecha-campaign-selector .owner-icon {
+  position: absolute;
+  top: 50%;
+  right: calc(16 * var(--owner-scale));
+  transform: translateY(-50%);
+}
+.owner-layout .harvest-records-page > .cosecha-heading,
+.owner-layout .harvest-tickets-page > .cosecha-heading {
+  margin-bottom: 32px;
+}
+.owner-layout.crop-setup-layout .content {
+  position: relative;
+  margin-top: 0;
+  margin-left: calc(291 * var(--owner-scale));
+  margin-right: calc(226 * var(--owner-scale));
+  padding: calc(59 * var(--owner-scale)) 0 calc(60 * var(--owner-scale));
+  min-height: 100dvh;
+  color: var(--owner-ink);
+}
+.crop-setup-page > .cosecha-heading {
+  min-height: calc(80 * var(--owner-scale));
+  margin-bottom: calc(10 * var(--owner-scale));
+}
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .owner-layout.crop-setup-layout .content {
+    margin-left: 160px;
+    margin-right: 32px;
+  }
+}
+@media (max-width: 1023px) {
+  .owner-layout.crop-setup-layout .content {
+    margin: 0;
+    padding: 32px 24px 40px;
+  }
+  .cosecha-heading {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .owner-layout .cosecha-heading > h1 {
+    font-size: 44px;
+  }
+  .cosecha-campaign-selector {
+    width: 100%;
+  }
+  .cosecha-campaign-selector select {
+    height: 46px;
+    font-size: 16px;
+  }
+  .crop-setup-page > .cosecha-heading {
+    margin-bottom: 24px;
+  }
+}

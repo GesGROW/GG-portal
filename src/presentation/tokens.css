@@ -1,0 +1,431 @@
+/* GesGROW Foundations / Data Viz, Palette V2. All Portal colors live here.
+   Breakpoint literals mirror these tokens; CSS variables cannot be media conditions. */
+:root {
+  --green-950: #102a1d;
+  --green-900: #173f2b;
+  --green-800: #1f5a3a;
+  --green-700: #26734a;
+  --green-600: #2f8a57;
+  --green-500: #3a9c66;
+  --green-400: #68b286;
+  --green-300: #9ccdaf;
+  --green-200: #cfe6d7;
+  --green-100: #e8f4ec;
+  --green-050: #f4faf6;
+  /* Harvest Gold is the canonical warm accent. Yellow names stay as compatibility aliases. */
+  --harvest-700: #8d6a1f;
+  --harvest-600: #a67c22;
+  --harvest-500: #c69a2d;
+  --harvest-400: #ddb557;
+  --harvest-300: #e7c97d;
+  --harvest-200: #f1deb0;
+  --harvest-100: #f8f0d8;
+  --yellow-900: var(--harvest-700);
+  --yellow-800: var(--harvest-700);
+  --yellow-700: var(--harvest-700);
+  --yellow-600: var(--harvest-600);
+  --yellow-500: var(--harvest-500);
+  --yellow-400: var(--harvest-400);
+  --yellow-300: var(--harvest-300);
+  --yellow-200: var(--harvest-200);
+  --yellow-100: var(--harvest-100);
+  --yellow-050: var(--harvest-100);
+  --aqua-900: #0c5557;
+  --aqua-800: #12696b;
+  --aqua-700: #177f81;
+  --aqua-600: #239698;
+  --aqua-500: #2fafb0;
+  --aqua-400: #52c0c0;
+  --aqua-300: #76cfce;
+  --aqua-200: #afe5e2;
+  --aqua-100: #ddf5f3;
+  --aqua-050: #f0fbfa;
+  --sky-900: #263f5d;
+  --sky-800: #2f4e72;
+  --sky-700: #365f8a;
+  --sky-600: #426d9a;
+  --sky-500: #4f7cac;
+  --sky-400: #6e93bc;
+  --sky-300: #8caed1;
+  --sky-200: #bcd0e5;
+  --sky-100: #e5eff8;
+  --sky-050: #f4f8fc;
+  --soil-900: #65311f;
+  --soil-800: #7d3d27;
+  --soil-700: #974a2e;
+  --soil-600: #af5b38;
+  --soil-500: #c96f45;
+  --soil-400: #d98965;
+  --soil-300: #e3a083;
+  --soil-200: #efc5b2;
+  --soil-100: #f8e9e2;
+  --soil-050: #fcf5f1;
+  --berry-900: #3b316b;
+  --berry-800: #493d82;
+  --berry-700: #57499b;
+  --berry-600: #6657b1;
+  --berry-500: #7767c7;
+  --berry-400: #9184d4;
+  --berry-300: #aaa0de;
+  --berry-200: #cfc8ec;
+  --berry-100: #eeebfa;
+  --berry-050: #f7f5fd;
+  --red-900: #6e211a;
+  --red-800: #842820;
+  --red-700: #9d3128;
+  --red-600: #b63930;
+  --red-500: #c4473a;
+  --red-400: #d66b61;
+  --red-300: #e6938b;
+  --red-200: #f2c1bc;
+  --red-100: #fbe9e7;
+  --red-050: #fef5f4;
+  --neutral-950: #17201a;
+  --neutral-900: #1f2a23;
+  --neutral-800: #2d3932;
+  --neutral-700: #46534b;
+  --neutral-600: #5d6a62;
+  --neutral-500: #748078;
+  --neutral-400: #99a39d;
+  --neutral-300: #bcc5bf;
+  --neutral-250: var(--neutral-200); /* Compatibility alias; no extra V2 shade. */
+  --neutral-200: #dce4df;
+  --neutral-150: #e6ece8;
+  --neutral-100: #eef3f0;
+  --neutral-075: #f4f6f4;
+  --neutral-050: #f8faf8;
+  --white: #ffffff;
+  --status-active-bg: #132b20;
+  --status-active-border: #42b963;
+  --status-active-text: #d5f8e3;
+  --status-active-dot: #2dcc62;
+  --status-inactive-bg: #301e21;
+  --status-inactive-border: #ca5659;
+  --status-inactive-text: #ffdddd;
+  --status-inactive-dot: #f04449;
+  --dark-950: #090f0b;
+  --dark-900: #0d1410;
+  --dark-850: #101812;
+  --dark-800: #121a15;
+  --dark-750: #18221c;
+  --dark-700: #1e2a22;
+  --dark-600: #26332b;
+  --dark-500: #4b5a51;
+  --dark-400: #78867e;
+  --dark-300: #aab7af;
+  --dark-200: #cbd5cf;
+  --dark-100: #e2e9e5;
+  --dark-050: #f2f6f3;
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 0.9375rem; /* 15px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.125rem; /* 34px */
+  --font-size-5xl: 2.5rem; /* 40px */
+  --font-size-6xl: 3rem; /* 48px */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 750;
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --breakpoint-xs: 360px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-round: 999px;
+  --border-width-hairline: 1px;
+  --border-width-default: 1px;
+  --border-width-strong: 1.5px;
+  --border-width-focus: 2px;
+  --shadow-xs: 0 1px 3px rgba(21, 32, 25, 0.04);
+  --shadow-sm: 0 3px 10px rgba(21, 32, 25, 0.06);
+  --shadow-md: 0 4px 14px rgba(21, 32, 25, 0.08);
+  --shadow-lg: 0 10px 28px rgba(21, 32, 25, 0.12);
+  --shadow-xl: 0 18px 48px rgba(21, 32, 25, 0.16);
+  --motion-instant: 80ms;
+  --motion-fast: 120ms;
+  --motion-base: 160ms;
+  --motion-slow: 220ms;
+  --motion-panel: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-popover: 300;
+  --z-sidebar: 400;
+  --z-drawer: 500;
+  --z-overlay: 600;
+  --z-dialog: 700;
+  --z-toast: 800;
+  --z-tooltip: 900;
+  --icon-xs: 14px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+  --icon-2xl: 36px;
+
+  --font-family-sans:
+    'Inter Variable', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-border-focus);
+  --density-control-height: 42px;
+  --portal-filter-height: 48px;
+  --portal-filter-font-size: 17px;
+  --portal-filter-line-height: 22px;
+  --portal-filter-padding-x: 18px;
+  --density-row-height: 44px;
+  --portal-table-width: 100%;
+  --portal-table-font-size: 20px;
+  --portal-table-line-height: 24px;
+  --portal-table-row-height: 40px;
+  --portal-table-cell-padding: 7px 6px;
+  --density-icon-button: 40px;
+  --portal-sidebar-collapsed: 72px;
+  --portal-sidebar-expanded: 248px;
+  /* Rail y panel contextual: dirección Portal 2026, sin alterar densidad interna. */
+  --portal-rail-width: 72px;
+  --portal-navigation-panel-width: 290px;
+  --portal-topbar-height: 64px;
+  --content-max-standard: 1600px;
+  --content-max-form: 960px;
+  --content-max-narrow: 720px;
+  --portal-page-padding-x: 20px;
+  --portal-page-padding-y: 32px;
+  --glass-blur: 16px;
+  --gradient-weather-light: linear-gradient(
+    135deg,
+    #bde6d4 0%,
+    #42bfc0 52%,
+    #f4e5b7 100%
+  );
+  --gradient-weather-dark: linear-gradient(
+    135deg,
+    #17443d 0%,
+    #1f7375 55%,
+    #6a5b27 100%
+  );
+  --gradient-brand-editorial: linear-gradient(
+    160deg,
+    var(--green-950) 10%,
+    transparent 160%
+  );
+  --gradient-brand-overlay: linear-gradient(
+    90deg,
+    var(--green-950) 10%,
+    transparent 170%
+  );
+  --chart-1-dark: #69bb88;
+  --chart-2-dark: var(--aqua-400);
+  --chart-3-dark: var(--harvest-400);
+  --chart-4-dark: var(--soil-400);
+  --chart-5-dark: var(--berry-400);
+  --chart-6-dark: var(--sky-400);
+  /* Compatibility names keep their role; recent-day highlight has its own token. */
+  --chart-primary: var(--chart-1);
+  --chart-secondary: var(--chart-2);
+  --chart-recent: var(--chart-3);
+  --chart-recent-stroke: var(--chart-3-stroke);
+  --chart-error: var(--error-fg);
+  --chart-info: var(--color-accent-sky);
+  --color-context-available-bg: var(--color-accent-aqua-soft);
+  --color-context-available-fg: var(--color-accent-aqua-strong);
+  --color-context-available-border: var(--color-accent-aqua-border);
+}
+:root,
+[data-theme='light'] {
+  --color-brand-primary: var(--green-700);
+  --color-brand-primary-hover: var(--green-800);
+  --color-brand-primary-pressed: var(--green-900);
+  --color-brand-soft: var(--green-100);
+  --color-brand-softer: var(--green-050);
+
+  --color-accent-harvest: var(--harvest-500);
+  --color-accent-harvest-strong: var(--harvest-700);
+  --color-accent-harvest-soft: var(--harvest-100);
+  --color-accent-harvest-border: var(--harvest-300);
+  --color-accent-harvest-text: #7a5a16;
+  --color-accent-aqua: var(--aqua-500);
+  --color-accent-aqua-strong: var(--aqua-800);
+  --color-accent-aqua-soft: var(--aqua-100);
+  --color-accent-aqua-border: var(--aqua-200);
+  --color-accent-sky: var(--sky-500);
+  --color-accent-soil: var(--soil-500);
+  --color-accent-berry: var(--berry-500);
+
+  --color-text-primary: var(--neutral-950);
+  --color-text-secondary: var(--neutral-700);
+  --color-text-tertiary: var(--neutral-600); /* AA for captions/placeholders. */
+  --color-text-inverse: var(--white);
+  --color-text-disabled: var(--neutral-400);
+
+  --color-surface-canvas: var(--neutral-075);
+  --color-surface-page: var(--neutral-050);
+  --color-surface-card: var(--white);
+  --color-surface-subtle: var(--neutral-100);
+  --color-surface-raised: var(--white);
+  --color-surface-disabled: #eef1ef;
+
+  --color-border-subtle: var(--neutral-150);
+  --color-border-default: var(--neutral-200);
+  --color-border-strong: var(--neutral-300);
+  --color-border-focus: #022f2a;
+
+  --color-overlay: rgba(16, 42, 29, 0.3);
+  --glass-bg: color-mix(in srgb, var(--white) 82%, transparent);
+  --success-bg: var(--green-100);
+  --success-fg: #1f6b43;
+  --success-border: #bbddc7;
+  --success-strong: #155232;
+  --warning-bg: var(--color-accent-harvest-soft);
+  --warning-fg: var(--color-accent-harvest-text);
+  --warning-border: var(--color-accent-harvest-border);
+  --warning-strong: var(--color-accent-harvest-strong);
+  --error-bg: var(--red-100);
+  --error-fg: var(--red-600);
+  --error-border: var(--red-200);
+  --error-strong: var(--red-800);
+  --info-bg: var(--sky-100);
+  --info-fg: var(--sky-700);
+  --info-border: var(--sky-200);
+  --info-strong: var(--sky-900);
+  --gradient-weather: var(--gradient-weather-light);
+  --color-context-environment-foreground: var(--green-950);
+  --chart-1: var(--green-500);
+  --chart-2: var(--aqua-500);
+  --chart-3: var(--harvest-500);
+  --chart-4: var(--soil-500);
+  --chart-5: var(--berry-500);
+  --chart-6: var(--sky-500);
+  --chart-1-stroke: var(--green-700);
+  --chart-2-stroke: var(--aqua-700);
+  --chart-3-stroke: var(--harvest-700);
+  --chart-4-stroke: var(--soil-700);
+  --chart-5-stroke: var(--berry-700);
+  --chart-6-stroke: var(--sky-700);
+  --chart-grid: rgba(21, 32, 25, 0.08);
+  --chart-axis: var(--neutral-600); /* Normal-size axis text needs AA. */
+  --chart-label: var(--neutral-700);
+  --chart-success: var(--green-600);
+  --chart-warning: var(--harvest-600);
+}
+
+[data-theme='dark'] {
+  --color-brand-primary: #56b77a;
+  --color-brand-primary-hover: #6ac68b;
+  --color-brand-primary-pressed: #83d19d;
+  --color-brand-soft: color-mix(in srgb, var(--green-500) 18%, transparent);
+  --color-brand-softer: color-mix(in srgb, var(--green-500) 10%, transparent);
+
+  --color-accent-harvest: var(--harvest-400);
+  --color-accent-harvest-strong: #f0d58a;
+  --color-accent-harvest-soft: rgba(198, 154, 45, 0.14);
+  --color-accent-harvest-border: rgba(221, 181, 87, 0.28);
+  --color-accent-harvest-text: #f0d58a;
+  --color-accent-aqua: var(--aqua-400);
+  --color-accent-aqua-strong: var(--aqua-300);
+  --color-accent-aqua-soft: color-mix(in srgb, var(--aqua-500) 16%, transparent);
+  --color-accent-aqua-border: color-mix(in srgb, var(--aqua-400) 36%, transparent);
+  --color-accent-sky: var(--sky-400);
+  --color-accent-soil: var(--soil-400);
+  --color-accent-berry: var(--berry-400);
+
+  --color-text-primary: var(--dark-050);
+  --color-text-secondary: var(--dark-300);
+  --color-text-tertiary: var(--dark-300);
+  --color-text-inverse: var(--dark-950);
+  --color-text-disabled: var(--dark-500);
+
+  --color-surface-canvas: var(--dark-950);
+  --color-surface-page: var(--dark-900);
+  --color-surface-card: var(--dark-800);
+  --color-surface-subtle: var(--dark-750);
+  --color-surface-raised: var(--dark-700);
+  --color-surface-disabled: var(--dark-750);
+
+  --color-border-subtle: rgba(223, 231, 226, 0.08);
+  --color-border-default: var(--dark-600);
+  --color-border-strong: rgba(223, 231, 226, 0.24);
+  --color-border-focus: #022f2a;
+
+  --color-overlay: rgba(0, 0, 0, 0.58);
+  --glass-bg: color-mix(in srgb, var(--color-surface-page) 86%, transparent);
+  --success-bg: color-mix(in srgb, var(--green-600) 18%, transparent);
+  --success-fg: var(--green-300);
+  --success-border: color-mix(in srgb, var(--green-400) 36%, transparent);
+  --success-strong: var(--green-200);
+  --warning-bg: var(--color-accent-harvest-soft);
+  --warning-fg: var(--color-accent-harvest-text);
+  --warning-border: var(--color-accent-harvest-border);
+  --warning-strong: var(--color-accent-harvest-text);
+  --error-bg: color-mix(in srgb, var(--red-500) 18%, transparent);
+  --error-fg: var(--red-300);
+  --error-border: color-mix(in srgb, var(--red-400) 36%, transparent);
+  --error-strong: var(--red-200);
+  --info-bg: color-mix(in srgb, var(--sky-500) 20%, transparent);
+  --info-fg: var(--sky-300);
+  --info-border: color-mix(in srgb, var(--sky-400) 36%, transparent);
+  --info-strong: var(--sky-200);
+  --gradient-weather: var(--gradient-weather-dark);
+  --color-context-environment-foreground: var(--white);
+  --chart-1: var(--chart-1-dark);
+  --chart-2: var(--chart-2-dark);
+  --chart-3: var(--chart-3-dark);
+  --chart-4: var(--chart-4-dark);
+  --chart-5: var(--chart-5-dark);
+  --chart-6: var(--chart-6-dark);
+  --chart-1-stroke: var(--chart-1);
+  --chart-2-stroke: var(--chart-2);
+  --chart-3-stroke: var(--chart-3);
+  --chart-4-stroke: var(--chart-4);
+  --chart-5-stroke: var(--chart-5);
+  --chart-6-stroke: var(--chart-6);
+  --chart-grid: rgba(223, 231, 226, 0.1);
+  --chart-axis: var(--dark-300);
+  --chart-label: var(--dark-050);
+  --chart-success: var(--green-400);
+  --chart-warning: var(--harvest-400);
+  --shadow-sm: none;
+  --shadow-md: none;
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  color-scheme: light;
+}

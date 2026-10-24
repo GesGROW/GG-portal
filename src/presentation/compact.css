@@ -1,0 +1,21 @@
+/* Densidad de escritorio equivalente a la referencia del portal al 80%. */
+@media (min-width: 1024px) {
+  .portal-shell {
+    --portal-display-scale: 0.8;
+    --portal-viewport-height: calc(100dvh / var(--portal-display-scale));
+    zoom: var(--portal-display-scale);
+    min-height: var(--portal-viewport-height);
+  }
+
+  .portal-shell .workspace {
+    min-height: var(--portal-viewport-height);
+  }
+
+  .portal-shell .suite-navigation {
+    height: calc(var(--portal-viewport-height) - 84px);
+  }
+
+  .records-layout .content:has(.harvest-tickets-page) {
+    min-height: var(--portal-viewport-height);
+  }
+}

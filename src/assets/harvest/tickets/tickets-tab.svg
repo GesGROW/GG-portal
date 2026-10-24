@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="166" height="65" viewBox="0 0 166 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Sidebar">
+<path d="M0 32.5C0 14.5507 14.5507 0 32.5 0H133.5C151.449 0 166 14.5507 166 32.5C166 50.4493 151.449 65 133.5 65H32.5C14.5507 65 0 50.4493 0 32.5Z" fill="#777B19"/>
+<mask id="stroke0_0_126" fill="white">
+<path d="M0 32.5C0 14.5507 14.5507 0 32.5 0H133.5C151.449 0 166 14.5507 166 32.5C166 50.4493 151.449 65 133.5 65H32.5C14.5507 65 0 50.4493 0 32.5Z"/>
+</mask>
+<path d="M32.5 65H133.5C151.449 65 166 50.4493 166 32.5C166 14.5507 151.449 0 133.5 0H32.5C14.5507 0 0 14.5507 0 32.5C0 50.4493 14.5507 65 32.5 65Z" stroke-width="6" stroke="#141C18" mask="url(#stroke0_0_126)"/>
+</g>
+</svg>

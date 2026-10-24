@@ -1,0 +1,33 @@
+.campaign-worker-icons {
+  display: flex;
+  align-items: center;
+  gap: calc(2 * var(--owner-scale));
+}
+.campaign-sub-tabs .campaign-worker-icons .campaign-worker-role-icon {
+  width: calc(15 * var(--owner-scale));
+  height: calc(15 * var(--owner-scale));
+}
+.campaign-workers {
+  margin-top: calc(26 * var(--owner-scale));
+  margin-right: calc(9 * var(--owner-scale));
+}
+.campaign-workers .campaign-workers-table {
+  min-width: 1100px;
+}
+.campaign-workers-table td:first-child {
+  white-space: nowrap;
+}
+.campaign-worker-state {
+  display: inline-block;
+  padding: calc(4 * var(--owner-scale)) calc(14 * var(--owner-scale));
+  border-radius: 24px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #022f2a;
+}
+.campaign-worker-state.is-active {
+  background: #22cf42;
+}
+.campaign-worker-state.is-inactive {
+  background: #ff5b5b;
+}

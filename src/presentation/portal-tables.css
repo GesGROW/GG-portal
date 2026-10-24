@@ -1,0 +1,104 @@
+/* Base única: encabezado y filas de Usuarios y accesos para todo el Portal. */
+.portal-layout.owner-layout .table-scroll:has(> .portal-data-table) {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: calc(30 * var(--owner-scale, 1px)) calc(30 * var(--owner-scale, 1px)) 0
+    0;
+  background: #eff0e2;
+  overflow-x: auto;
+  box-shadow: none;
+}
+.portal-layout.owner-layout .table-scroll .portal-data-table,
+.portal-layout.owner-layout .owner-users-table.portal-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #eff0e2;
+  color: #022f2a;
+  font-family: inherit;
+  font-size: calc(20 * var(--owner-scale, 1px));
+  line-height: calc(29 * var(--owner-scale, 1px));
+}
+.portal-layout.owner-layout .portal-data-table :is(th, td) {
+  height: calc(47 * var(--owner-scale, 1px));
+  padding: calc(8 * var(--owner-scale, 1px)) calc(22 * var(--owner-scale, 1px));
+  border: 2px solid white;
+  font-family: inherit;
+  font-size: calc(20 * var(--owner-scale, 1px));
+  line-height: calc(29 * var(--owner-scale, 1px));
+  font-weight: 400;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.portal-layout.owner-layout .portal-data-table :is(th, td):first-child {
+  border-left: 0;
+  padding-left: calc(28 * var(--owner-scale, 1px));
+}
+.portal-layout.owner-layout .portal-data-table :is(th, td):last-child {
+  border-right: 0;
+}
+.portal-layout.owner-layout .portal-data-table thead th {
+  border-top: 0;
+  background: #1b9e10;
+  color: white;
+  font-weight: 500;
+  font-style: normal;
+}
+.portal-layout.owner-layout .portal-data-table tbody tr > :is(th, td) {
+  background: #eff0e2;
+  color: #022f2a;
+  border-bottom: 2px solid white;
+}
+.portal-layout.owner-layout .portal-data-table tbody tr:last-child > :is(th, td) {
+  border-bottom: 2px solid white;
+}
+.portal-layout.owner-layout .portal-data-table tbody tr:is(:hover, :focus-within, .is-selected) > :is(th, td),
+.portal-layout.owner-layout
+  .portal-data-table
+  tbody
+  tr[data-interactive='true']:is(:hover, :focus-visible)
+  > :is(th, td) {
+  background: #e3ebd5;
+  color: #022f2a;
+}
+.portal-layout.owner-layout .portal-data-table :is(th, td).numeric {
+  text-align: right;
+}
+.portal-layout.owner-layout .portal-data-table [data-muted='true'] {
+  color: #52635a;
+}
+.portal-layout.owner-layout .table-pagination .table-pagination-button {
+  color: #022f2a;
+  background: #eff0e2;
+  border-color: #e3e4d6;
+}
+.portal-layout.owner-layout
+  .table-pagination
+  .table-pagination-button[aria-current='page'] {
+  background: #c1f13d;
+}
+.portal-layout.owner-layout .table-pagination-summary {
+  color: #52635a;
+}
+.portal-layout.owner-layout .portal-data-table caption {
+  background: #eff0e2;
+  color: #022f2a;
+}
+.portal-layout.owner-layout
+  .table-pagination
+  .table-pagination-button:hover:not(:disabled) {
+  background: #e3e4d6;
+  color: #022f2a;
+}
+@media (max-width: 1023px) {
+  .portal-layout.owner-layout .portal-data-table :is(th, td) {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}

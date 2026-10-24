@@ -1,0 +1,47 @@
+.portal-layout.owner-layout .table-scroll:has(.campaign-table-empty) {
+  border-radius: calc(30 * var(--owner-scale, 1px));
+}
+.portal-layout.owner-layout .portal-data-table tbody tr.table-empty-row > td,
+.portal-layout.owner-layout .portal-data-table tbody tr.table-empty-row:is(:hover, :focus-within) > td {
+  padding: 0;
+  border: 0;
+  background: #d9d9d9;
+}
+.campaign-table-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(48 * var(--owner-scale, 1px));
+  height: calc(584 * var(--owner-scale, 1px));
+  min-height: 300px;
+  padding: 32px;
+  color: #829896;
+}
+.campaign-table-empty svg {
+  flex: 0 0 auto;
+  width: calc(100 * var(--owner-scale, 1px));
+  height: calc(100 * var(--owner-scale, 1px));
+}
+.campaign-table-empty p {
+  max-width: calc(543 * var(--owner-scale, 1px));
+  margin: 0;
+  color: #829896;
+  font-size: calc(40 * var(--owner-scale, 1px));
+  line-height: 1.15;
+  font-weight: 600;
+}
+@media (max-width: 1023px) {
+  .campaign-table-empty { gap: 28px; height: 420px; }
+  .campaign-table-empty p { font-size: 32px; }
+  .portal-layout.owner-layout .portal-data-table:has(.table-empty-row) { min-width: 0; }
+  .portal-layout.owner-layout .portal-data-table:has(.table-empty-row) th {
+    font-size: 14px;
+    line-height: 1.3;
+    padding: 12px 10px;
+  }
+}
+@media (max-width: 599px) {
+  .campaign-table-empty { flex-direction: column; gap: 24px; padding: 32px 20px; height: 360px; text-align: center; }
+  .campaign-table-empty svg { width: 80px; height: 80px; }
+  .campaign-table-empty p { font-size: 28px; }
+}

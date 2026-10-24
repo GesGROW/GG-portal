@@ -1,0 +1,55 @@
+.campaign-lots {
+  margin-top: calc(26 * var(--owner-scale));
+  margin-right: calc(9 * var(--owner-scale));
+}
+.campaign-lots .campaign-lots-table {
+  min-width: 600px;
+}
+.campaign-lots .lot-tickets-button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: calc(40 * var(--owner-scale));
+  height: calc(28 * var(--owner-scale));
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: black;
+  border-radius: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: none;
+}
+.campaign-lots .lot-tickets-button:is(:hover, :active) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.campaign-lots .lot-tickets-button::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: calc(36 * var(--owner-scale));
+  height: calc(18 * var(--owner-scale));
+  border-radius: 20px;
+  background: #d9d9d9;
+  transition: background 150ms ease;
+}
+.campaign-lots .lot-tickets-button:is(:hover, :focus-visible):not([aria-pressed='true'])::before {
+  background: #c4c4c4;
+}
+.campaign-lots .lot-tickets-button svg {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+.campaign-lots .lot-tickets-button[aria-pressed='true']::before {
+  background: #c1f13d;
+}
+.campaign-lots :is(.notice, [role='status']) {
+  color: #022f2a;
+}

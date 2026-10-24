@@ -1,0 +1,421 @@
+/* Resumen del owner: referencia PNG del frame 86:656 aportada por el usuario. */
+.owner-home-harvest .owner-summary-heading {
+  display: block;
+  min-height: calc(197 * var(--owner-scale));
+  padding: 0;
+}
+.owner-home-harvest .owner-summary-heading h2 {
+  height: calc(84 * var(--owner-scale));
+  margin: 0;
+}
+.owner-home-harvest .owner-module-select {
+  display: grid;
+  gap: calc(10 * var(--owner-scale));
+  width: calc(211 * var(--owner-scale));
+  margin: 0;
+  color: var(--owner-ink);
+}
+.owner-home-harvest .owner-module-select > span:first-child {
+  font-size: calc(24 * var(--owner-scale));
+  line-height: calc(29 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .owner-module-select select {
+  width: 100%;
+  min-width: 0;
+  height: calc(46 * var(--owner-scale));
+  min-height: 0;
+  padding: 0 calc(44 * var(--owner-scale)) 0 calc(21 * var(--owner-scale));
+  border-radius: calc(30 * var(--owner-scale));
+  font-size: calc(16 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .owner-module-select .owner-icon {
+  right: calc(16 * var(--owner-scale));
+  bottom: calc(11 * var(--owner-scale));
+}
+.owner-home-harvest .home-summary-content-embedded {
+  display: grid;
+  grid-template-columns: minmax(0, 1039fr) minmax(0, 313fr);
+  column-gap: calc(51 * var(--owner-scale));
+  row-gap: calc(30 * var(--owner-scale));
+  align-items: start;
+}
+.home-summary-content-embedded > .home-summary {
+  display: contents;
+}
+.owner-home-harvest .home-feature-cards {
+  grid-column: 1;
+  grid-row: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(39 * var(--owner-scale));
+  align-items: stretch;
+  margin: 0;
+}
+.owner-home-harvest .home-feature-cards :is(.home-production, .home-top-worker) {
+  min-height: calc(341 * var(--owner-scale));
+  border-radius: calc(30 * var(--owner-scale));
+  background: var(--owner-surface);
+  padding: calc(32 * var(--owner-scale)) calc(40 * var(--owner-scale));
+}
+.owner-home-harvest .home-feature-cards h3 {
+  margin: 0;
+  color: var(--owner-ink);
+  font-size: calc(24 * var(--owner-scale));
+  line-height: calc(29 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .home-production-values {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(20 * var(--owner-scale));
+  margin-top: calc(48 * var(--owner-scale));
+}
+.owner-home-harvest .home-production-values :is(dt, .home-today > span) {
+  color: var(--owner-ink);
+  font-size: calc(16 * var(--owner-scale));
+  line-height: calc(24 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .home-production-values :is(dd, .home-today > strong) {
+  color: var(--owner-ink);
+  font-size: calc(96 * var(--owner-scale));
+  line-height: calc(116 * var(--owner-scale));
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+.owner-home-harvest .home-feature-cards > section > .home-link {
+  padding-top: calc(28 * var(--owner-scale));
+  margin-top: auto;
+  font-size: calc(16 * var(--owner-scale));
+  line-height: calc(24 * var(--owner-scale));
+  color: var(--owner-ink);
+}
+.owner-home-harvest .home-feature-cards .home-winner {
+  display: grid;
+  grid-template-columns: minmax(0, 308fr) minmax(0, 192fr);
+  gap: 0;
+  margin: calc(38 * var(--owner-scale)) calc(-40 * var(--owner-scale)) 0;
+  min-height: calc(134 * var(--owner-scale));
+}
+.owner-home-harvest .home-ranking-empty {
+  min-height: calc(134 * var(--owner-scale));
+  margin: calc(38 * var(--owner-scale)) calc(-14 * var(--owner-scale)) 0 calc(-40 * var(--owner-scale));
+  padding: calc(12 * var(--owner-scale)) calc(20 * var(--owner-scale));
+  border-radius: 0 calc(30 * var(--owner-scale)) calc(30 * var(--owner-scale)) 0;
+  font-size: calc(40 * var(--owner-scale));
+  line-height: calc(45 * var(--owner-scale));
+  letter-spacing: -0.035em;
+}
+.owner-home-harvest .home-winner .home-winner-name {
+  min-height: calc(134 * var(--owner-scale));
+  padding: calc(12 * var(--owner-scale)) calc(20 * var(--owner-scale));
+  border-radius: 0 calc(30 * var(--owner-scale)) calc(30 * var(--owner-scale)) 0;
+  background: #ffea00;
+  color: var(--owner-ink);
+  font-size: calc(40 * var(--owner-scale));
+  font-weight: 500;
+  line-height: calc(45 * var(--owner-scale));
+  letter-spacing: -0.035em;
+}
+.owner-home-harvest .home-winner-score {
+  justify-self: start;
+  margin-inline-start: calc(6 * var(--owner-scale));
+  width: calc(156 * var(--owner-scale));
+  height: calc(156 * var(--owner-scale));
+  flex-basis: auto;
+}
+.owner-home-harvest .home-laurel {
+  width: 100%;
+  height: 100%;
+}
+.owner-home-harvest .home-winner-score dl {
+  max-width: 62%;
+}
+.owner-home-harvest .home-winner-score dd {
+  color: var(--owner-ink);
+  font-size: calc(64 * var(--owner-scale));
+  line-height: 1;
+  font-weight: 600;
+}
+.owner-home-harvest .home-winner-score dt {
+  color: var(--owner-ink);
+  font-size: calc(16 * var(--owner-scale));
+}
+.owner-home-harvest .home-campaign-panel {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  min-width: 0;
+  min-height: calc(288 * var(--owner-scale));
+  padding: calc(24 * var(--owner-scale)) calc(20 * var(--owner-scale));
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+  border-radius: calc(30 * var(--owner-scale));
+}
+.owner-home-harvest .home-campaign-panel h3 {
+  padding-inline: calc(12 * var(--owner-scale));
+  margin-top: 0;
+  margin-bottom: calc(22 * var(--owner-scale));
+  font-size: calc(24 * var(--owner-scale));
+  line-height: calc(29 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .home-campaign-list {
+  display: block;
+  width: 100%;
+  height: calc(154 * var(--owner-scale));
+  min-height: 0;
+  padding: 0 calc(10 * var(--owner-scale)) 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--owner-ink);
+  font-size: calc(16 * var(--owner-scale));
+  font-weight: 500;
+  line-height: calc(24 * var(--owner-scale));
+  scrollbar-color: #b2b6a6 #fff;
+  scrollbar-width: thin;
+  overflow-y: auto;
+}
+.owner-home-harvest .home-campaign-list option {
+  padding: calc(9 * var(--owner-scale)) calc(12 * var(--owner-scale));
+  border-bottom: 1px solid #526e67;
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+}
+.owner-home-harvest .home-campaign-list option:checked {
+  background: var(--owner-selected)
+    linear-gradient(var(--owner-selected), var(--owner-selected));
+  color: var(--owner-ink);
+  border-radius: 30px;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+.owner-home-harvest .home-campaign-refresh {
+  position: absolute;
+  top: calc(16 * var(--owner-scale));
+  right: calc(12 * var(--owner-scale));
+  min-height: 32px;
+  padding: 4px;
+  border: 0;
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+  opacity: 0;
+}
+.owner-home-harvest .home-campaign-refresh:is(:hover, :active, :focus-visible) {
+  background: var(--owner-selected);
+}
+.owner-home-harvest
+  .home-campaign-panel:is(:hover, :focus-within)
+  .home-campaign-refresh {
+  opacity: 1;
+}
+.owner-home-harvest .home-stats {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  align-items: center;
+  min-height: calc(179 * var(--owner-scale));
+  margin: 0;
+  padding: calc(32 * var(--owner-scale));
+  border-radius: calc(30 * var(--owner-scale));
+  background: var(--owner-surface);
+  color: var(--owner-ink);
+}
+.owner-home-harvest .home-stat {
+  min-height: calc(76 * var(--owner-scale));
+  justify-content: center;
+  gap: calc(10 * var(--owner-scale));
+  padding-inline: calc(12 * var(--owner-scale));
+}
+.owner-home-harvest .home-stat + .home-stat {
+  border-left: 2px solid var(--owner-ink);
+}
+.owner-home-harvest .home-stat dt {
+  font-size: calc(16 * var(--owner-scale));
+  line-height: calc(24 * var(--owner-scale));
+}
+.owner-home-harvest .home-stat dd {
+  margin: 0;
+  color: var(--owner-ink);
+  font-size: calc(32 * var(--owner-scale));
+  line-height: calc(38 * var(--owner-scale));
+  font-weight: 500;
+}
+.owner-home-harvest .home-stat-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: calc(50 * var(--owner-scale));
+  height: calc(50 * var(--owner-scale));
+}
+.owner-home-harvest .home-stat .home-icon {
+  transform: scale(calc(var(--owner-scale) / 1px));
+  transform-origin: top left;
+}
+@media (max-width: 1399px) and (min-width: 1024px) {
+  .owner-home-harvest .home-summary-content-embedded {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .owner-home-harvest .home-feature-cards {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .owner-home-harvest .home-campaign-panel {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .owner-home-harvest .home-stats {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .owner-home-harvest .home-feature-cards {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    row-gap: 24px;
+  }
+  .owner-home-harvest .home-campaign-panel {
+    grid-column: 1/-1;
+    min-height: 0;
+  }
+  .owner-home-harvest .home-campaign-panel h3 {
+    margin-bottom: 16px;
+  }
+  .owner-home-harvest .home-campaign-list {
+    height: 100px;
+  }
+  .owner-home-harvest .home-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 20px;
+  }
+  .owner-home-harvest .home-stat dt {
+    white-space: normal;
+  }
+}
+@media (max-width: 1023px) {
+  .owner-home-harvest .home-summary-content-embedded {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .owner-home-harvest .home-feature-cards {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .owner-home-harvest .home-campaign-panel {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .owner-home-harvest .home-stats {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .owner-home-harvest .owner-summary-heading {
+    min-height: 0;
+    padding-bottom: 28px;
+  }
+  .owner-home-harvest .owner-summary-heading h2 {
+    height: auto;
+    margin-bottom: 24px;
+  }
+  .owner-home-harvest .owner-module-select {
+    width: 211px;
+  }
+  .owner-home-harvest .home-feature-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .owner-home-harvest .home-campaign-panel {
+    grid-column: 1/-1;
+    min-height: 0;
+  }
+  .owner-home-harvest .home-campaign-list {
+    height: 150px;
+  }
+  .owner-home-harvest .home-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 0;
+    padding: 24px 16px;
+  }
+  .owner-home-harvest .home-stat {
+    justify-content: flex-start;
+  }
+  .owner-home-harvest .home-stat:nth-child(odd) {
+    border-left: 0;
+  }
+  .owner-home-harvest .home-stat dt {
+    white-space: normal;
+  }
+}
+@media (max-width: 599px) {
+  .owner-home-harvest .home-ranking-empty {
+    min-height: 118px;
+    margin: 32px -8px 0 -24px;
+    padding: 16px 20px;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+  .owner-home-harvest .home-feature-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .owner-home-harvest .home-feature-cards :is(.home-production, .home-top-worker) {
+    padding: 28px 24px;
+    min-height: 300px;
+  }
+  .owner-home-harvest .home-production-values {
+    margin-top: 38px;
+  }
+  .owner-home-harvest .home-production-values :is(dd, .home-today > strong) {
+    font-size: 68px;
+    line-height: 1.2;
+  }
+  .owner-home-harvest .home-feature-cards .home-winner {
+    margin: 32px -24px 0;
+    grid-template-columns: minmax(0, 1fr) 130px;
+  }
+  .owner-home-harvest .home-winner .home-winner-name {
+    font-size: 30px;
+    line-height: 1.2;
+    min-height: 118px;
+    padding-inline: 16px;
+  }
+  .owner-home-harvest .home-winner-score {
+    width: 126px;
+    height: 126px;
+    margin-inline-start: 0;
+  }
+  .owner-home-harvest .home-winner-score dd {
+    font-size: 48px;
+  }
+  .owner-home-harvest .home-campaign-refresh {
+    opacity: 1;
+  }
+  .owner-home-harvest .home-stat {
+    padding-inline: 8px;
+    gap: 8px;
+  }
+  .owner-home-harvest .home-stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .owner-home-harvest .home-stat .home-icon {
+    transform: scale(0.8);
+  }
+  .owner-home-harvest .home-stat dt {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .owner-home-harvest .home-stat dd {
+    font-size: 28px;
+  }
+}
+@media (max-width: 359px) {
+  .owner-home-harvest .home-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .owner-home-harvest .home-stat {
+    padding: 16px 8px;
+  }
+  .owner-home-harvest .home-stat + .home-stat {
+    border-left: 0;
+    border-top: 1px solid var(--owner-ink);
+  }
+}
