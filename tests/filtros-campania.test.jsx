@@ -15,7 +15,8 @@ describe('Filtros de las tablas de Cosecha', () => {
   it('busca lotes desde otra página, combina estado y fechas y limpia la selección', async () => {
     const user = userEvent.setup()
     const servicio = {
-      listar: vi.fn(async (_, f) => {
+      listar: vi.fn(async (tipo, f) => {
+        if (tipo === 'tickets') return { filas: [], total: 0 }
         if (f.busqueda) return { filas: [lote], total: 1 }
         return {
           filas: f.offset
@@ -25,11 +26,13 @@ describe('Filtros de las tablas de Cosecha', () => {
         }
       })
     }
+    servicio.ticketsLote = vi.fn(async () => ({ filas: [], total: 0 }))
     render(<LotesCampania servicio={servicio} campania={campania} />)
     await screen.findByRole('cell', { name: 'LT-9' })
     await user.click(screen.getByRole('button', { name: 'Página 6' }))
     await screen.findByRole('cell', { name: 'LT-51' })
     await user.click(screen.getByRole('button', { name: 'Tickets del lote LT-51' }))
+    await user.click(screen.getByRole('button', { name: 'Cerrar panel' }))
     await user.type(
       screen.getByRole('searchbox', { name: 'Buscar por lote' }),
       'LT-51{Enter}'
@@ -89,7 +92,7 @@ describe('Filtros de las tablas de Cosecha', () => {
       ...sinFiltros,
       busqueda: '76338971'
     })
-    expect(screen.getAllByRole('columnheader')).toHaveLength(3)
+    expect(screen.getAllByRole('columnheader')).toHaveLength(4)
   })
 
   it.each(SECCIONES_TRABAJADORES)(

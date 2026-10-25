@@ -46,6 +46,31 @@ export function crearCosechaAdapter(consultar) {
             : {})
         }
       ),
+    ticketsLote: (t, campaniaId, loteId, offset = 0) =>
+      consultar('harvest_admin_tickets_lote', {
+        p_tenant_id: t,
+        p_campania_id: campaniaId,
+        p_lote_id: loteId,
+        p_offset: offset
+      }),
+    trabajadorCampania: (t, campaniaId, rol, participacionId) =>
+      consultar('harvest_admin_trabajador_campania', {
+        p_tenant_id: t,
+        p_campania_id: campaniaId,
+        p_rol: rol,
+        p_participacion_id: participacionId
+      }),
+    editarTrabajadorCampania: (t, campaniaId, rol, participacionId, d) =>
+      consultar('harvest_admin_editar_trabajador_campania', {
+        p_tenant_id: t,
+        p_campania_id: campaniaId,
+        p_rol: rol,
+        p_participacion_id: participacionId,
+        p_dni: d.dni,
+        p_nombres: d.nombres,
+        p_apellidos: d.apellidos,
+        p_activo: d.activo
+      }),
     generar: (t, d) =>
       consultar('harvest_admin_generar', {
         p_tenant_id: t,
@@ -53,6 +78,40 @@ export function crearCosechaAdapter(consultar) {
         p_operacion_id: d.operacionId,
         p_cantidad: d.cantidadTickets,
         p_tamanio: d.tamanioLote
+      }),
+    previsualizar: (t, d) =>
+      consultar('harvest_admin_previsualizar', {
+        p_tenant_id: t,
+        p_campania_id: d.campaniaId,
+        p_operacion_id: d.operacionId,
+        p_cantidad: d.cantidadTickets,
+        p_tamanio: d.tamanioLote
+      }),
+    confirmarImpresion: (t, d, vistaPrevia) =>
+      consultar('harvest_admin_reservar_impresion', {
+        p_tenant_id: t,
+        p_campania_id: d.campaniaId,
+        p_operacion_id: d.operacionId,
+        p_cantidad: d.cantidadTickets,
+        p_tamanio: d.tamanioLote,
+        p_vista_previa: vistaPrevia
+      }),
+    resolverImpresion: (t, operacionId, impresa) =>
+      consultar('harvest_admin_resolver_impresion', {
+        p_tenant_id: t,
+        p_operacion_id: operacionId,
+        p_impresa: impresa
+      }),
+    generacion: (t, operacionId) =>
+      consultar('harvest_admin_generacion', {
+        p_tenant_id: t,
+        p_operacion_id: operacionId
+      }),
+    documentoImpresion: (t, operacionId, offset = 0) =>
+      consultar('harvest_admin_documento_impresion', {
+        p_tenant_id: t,
+        p_operacion_id: operacionId,
+        p_offset: offset
       }),
     listar: (t, tipo, f) =>
       consultar(

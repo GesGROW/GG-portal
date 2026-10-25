@@ -4,6 +4,7 @@ import { Carga } from './GestionUi.jsx'
 import { usePaginaCampania } from './usePaginaCampania.js'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
 import { FiltrosCampania, filtrosIniciales } from './FiltrosCampania.jsx'
+import { TicketsLotePanel } from './TicketsLotePanel.jsx'
 import './lotes-campania.css'
 
 export function fechaLote(valor) {
@@ -36,52 +37,57 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
     {
       key: 'id',
       header: 'Lote',
-      width: asignados ? '25%' : '32%',
+      width: asignados ? '20%' : '32%',
       render: (l) => l.codigo ?? l.id
     },
-    asignados
-      ? {
-          key: 'trabajador',
-          header: 'Cosechador',
-          width: '32%',
-          render: (l) =>
-            l.trabajador?.nombre ?? l.asignacion?.trabajador?.nombre ?? 'Sin cosechador'
-        }
-      : {
-          key: 'tickets',
-          header: 'Tickets',
-          width: '35%',
-          render: (l) => (
-            <button
-              type="button"
-              className="lot-tickets-button"
-              aria-label={`Tickets del lote ${l.codigo ?? l.id}`}
-              aria-pressed={seleccionado === l.id}
-              onClick={() => setSeleccionado(l.id)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#000000"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-              </svg>
-            </button>
-          )
-        },
+    ...(asignados
+      ? [
+          {
+            key: 'trabajador',
+            header: 'Cosechador',
+            width: '27%',
+            render: (l) =>
+              l.trabajador?.nombre ??
+              l.asignacion?.trabajador?.nombre ??
+              'Sin cosechador'
+          }
+        ]
+      : []),
+    {
+      key: 'tickets',
+      header: 'Tickets',
+      width: asignados ? '16%' : '35%',
+      render: (l, indice) => (
+        <button
+          type="button"
+          className="lot-tickets-button"
+          aria-label={`Tickets del lote ${l.codigo ?? l.id}`}
+          aria-pressed={seleccionado === paginacion.offset + indice}
+          onClick={() => setSeleccionado(paginacion.offset + indice)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000000"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="19" cy="12" r="1" />
+            <circle cx="5" cy="12" r="1" />
+          </svg>
+        </button>
+      )
+    },
     {
       key: 'fecha',
       header: asignados ? 'Fecha y hora de asignación' : 'Fecha y hora',
-      width: asignados ? '43%' : '33%',
+      width: asignados ? '37%' : '33%',
       render: (l) => {
         const valor = asignados ? l.asignadoEn : l.creadoEn
         const fecha = fechaLote(valor)
@@ -137,10 +143,24 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
           </>
         )}
       </Carga>
-      {seleccionado && (
-        <span className="sr-only" role="status">
-          Lote {seleccionado} seleccionado.
-        </span>
+      {seleccionado !== null && (
+        <TicketsLotePanel
+          servicio={servicio}
+          campaniaId={campania.id}
+          asignados={asignados}
+          lote={filas[seleccionado - paginacion.offset]}
+          indice={seleccionado}
+          total={paginacion.total}
+          cargando={consulta.cargando}
+          error={consulta.error}
+          onRetry={consulta.refrescar}
+          onClose={() => setSeleccionado(null)}
+          onMove={(indice) => {
+            if (indice < 0 || indice >= paginacion.total) return
+            setSeleccionado(indice)
+            paginacion.onPageChange(Math.floor(indice / paginacion.pageSize) + 1)
+          }}
+        />
       )}
     </section>
   )

@@ -44,7 +44,10 @@
   width: calc(24 * var(--owner-scale));
   height: calc(24 * var(--owner-scale));
 }
-.campaign-container :is(.campaign-main-tabs, .campaign-sub-tabs) > :is(a, button) > span {
+.campaign-container
+  :is(.campaign-main-tabs, .campaign-sub-tabs)
+  > :is(a, button)
+  > span {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -105,9 +108,30 @@
   color: #022f2a;
 }
 .campaign-generation {
-  margin-top: calc(48 * var(--owner-scale));
-  padding-left: calc(36 * var(--owner-scale));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(563 * var(--owner-scale));
+  column-gap: calc(64 * var(--owner-scale));
+  row-gap: calc(42 * var(--owner-scale));
+  align-items: start;
+  margin-top: 0;
+  padding-left: 0;
   color: #022f2a;
+}
+.campaign-generation > * {
+  grid-column: 1;
+  min-width: 0;
+}
+.campaign-generation-title {
+  grid-column: 1 / -1;
+  align-self: center;
+  margin: 0;
+  font-size: calc(32 * var(--owner-scale));
+  font-weight: 500;
+  line-height: 1.2;
+}
+.campaign-generation-controls {
+  grid-row: 2;
+  padding-left: calc(36 * var(--owner-scale));
 }
 .campaign-step {
   position: relative;
@@ -134,6 +158,8 @@
   background: #1d9e0d;
 }
 .campaign-step > label {
+  flex: 1;
+  min-width: 0;
   display: block;
   font-size: calc(24 * var(--owner-scale));
   font-weight: 500;
@@ -143,15 +169,17 @@
   display: block;
   position: relative;
   margin-top: calc(16 * var(--owner-scale));
-  width: calc(242 * var(--owner-scale));
+  width: min(100%, calc(242 * var(--owner-scale)));
   height: calc(46 * var(--owner-scale));
   background: #e3e4d6;
   border-radius: calc(30 * var(--owner-scale));
 }
 .campaign-number input {
   appearance: textfield;
+  display: block;
   width: 100%;
   height: 100%;
+  min-height: 0;
   padding: 0 calc(50 * var(--owner-scale)) 0 calc(24 * var(--owner-scale));
   border: 0;
   border-radius: inherit;
@@ -159,6 +187,7 @@
   color: #022f2a;
   font-family: inherit;
   font-size: calc(16 * var(--owner-scale));
+  line-height: normal;
 }
 .campaign-number input::-webkit-inner-spin-button {
   appearance: none;
@@ -208,7 +237,7 @@
   left: calc(50 * var(--owner-scale));
   top: calc(10 * var(--owner-scale));
   height: calc(79 * var(--owner-scale));
-  width: calc(365 * var(--owner-scale));
+  width: min(calc(365 * var(--owner-scale)), calc(100% - 50 * var(--owner-scale)));
   overflow: hidden;
   border-radius: 0 calc(30 * var(--owner-scale)) calc(30 * var(--owner-scale)) 0;
 }
@@ -225,28 +254,183 @@
   font-weight: 600;
   animation: campaign-print-emerge 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+.campaign-print-reveal > button:is(:hover, :focus-visible):not(:disabled) {
+  background: #a2bf3e;
+  color: #022f2a;
+}
+.campaign-print-reveal > button:active:not(:disabled) {
+  background: #89a628;
+  color: #022f2a;
+}
+.campaign-print-reveal > button:focus-visible {
+  outline: 2px solid #022f2a;
+  outline-offset: -4px;
+}
 @keyframes campaign-print-emerge {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .campaign-print-reveal > button { animation: none; }
+  .campaign-print-reveal > button {
+    animation: none;
+  }
 }
 .campaign-generation-error {
   color: #a51919;
   max-width: 600px;
 }
-.campaign-generation-result {
-  margin-left: calc(166 * var(--owner-scale));
-  max-width: 600px;
-  font-size: 16px;
+.campaign-ticket-preview {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
 }
-.campaign-generation-result button {
+.campaign-ticket-preview h3 {
+  margin: 0 0 calc(24 * var(--owner-scale));
+  font-size: calc(24 * var(--owner-scale));
+  font-weight: 500;
+  line-height: 1.2;
+}
+.campaign-preview-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 563 / 403;
+  background: #829896;
+  overflow: hidden;
+}
+.campaign-preview-frame iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
   border: 0;
-  background: #e3e4d6;
+  background: white;
+}
+.campaign-preview-placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  margin: 0;
+  padding: calc(40 * var(--owner-scale));
+  text-align: center;
+  font-size: calc(40 * var(--owner-scale));
+  font-weight: 500;
+  line-height: 1.2;
+}
+.campaign-generation-completion {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(563 * var(--owner-scale));
+  column-gap: calc(64 * var(--owner-scale));
+  align-items: center;
+}
+.campaign-confirm-step {
+  grid-column: 2;
+  margin: 0 0 0 calc(-134 * var(--owner-scale));
+  gap: calc(34 * var(--owner-scale));
+}
+.campaign-generation-success {
+  display: flex;
+  align-items: center;
+  gap: calc(20 * var(--owner-scale));
+  padding: 0 calc(110 * var(--owner-scale)) 0 calc(76 * var(--owner-scale));
+  font-size: calc(16 * var(--owner-scale));
+  font-weight: 500;
+  line-height: 1.5;
+}
+.campaign-generation-success svg {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
   color: #022f2a;
-  border-radius: 24px;
-  padding: 12px 20px;
+}
+.campaign-generation-success p {
+  margin: 0;
+}
+.campaign-preview-actions {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: calc(16 * var(--owner-scale));
+  animation: campaign-actions-emerge 180ms ease-out both;
+}
+.campaign-print-confirmation {
+  flex: 1;
+  min-width: 0;
+}
+.campaign-print-confirmation > p {
+  margin: 0 0 12px;
+  color: #022f2a;
+  font-size: calc(20 * var(--owner-scale));
+  font-weight: 600;
+}
+@keyframes campaign-actions-emerge {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.campaign-preview-actions button {
+  flex: 1;
+  min-width: 0;
+  min-height: calc(58 * var(--owner-scale));
+  padding: calc(12 * var(--owner-scale)) calc(16 * var(--owner-scale));
+  border: 0;
+  border-radius: calc(30 * var(--owner-scale));
+  background: #95b52c;
+  color: #022f2a;
+  font-family: inherit;
+  font-size: calc(20 * var(--owner-scale));
+  font-weight: 600;
+}
+.campaign-preview-actions button + button {
+  background: #d9d9d9;
+}
+.campaign-preview-actions button:is(:hover, :focus-visible):not(:disabled) {
+  background: #a2bf3e;
+  color: #022f2a;
+}
+.campaign-preview-actions button:active:not(:disabled) {
+  background: #89a628;
+  color: #022f2a;
+}
+.campaign-preview-actions button + button:is(:hover, :focus-visible):not(:disabled) {
+  background: #c9ceca;
+}
+.campaign-preview-actions button + button:active:not(:disabled) {
+  background: #bbc3bd;
+}
+@media (prefers-reduced-motion: reduce) {
+  .campaign-preview-actions {
+    animation: none;
+  }
+}
+.campaign-preview-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.campaign-confirm-step.is-complete .campaign-preview-actions button:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.campaign-preview-actions button:focus-visible {
+  outline: 3px solid #022f2a;
+  outline-offset: 3px;
+}
+.campaign-print-reveal > button:disabled {
+  opacity: 0.6;
+}
+.campaign-generation.is-printing .campaign-print-reveal > button:disabled {
+  opacity: 1;
 }
 .campaign-body .harvest-ticket-tabs {
   display: none;
@@ -300,8 +484,45 @@
     width: calc((100% - 28px) / 3);
   }
   .campaign-generation {
+    display: block;
     padding: 0;
-    margin-top: 42px;
+    margin-top: 0;
+  }
+  .campaign-generation-title {
+    font-size: 26px;
+    margin-bottom: 24px;
+  }
+  .campaign-generation-controls {
+    padding-left: 0;
+  }
+  .campaign-ticket-preview {
+    margin-top: 32px;
+  }
+  .campaign-ticket-preview h3 {
+    font-size: 22px;
+  }
+  .campaign-preview-frame {
+    max-width: 563px;
+  }
+  .campaign-preview-placeholder {
+    font-size: 30px;
+    padding: 24px;
+  }
+  .campaign-generation-completion {
+    display: block;
+    margin-top: 32px;
+  }
+  .campaign-confirm-step {
+    margin: 0;
+  }
+  .campaign-generation-success {
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .campaign-preview-actions button {
+    font-size: 18px;
+    min-height: 48px;
   }
   .campaign-step {
     gap: 20px;
@@ -327,9 +548,6 @@
   .campaign-print-reveal > button {
     font-size: 20px;
   }
-  .campaign-generation-result {
-    margin-left: 0;
-  }
 }
 @media (max-width: 580px) {
   .owner-layout.campaign-workspace-layout .content {
@@ -354,6 +572,16 @@
   .campaign-body > h2 {
     font-size: 24px;
     overflow-wrap: anywhere;
+  }
+  .campaign-generation-title {
+    font-size: 24px;
+  }
+  .campaign-preview-placeholder {
+    font-size: 24px;
+  }
+  .campaign-preview-actions {
+    flex-direction: column;
+    gap: 12px;
   }
   .campaign-step {
     gap: 12px;

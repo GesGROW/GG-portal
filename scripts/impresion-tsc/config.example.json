@@ -1,0 +1,7 @@
+{
+  "port": 18191,
+  "origins": ["http://localhost:5174"],
+  "token": "REEMPLAZAR_CON_TOKEN_ALEATORIO_DE_AL_MENOS_32_CARACTERES",
+  "printer": "TSC TTP-247",
+  "dryRun": true
+}

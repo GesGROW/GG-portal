@@ -43,6 +43,13 @@ export function crearPuertosSupabase(cliente) {
           'workforce_cosecha_listar',
           'iam_crear_empresa_inicial',
           'harvest_admin_trabajadores',
+          'harvest_admin_tickets_lote',
+          'harvest_admin_trabajador_campania',
+          'harvest_admin_editar_trabajador_campania',
+          'harvest_admin_previsualizar',
+          'harvest_admin_confirmar_impresion',
+          'harvest_admin_reservar_impresion',
+          'harvest_admin_resolver_impresion',
           'harvest_reportes_campania'
         ].includes(nombre) &&
         e.code === 'PGRST202'

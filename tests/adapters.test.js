@@ -102,6 +102,11 @@ test('consulta de trabajadores sin migración no se presenta como fallo de conex
       return true
     }
   )
+  for (const consultar of [
+    () => puertos.harvestAdmin.previsualizar('A', {}),
+    () => puertos.harvestAdmin.confirmarImpresion('A', {}, {})
+  ])
+    await assert.rejects(consultar(), /Falta aplicar su actualización/)
   codigo = 'PGRST000'
   await assert.rejects(puertos.workforce.listarCosecha('A', {}), (error) => {
     assert.match(error.message, /Compruebe su conexión/)

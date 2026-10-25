@@ -38,7 +38,8 @@
   background: #d9d9d9;
   transition: background 150ms ease;
 }
-.campaign-lots .lot-tickets-button:is(:hover, :focus-visible):not([aria-pressed='true'])::before {
+.campaign-lots
+  .lot-tickets-button:is(:hover, :focus-visible):not([aria-pressed='true'])::before {
   background: #c4c4c4;
 }
 .campaign-lots .lot-tickets-button svg {

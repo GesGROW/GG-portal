@@ -23,6 +23,180 @@ async function crear(options = {}) {
   return { app, ports, datos }
 }
 
+test('panel de tickets usa solo la consulta ligera y rechaza otro lote', async () => {
+  const { app, ports } = await crear()
+  const r = {
+    tenantId: 'A',
+    campaniaId: 'A-camp',
+    loteId: 'l1',
+    total: 1,
+    filas: [{ codigo: 'C00000101', estado: 'DISPONIBLE' }]
+  }
+  const calls = []
+  ports.harvestAdmin.ticketsLote = async (...args) => {
+    calls.push(args)
+    return r
+  }
+  assert.deepEqual(await app.cosecha.ticketsLote('A-camp', 'l1'), r)
+  assert.deepEqual(calls, [['A', 'A-camp', 'l1', 0]])
+  ports.harvestAdmin.ticketsLote = async () => ({ ...r, loteId: 'ajeno' })
+  await assert.rejects(app.cosecha.ticketsLote('A-camp', 'l1'), /no corresponden/)
+  await assert.rejects(app.cosecha.ticketsLote('A-camp', 'l1', -1), /inválida/)
+  const adapter = crearCosechaAdapter(async (...args) => calls.push(args))
+  await adapter.ticketsLote('A', 'A-camp', 'l1', 50)
+  assert.deepEqual(calls.at(-1), [
+    'harvest_admin_tickets_lote',
+    { p_tenant_id: 'A', p_campania_id: 'A-camp', p_lote_id: 'l1', p_offset: 50 }
+  ])
+})
+
+test('la lectura del panel y la comprobación del módulo corren en paralelo, sin entregar datos si el módulo falla', async () => {
+  const { app, ports } = await crear()
+  const r = {
+    id: 't1',
+    tenantId: 'A',
+    campaniaId: 'A-camp',
+    rol: 'JABERO',
+    participacionId: 'r1'
+  }
+  let resolverModulo,
+    lecturaIniciada = false,
+    terminada = false
+  const comprobarModulo = ports.entitlements.puedeUsarModulo
+  let primera = true
+  ports.entitlements.puedeUsarModulo = (...args) => {
+    if (!primera) return comprobarModulo(...args)
+    primera = false
+    return new Promise((resolve) => {
+      resolverModulo = resolve
+    })
+  }
+  ports.harvestAdmin.trabajadorCampania = async () => {
+    lecturaIniciada = true
+    return r
+  }
+  const tarea = app.cosecha.trabajadorCampania('A-camp', 'JABERO', 'r1').finally(() => {
+    terminada = true
+  })
+  while (!resolverModulo) await new Promise((resolve) => setTimeout(resolve, 0))
+  assert.equal(lecturaIniciada, true)
+  assert.equal(terminada, false)
+  ports.modulos.A = []
+  resolverModulo(false)
+  await assert.rejects(tarea, /módulo|habilitado/i)
+})
+
+test('ficha de campaña usa solo HARVEST; edición limita datos y exige harvest.manage', async () => {
+  const { app, ports } = await crear({ modulos: { A: ['HARVEST'] } })
+  const ficha = {
+    id: 't1',
+    tenantId: 'A',
+    campaniaId: 'A-camp',
+    rol: 'COSECHADOR',
+    participacionId: 'r1',
+    dni: '12345678',
+    nombres: 'Ana',
+    apellidos: 'Rojas',
+    activo: true
+  }
+  const calls = []
+  ports.harvestAdmin.trabajadorCampania = async (...args) => {
+    calls.push(['leer', ...args])
+    return ficha
+  }
+  ports.harvestAdmin.editarTrabajadorCampania = async (...args) => {
+    calls.push(['editar', ...args])
+    return ficha
+  }
+  assert.deepEqual(
+    await app.cosecha.trabajadorCampania('A-camp', 'COSECHADOR', 'r1'),
+    ficha
+  )
+  assert.deepEqual(
+    await app.cosecha.editarTrabajadorCampania('A-camp', 'COSECHADOR', 'r1', {
+      ...ficha,
+      tenantId: 'B',
+      dni: ' 12345678 ',
+      activo: true
+    }),
+    ficha
+  )
+  assert.deepEqual(calls.at(-1), [
+    'editar',
+    'A',
+    'A-camp',
+    'COSECHADOR',
+    'r1',
+    { dni: '12345678', nombres: 'Ana', apellidos: 'Rojas', activo: true }
+  ])
+  await assert.rejects(
+    app.cosecha.editarTrabajadorCampania('A-camp', 'COSECHADOR', 'r1', {
+      ...ficha,
+      dni: '123'
+    }),
+    /requeridos/
+  )
+  ports.harvestAdmin.trabajadorCampania = async () => ({ ...ficha, tenantId: 'B' })
+  await assert.rejects(
+    app.cosecha.trabajadorCampania('A-camp', 'COSECHADOR', 'r1'),
+    /no corresponde/
+  )
+  ports.permisos.A = ['harvest.view']
+  await assert.rejects(
+    app.cosecha.editarTrabajadorCampania('A-camp', 'COSECHADOR', 'r1', ficha),
+    /permiso/i
+  )
+})
+
+test('la ficha descarta una respuesta después de cambiar de empresa y el adapter no serializa autoridad del formulario', async () => {
+  const { app, ports } = await crear({
+    empresas: ['A', 'B'],
+    permisos: { A: ['harvest.manage'], B: ['harvest.manage'] }
+  })
+  let liberar
+  ports.harvestAdmin.trabajadorCampania = () =>
+    new Promise((r) => {
+      liberar = r
+    })
+  const tarea = app.cosecha.trabajadorCampania('A-camp', 'JABERO', 'r1')
+  while (!liberar) await new Promise((r) => setTimeout(r, 0))
+  await app.seleccionarEmpresa('B')
+  liberar({
+    id: 't1',
+    tenantId: 'A',
+    campaniaId: 'A-camp',
+    rol: 'JABERO',
+    participacionId: 'r1'
+  })
+  await assert.rejects(tarea, { name: 'SolicitudObsoleta' })
+  const calls = [],
+    adapter = crearCosechaAdapter(async (...args) => calls.push(args))
+  await adapter.editarTrabajadorCampania('A', 'c1', 'JABERO', 'r1', {
+    tenantId: 'B',
+    id: 'otro',
+    dni: '12345678',
+    nombres: 'Ana',
+    apellidos: 'Rojas',
+    activo: false,
+    actor: 'falso'
+  })
+  assert.deepEqual(calls, [
+    [
+      'harvest_admin_editar_trabajador_campania',
+      {
+        p_tenant_id: 'A',
+        p_campania_id: 'c1',
+        p_rol: 'JABERO',
+        p_participacion_id: 'r1',
+        p_dni: '12345678',
+        p_nombres: 'Ana',
+        p_apellidos: 'Rojas',
+        p_activo: false
+      }
+    ]
+  ])
+})
+
 test('trabajadores de la campaña usa sólo HARVEST, valida filtros y revalida el contexto', async () => {
   const { app, ports, datos } = await crear({ modulos: { A: ['HARVEST'] } })
   datos.trabajadoresCampania.A.push({
@@ -91,33 +265,94 @@ test('generación transmite sólo intención a la API pública Harvest; servidor
 
 test('filtros de tablas conserva contexto, fechas y el estado inactivo sin cambiar los RPC antiguos', async () => {
   const { app, ports } = await crear()
-  const filtros = { busqueda: '  Lucía  ', estado: 'INACTIVO', desde: '2026-10-20', hasta: '2026-10-21' }
+  const filtros = {
+    busqueda: '  Lucía  ',
+    estado: 'INACTIVO',
+    desde: '2026-10-20',
+    hasta: '2026-10-21'
+  }
   await app.cosecha.trabajadoresCampania('A-camp', 'JABERO', 0, filtros)
-  assert.deepEqual(ports.calls.find(c => c[0] === 'trabajadoresCampania'), [
-    'trabajadoresCampania', 'A', 'A-camp', 'JABERO', 0, { ...filtros, busqueda: 'Lucía' }
+  assert.deepEqual(
+    ports.calls.find((c) => c[0] === 'trabajadoresCampania'),
+    [
+      'trabajadoresCampania',
+      'A',
+      'A-camp',
+      'JABERO',
+      0,
+      { ...filtros, busqueda: 'Lucía' }
+    ]
+  )
+  for (const invalido of [
+    { estado: 'OTRO' },
+    { busqueda: 123 },
+    { desde: '2026-02-30' },
+    { desde: '2026-10-22', hasta: '2026-10-20' },
+    { hasta: 'infinity' }
   ])
-  for(const invalido of [
-    { estado: 'OTRO' }, { busqueda: 123 }, { desde: '2026-02-30' },
-    { desde: '2026-10-22', hasta: '2026-10-20' }, { hasta: 'infinity' }
-  ]) await assert.rejects(app.cosecha.trabajadoresCampania('A-camp', 'JABERO', 0, invalido), /inválid/)
-  await app.cosecha.listar('lotes', { campaniaId: 'A-camp', ...filtros, estado: 'ASIGNADO' })
-  assert.deepEqual(ports.calls.find(c => c[0] === 'listarHarvest')[3], {
-    campaniaId: 'A-camp', busqueda: 'Lucía', estado: 'ASIGNADO', desde: '2026-10-20', hasta: '2026-10-21',
-    loteId: null, trabajadorId: null, offset: 0
+    await assert.rejects(
+      app.cosecha.trabajadoresCampania('A-camp', 'JABERO', 0, invalido),
+      /inválid/
+    )
+  await app.cosecha.listar('lotes', {
+    campaniaId: 'A-camp',
+    ...filtros,
+    estado: 'ASIGNADO'
+  })
+  assert.deepEqual(ports.calls.find((c) => c[0] === 'listarHarvest')[3], {
+    campaniaId: 'A-camp',
+    busqueda: 'Lucía',
+    estado: 'ASIGNADO',
+    desde: '2026-10-20',
+    hasta: '2026-10-21',
+    loteId: null,
+    trabajadorId: null,
+    offset: 0
   })
   const calls = []
   const adapter = crearCosechaAdapter(async (...args) => calls.push(args))
-  await adapter.trabajadoresCampania('A', 'camp', 'JABERO', 0, { ...filtros, busqueda: 'Lucía' })
-  assert.deepEqual(calls[0], ['harvest_admin_trabajadores_filtrados', {
-    p_tenant_id: 'A', p_campania_id: 'camp', p_rol: 'JABERO', p_offset: 0,
-    p_busqueda: 'Lucía', p_activo: false, p_desde: '2026-10-20', p_hasta: '2026-10-21'
-  }])
-  await adapter.listar('A', 'asignaciones', { campaniaId: 'camp', busqueda: '76338971', estado: '',
-    loteId: null, trabajadorId: null, offset: 50, desde: '2026-10-20', hasta: '2026-10-21' })
-  assert.deepEqual(calls[1], ['harvest_admin_listar_filtrado', {
-    p_tenant_id: 'A', p_tipo: 'asignaciones', p_campania_id: 'camp', p_busqueda: '76338971',
-    p_estado: '', p_lote_id: null, p_trabajador_id: null, p_offset: 50, p_desde: '2026-10-20', p_hasta: '2026-10-21'
-  }])
+  await adapter.trabajadoresCampania('A', 'camp', 'JABERO', 0, {
+    ...filtros,
+    busqueda: 'Lucía'
+  })
+  assert.deepEqual(calls[0], [
+    'harvest_admin_trabajadores_filtrados',
+    {
+      p_tenant_id: 'A',
+      p_campania_id: 'camp',
+      p_rol: 'JABERO',
+      p_offset: 0,
+      p_busqueda: 'Lucía',
+      p_activo: false,
+      p_desde: '2026-10-20',
+      p_hasta: '2026-10-21'
+    }
+  ])
+  await adapter.listar('A', 'asignaciones', {
+    campaniaId: 'camp',
+    busqueda: '76338971',
+    estado: '',
+    loteId: null,
+    trabajadorId: null,
+    offset: 50,
+    desde: '2026-10-20',
+    hasta: '2026-10-21'
+  })
+  assert.deepEqual(calls[1], [
+    'harvest_admin_listar_filtrado',
+    {
+      p_tenant_id: 'A',
+      p_tipo: 'asignaciones',
+      p_campania_id: 'camp',
+      p_busqueda: '76338971',
+      p_estado: '',
+      p_lote_id: null,
+      p_trabajador_id: null,
+      p_offset: 50,
+      p_desde: '2026-10-20',
+      p_hasta: '2026-10-21'
+    }
+  ])
 })
 test('harvest.view consulta pero no genera; harvest.operate no habilita administración ni consultas Portal', async () => {
   const view = await crear({ permisos: { A: ['harvest.view'] } })

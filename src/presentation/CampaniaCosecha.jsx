@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { GeneracionCampania } from './GeneracionCampania.jsx'
+export { GeneracionCampania } from './GeneracionCampania.jsx'
+import { useEffect } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router'
 import { useCarga, Carga } from './GestionUi.jsx'
 import { CosechaSelector } from './CosechaSelector.jsx'
@@ -206,7 +208,6 @@ export function CampaniaCosecha({
           ))}
         </nav>
         <section className="campaign-body" aria-busy={pendiente || catalogo.cargando}>
-          {seccion === 'generar' && <h2>Generación e impresión de lotes de tickets</h2>}
           {seccion === 'lotes' && <h2>Lotes de tickets generados</h2>}
           {seccion === 'asignaciones' && <h2>Lotes de tickets asignados</h2>}
           {trabajadores && <h2>{trabajadores.label}</h2>}
@@ -241,15 +242,22 @@ export function CampaniaCosecha({
                     servicio={servicio}
                     campania={elegida}
                     seccion={trabajadores}
+                    puedeEditar={generar}
                   />
                 )
               if (seccion === 'generar')
                 return (
                   <GeneracionCampania
-                    key={elegida.id}
+                    key={`${elegida.id}:${params.get('operacion') ?? ''}`}
                     servicio={servicio}
                     campania={elegida}
                     pendiente={pendiente}
+                    operacionId={params.get('operacion')}
+                    onNuevaGeneracion={() => {
+                      const siguientes = new URLSearchParams(params)
+                      siguientes.delete('operacion')
+                      setParams(siguientes, { replace: true })
+                    }}
                   />
                 )
               if (seccion === 'lotes' || seccion === 'asignaciones')
@@ -275,208 +283,5 @@ export function CampaniaCosecha({
         </section>
       </div>
     </div>
-  )
-}
-
-export function GeneracionCampania({ servicio, campania, pendiente = false }) {
-  const [cantidad, setCantidad] = useState('0'),
-    [tamanio, setTamanio] = useState('0')
-  const [intento, setIntento] = useState(null),
-    [resultado, setResultado] = useState(null)
-  const [ocupado, setOcupado] = useState(false),
-    [impreso, setImpreso] = useState(false),
-    [error, setError] = useState('')
-  const bloqueo = useRef(false),
-    operacion = useRef(crypto.randomUUID()),
-    destinoActual = useRef(null),
-    montado = useRef(true)
-  useEffect(() => {
-    montado.current = true
-    return () => {
-      montado.current = false
-      if (bloqueo.current) destinoActual.current?.cerrar?.()
-    }
-  }, [])
-  const valido = (v) =>
-    Number.isSafeInteger(Number(v)) && Number(v) > 0 && Number(v) <= 100000
-  const uno = valido(cantidad),
-    dos = valido(tamanio),
-    lista = uno && dos && campania.estado === 'ACTIVA'
-  async function enviar(e) {
-    e.preventDefault()
-    if (!lista || pendiente || bloqueo.current || impreso) return
-    let destino
-    try {
-      destino = servicio.abrirImpresion()
-      destinoActual.current = destino
-    } catch (e) {
-      setError(e.message)
-      return
-    }
-    bloqueo.current = true
-    setOcupado(true)
-    setError('')
-    const solicitud = intento ?? {
-      operacionId: operacion.current,
-      campaniaId: campania.id,
-      cantidadTickets: Number(cantidad),
-      tamanioLote: Number(tamanio)
-    }
-    setIntento(solicitud)
-    try {
-      const recibo = resultado ?? (await servicio.generar(solicitud))
-      if (!montado.current) {
-        destino.cerrar()
-        return
-      }
-      setResultado(recibo)
-      await servicio.imprimirGeneracion(solicitud.operacionId, destino)
-      if (montado.current) setImpreso(true)
-    } catch (e) {
-      destino?.cerrar?.()
-      if (montado.current && e.name !== 'SolicitudObsoleta')
-        setError(
-          e.message ||
-            'No se pudo preparar la impresión. Reintenta con los mismos tickets.'
-        )
-    } finally {
-      bloqueo.current = false
-      if (montado.current) setOcupado(false)
-    }
-  }
-  const deshabilitado = pendiente || ocupado || Boolean(intento)
-  return (
-    <form className="campaign-generation" onSubmit={enviar} noValidate>
-      <div className={`campaign-step ${uno ? 'is-complete' : ''}`}>
-        <span
-          className="campaign-step-number"
-          aria-label={`Paso 1: ${uno ? 'completo' : 'pendiente'}`}
-        >
-          1
-        </span>
-        <label>
-          Cantidad total de tickets
-          <Numero
-            label="Cantidad total de tickets"
-            valor={cantidad}
-            cambiar={setCantidad}
-            disabled={deshabilitado}
-          />
-        </label>
-      </div>
-      <div className={`campaign-step ${dos ? 'is-complete' : ''}`}>
-        <span
-          className="campaign-step-number"
-          aria-label={`Paso 2: ${dos ? 'completo' : 'pendiente'}`}
-        >
-          2
-        </span>
-        <label>
-          Tickets por lote
-          <Numero
-            label="Tickets por lote"
-            valor={tamanio}
-            cambiar={setTamanio}
-            disabled={deshabilitado}
-          />
-        </label>
-      </div>
-      <div
-        className={`campaign-step campaign-print-step ${impreso ? 'is-complete' : ''}`}
-      >
-        <span
-          className="campaign-step-number"
-          aria-label={`Paso 3: ${impreso ? 'completo' : 'pendiente'}`}
-        >
-          3
-        </span>
-        {lista && (
-          <div className="campaign-print-reveal">
-            <button type="submit" disabled={ocupado || pendiente || impreso}>
-              {ocupado
-                ? 'Preparando…'
-                : impreso
-                  ? 'Impresión abierta'
-                  : intento
-                    ? 'Reintentar impresión'
-                    : 'Imprimir tickets'}
-            </button>
-          </div>
-        )}
-      </div>
-      {campania.estado !== 'ACTIVA' && (
-        <p role="status">
-          Esta campaña está cerrada. Selecciona la campaña actual para generar tickets.
-        </p>
-      )}
-      {error && (
-        <p className="campaign-generation-error" role="alert">
-          {error}
-        </p>
-      )}
-      {resultado && (
-        <div className="campaign-generation-result" role="status">
-          <p>
-            {resultado.cantidadTickets} tickets · {resultado.lotes.length} lotes
-          </p>
-          {impreso && (
-            <p>
-              Se abrió la impresión en A4. Completa la impresión desde el navegador.
-            </p>
-          )}
-          <button
-            type="button"
-            disabled={ocupado || pendiente}
-            onClick={() => {
-              operacion.current = crypto.randomUUID()
-              setIntento(null)
-              setResultado(null)
-              setImpreso(false)
-              setError('')
-              setCantidad('0')
-              setTamanio('0')
-            }}
-          >
-            Preparar otra generación
-          </button>
-        </div>
-      )}
-    </form>
-  )
-}
-function Numero({ label, valor, cambiar, disabled }) {
-  const ref = useRef(null)
-  return (
-    <span className="campaign-number">
-      <input
-        ref={ref}
-        aria-label={label}
-        type="number"
-        min="0"
-        max="100000"
-        step="1"
-        value={valor}
-        disabled={disabled}
-        onChange={(e) => cambiar(e.target.value)}
-      />
-      <span className="campaign-number-arrows">
-        {[1, -1].map((n) => (
-          <button
-            type="button"
-            key={n}
-            aria-label={`${n === 1 ? 'Aumentar' : 'Disminuir'} ${label.toLocaleLowerCase('es')}`}
-            disabled={disabled}
-            onClick={() => {
-              ref.current[n === 1 ? 'stepUp' : 'stepDown']()
-              cambiar(ref.current.value)
-            }}
-          >
-            <svg viewBox="0 0 16 8" aria-hidden="true">
-              <path d={n === 1 ? 'M3 6 8 1l5 5' : 'm3 1 5 5 5-5'} />
-            </svg>
-          </button>
-        ))}
-      </span>
-    </span>
   )
 }

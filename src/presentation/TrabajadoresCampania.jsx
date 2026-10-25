@@ -5,6 +5,7 @@ import { usePaginaCampania } from './usePaginaCampania.js'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
 import { FiltrosCampania, filtrosIniciales } from './FiltrosCampania.jsx'
 import { fechaLote } from './LotesCampania.jsx'
+import { TrabajadorCampaniaPanel } from './TrabajadorCampaniaPanel.jsx'
 import './trabajadores-campania.css'
 
 export const SECCIONES_TRABAJADORES = Object.freeze([
@@ -65,8 +66,15 @@ export function IconoTrabajador({ tipo }) {
   )
 }
 
-export function TrabajadoresCampania({ servicio, campania, seccion }) {
+export function TrabajadoresCampania({
+  servicio,
+  campania,
+  seccion,
+  puedeEditar = false
+}) {
   const [filtros, setFiltros] = useState(filtrosIniciales)
+  const [seleccionado, setSeleccionado] = useState(null)
+  const conFicha = ['COSECHADOR', 'JABERO'].includes(seccion.rol)
   const { consulta, filas, paginacion, reiniciar, refrescar } = usePaginaCampania(
     (offset) =>
       servicio.trabajadoresCampania(campania.id, seccion.rol, offset, filtros),
@@ -107,9 +115,13 @@ export function TrabajadoresCampania({ servicio, campania, seccion }) {
         filtros={filtros}
         trabajadores
         consulta={consulta}
-        actualizar={refrescar}
+        actualizar={() => {
+          setSeleccionado(null)
+          refrescar()
+        }}
         cambiar={(valor) => {
           setFiltros(valor)
+          setSeleccionado(null)
           reiniciar()
         }}
       />
@@ -121,6 +133,8 @@ export function TrabajadoresCampania({ servicio, campania, seccion }) {
               tableClassName="campaign-workers-table"
               columns={columnas}
               data={filas}
+              onRowActivate={conFicha ? setSeleccionado : undefined}
+              rowClassName={(t) => (t.id === seleccionado?.id ? 'is-selected' : '')}
               emptyState={
                 <CampaignTableEmpty>
                   {filtros.busqueda || filtros.estado || filtros.desde || filtros.hasta
@@ -128,11 +142,36 @@ export function TrabajadoresCampania({ servicio, campania, seccion }) {
                     : `No hay ${seccion.label.toLocaleLowerCase('es')}`}
                 </CampaignTableEmpty>
               }
-              pagination={paginacion}
+              pagination={{
+                ...paginacion,
+                onPageChange: (pagina) => {
+                  setSeleccionado(null)
+                  paginacion.onPageChange(pagina)
+                }
+              }}
             />
           </>
         )}
       </Carga>
+      {seleccionado && (
+        <TrabajadorCampaniaPanel
+          servicio={servicio}
+          campania={campania}
+          seccion={seccion}
+          seleccionado={seleccionado}
+          puedeEditar={puedeEditar}
+          onClose={() => setSeleccionado(null)}
+          onSaved={(r) => {
+            setSeleccionado((t) => ({
+              ...t,
+              nombre: [r.nombres, r.apellidos].filter(Boolean).join(' '),
+              dni: r.dni,
+              activo: r.activo && r.trabajadorActivo
+            }))
+            refrescar()
+          }}
+        />
+      )}
     </section>
   )
 }

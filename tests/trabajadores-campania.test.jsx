@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { CampaniaCosecha } from '../src/presentation/CampaniaCosecha.jsx'
@@ -19,6 +19,155 @@ const campania = { id: 'camp-1', nombre: 'Campaña Arándano 2026', estado: 'ACT
 const contexto = { permite: (p) => p === 'harvest.manage' }
 const sinFiltros = { busqueda: '', estado: '', desde: null, hasta: null }
 describe('Trabajadores dentro de una campaña', () => {
+  it.each(SECCIONES_TRABAJADORES.slice(0, 2))(
+    '$label abre la ficha con clic o teclado y guarda los campos reales de esa participación',
+    async (seccion) => {
+      let actual = {
+        ...persona,
+        id: 'trabajador-1',
+        participacionId: persona.id,
+        campaniaId: campania.id,
+        rol: seccion.rol,
+        nombres: 'Ana María',
+        apellidos: 'De la Cruz Rojas',
+        activo: false,
+        trabajadorActivo: true
+      }
+      const servicio = {
+        trabajadoresCampania: vi.fn(async () => ({
+          filas: [
+            {
+              ...persona,
+              nombre: [actual.nombres, actual.apellidos].join(' '),
+              activo: actual.activo
+            }
+          ],
+          total: 1
+        })),
+        trabajadorCampania: vi.fn(async () => actual),
+        editarTrabajadorCampania: vi.fn(
+          async (c, r, id, d) => (actual = { ...actual, ...d })
+        )
+      }
+      render(
+        <TrabajadoresCampania
+          servicio={servicio}
+          campania={campania}
+          seccion={seccion}
+          puedeEditar
+        />
+      )
+      const user = userEvent.setup(),
+        fila = (await screen.findByText('Ana María De la Cruz Rojas')).closest('tr')
+      expect(fila).toHaveAttribute('tabindex', '0')
+      expect(within(fila).queryByRole('link')).not.toBeInTheDocument()
+      if (seccion.rol === 'COSECHADOR') await user.click(fila)
+      else {
+        fila.focus()
+        await user.keyboard('{Enter}')
+      }
+      const panel = screen.getByRole('dialog')
+      expect(await within(panel).findByLabelText('Nombres')).toHaveValue('Ana María')
+      expect(within(panel).getByLabelText('Apellidos')).toHaveValue('De la Cruz Rojas')
+      expect(servicio.trabajadorCampania).toHaveBeenCalledExactlyOnceWith(
+        campania.id,
+        seccion.rol,
+        persona.id
+      )
+      await user.clear(within(panel).getByLabelText('DNI'))
+      await user.type(within(panel).getByLabelText('DNI'), '12345678')
+      await user.clear(within(panel).getByLabelText('Nombres'))
+      await user.type(within(panel).getByLabelText('Nombres'), 'Ana')
+      await user.selectOptions(
+        within(panel).getByLabelText('Estado en esta campaña'),
+        'true'
+      )
+      await user.click(within(panel).getByRole('button', { name: 'Guardar datos' }))
+      expect(await within(panel).findByRole('status')).toHaveTextContent(
+        'Datos guardados.'
+      )
+      expect(servicio.editarTrabajadorCampania).toHaveBeenCalledExactlyOnceWith(
+        campania.id,
+        seccion.rol,
+        persona.id,
+        { dni: '12345678', nombres: 'Ana', apellidos: 'De la Cruz Rojas', activo: true }
+      )
+      expect(servicio.trabajadoresCampania).toHaveBeenCalledTimes(2)
+    }
+  )
+  it('un fallo conserva los cambios y bloquea el cierre durante el guardado para evitar doble envío', async () => {
+    let rechazar
+    const datos = {
+      id: 't1',
+      participacionId: persona.id,
+      dni: persona.dni,
+      nombres: 'Ana',
+      apellidos: 'Rojas',
+      activo: true,
+      trabajadorActivo: true
+    }
+    const servicio = {
+      trabajadoresCampania: vi.fn(async () => ({ filas: [persona], total: 1 })),
+      trabajadorCampania: vi.fn(async () => datos),
+      editarTrabajadorCampania: vi.fn(
+        () =>
+          new Promise((r, j) => {
+            rechazar = j
+          })
+      )
+    }
+    render(
+      <TrabajadoresCampania
+        servicio={servicio}
+        campania={campania}
+        seccion={SECCIONES_TRABAJADORES[0]}
+        puedeEditar
+      />
+    )
+    const user = userEvent.setup()
+    await user.click(await screen.findByText('Ana Rojas'))
+    const panel = screen.getByRole('dialog')
+    await within(panel).findByLabelText('Nombres')
+    await user.dblClick(within(panel).getByRole('button', { name: 'Guardar datos' }))
+    expect(servicio.editarTrabajadorCampania).toHaveBeenCalledTimes(1)
+    expect(within(panel).getByRole('button', { name: 'Cerrar panel' })).toBeDisabled()
+    await user.keyboard('{Escape}')
+    expect(panel).toBeInTheDocument()
+    await act(async () => rechazar(new Error('DNI duplicado')))
+    expect(within(panel).getByRole('alert')).toHaveTextContent('DNI duplicado')
+    expect(within(panel).getByLabelText('Nombres')).toHaveValue('Ana')
+    expect(within(panel).getByRole('button', { name: 'Guardar datos' })).toBeEnabled()
+    await user.click(within(panel).getByRole('button', { name: 'Cancelar' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+  it('consulta permite abrir la ficha sin exponer controles de guardado', async () => {
+    const servicio = {
+      trabajadoresCampania: vi.fn(async () => ({ filas: [persona], total: 1 })),
+      trabajadorCampania: vi.fn(async () => ({
+        id: 't1',
+        participacionId: persona.id,
+        dni: persona.dni,
+        nombres: 'Ana',
+        apellidos: 'Rojas',
+        activo: false,
+        trabajadorActivo: true
+      }))
+    }
+    render(
+      <TrabajadoresCampania
+        servicio={servicio}
+        campania={campania}
+        seccion={SECCIONES_TRABAJADORES[0]}
+      />
+    )
+    const user = userEvent.setup()
+    await user.click(await screen.findByText('Ana Rojas'))
+    const panel = screen.getByRole('dialog')
+    expect(await within(panel).findByLabelText('DNI')).toBeDisabled()
+    expect(
+      within(panel).queryByRole('button', { name: 'Guardar datos' })
+    ).not.toBeInTheDocument()
+  })
   it.each(SECCIONES_TRABAJADORES)(
     '$label consulta la campaña y rol correctos, incluidos los inactivos',
     async (seccion) => {
