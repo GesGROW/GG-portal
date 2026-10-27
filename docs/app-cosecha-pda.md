@@ -60,10 +60,11 @@ ni códigos en el portal real.
 ## Límites de esta entrega
 
 Esta entrega modifica el portal local. No aplica migraciones remotas ni publica
-un despliegue. La PWA publicada todavía necesita implementar la recepción de
-`#vincular`, el acceso del supervisor y la conexión del flujo de campo al nuevo
-contrato. La pantalla de instalación puede copiar el enlace actual, pero el QR
-por sí solo no completa esa integración pendiente.
+un despliegue. La primera pantalla de vinculación y el acceso de supervisor se
+implementan en GG-app-m-harvest; requieren desplegar esa versión y aplicar
+`20261027181414_pda_ingreso_supervisor.sql` en el backend. La migración completa
+del flujo de campo a `pda_operar` sigue pendiente; no activar todavía el acceso
+vinculado obligatorio para clientes que conservan los RPC operativos anteriores.
 
 ## Verificación
 
