@@ -1,0 +1,388 @@
+.pda-install-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: calc(58 * var(--owner-scale));
+}
+.pda-card {
+  min-width: 0;
+  min-height: calc(717 * var(--owner-scale));
+  padding: calc(35 * var(--owner-scale)) calc(44 * var(--owner-scale));
+  border-radius: calc(30 * var(--owner-scale));
+  background: #fff;
+  color: #022f2a;
+}
+.pda-card h2,
+.pda-devices h2 {
+  margin: 0;
+  color: inherit;
+  font-size: calc(32 * var(--owner-scale));
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+.pda-install-steps {
+  list-style: none;
+  padding: 0;
+  margin: calc(50 * var(--owner-scale)) 0 0;
+  display: grid;
+  gap: calc(38 * var(--owner-scale));
+}
+.pda-install-steps li {
+  display: flex;
+  align-items: center;
+  gap: calc(28 * var(--owner-scale));
+  min-height: calc(100 * var(--owner-scale));
+}
+.pda-step-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 calc(100 * var(--owner-scale));
+  width: calc(100 * var(--owner-scale));
+  height: calc(100 * var(--owner-scale));
+  border-radius: 50%;
+  background: #d9d9d9;
+  font-size: calc(24 * var(--owner-scale));
+  font-weight: 500;
+}
+.pda-install-steps p {
+  margin: 0;
+  font-size: calc(20 * var(--owner-scale));
+  line-height: 1.45;
+}
+.pda-content .pda-action {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(14 * var(--owner-scale));
+  min-height: calc(58 * var(--owner-scale));
+  padding: calc(12 * var(--owner-scale)) calc(28 * var(--owner-scale));
+  border: 0;
+  border-radius: 999px;
+  background: #94b72d;
+  color: #022f2a;
+  font: inherit;
+  font-size: calc(20 * var(--owner-scale));
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: none;
+}
+.pda-action svg {
+  width: calc(24 * var(--owner-scale));
+  height: calc(24 * var(--owner-scale));
+  flex-shrink: 0;
+}
+.pda-content button:focus-visible,
+.pda-content a:focus-visible {
+  outline: 3px solid #022f2a;
+  outline-offset: 4px;
+}
+.pda-content .pda-action:hover:not(:disabled) {
+  background: #85a729;
+}
+.pda-content button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.pda-browser-menu {
+  display: inline-flex;
+  width: calc(28 * var(--owner-scale));
+  height: calc(28 * var(--owner-scale));
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d9d9d9;
+  vertical-align: middle;
+}
+.pda-browser-menu svg {
+  width: calc(22 * var(--owner-scale));
+  height: calc(22 * var(--owner-scale));
+}
+.pda-qr-area {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: min(100%, calc(360 * var(--owner-scale)));
+  margin: calc(35 * var(--owner-scale)) auto calc(20 * var(--owner-scale));
+  text-align: center;
+}
+.pda-qr-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+.pda-qr-placeholder {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  max-width: 26ch;
+}
+.pda-qr-placeholder svg {
+  width: calc(100 * var(--owner-scale));
+  height: calc(100 * var(--owner-scale));
+  color: #bcc1aa;
+}
+.pda-qr-area p {
+  font-size: calc(18 * var(--owner-scale));
+  line-height: 1.5;
+}
+.pda-pair-details {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: calc(12 * var(--owner-scale)) calc(26 * var(--owner-scale));
+  margin: 0 calc(8 * var(--owner-scale));
+  font-size: calc(24 * var(--owner-scale));
+  line-height: 1.3;
+}
+.pda-pair-details dt {
+  font-weight: 500;
+}
+.pda-pair-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.pda-content .pda-regenerate {
+  display: flex;
+  width: fit-content;
+  margin: calc(55 * var(--owner-scale)) auto 0;
+}
+.pda-content .pda-install-unavailable {
+  margin-top: 12px;
+  font-size: calc(16 * var(--owner-scale));
+}
+.pda-install-link {
+  display: block;
+  margin-top: 14px;
+}
+.pda-notice {
+  margin: 0 0 20px;
+  font-size: max(14px, calc(18 * var(--owner-scale)));
+  overflow-wrap: anywhere;
+}
+.pda-notice p {
+  margin: 0 0 8px;
+}
+.pda-content .pda-text-button,
+.pda-content .pda-revoke {
+  border: 0;
+  background: transparent;
+  color: #022f2a;
+  text-decoration: underline;
+  padding: 8px;
+  box-shadow: none;
+}
+.pda-devices-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: calc(35 * var(--owner-scale));
+}
+.pda-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 20px;
+  background: white;
+}
+.pda-table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  text-align: left;
+  color: #022f2a;
+  font-size: max(14px, calc(18 * var(--owner-scale)));
+}
+.pda-table :is(th, td) {
+  padding: calc(24 * var(--owner-scale)) calc(18 * var(--owner-scale));
+  border: 0;
+  border-bottom: 1px solid #e3e4d6;
+}
+.pda-table thead th {
+  font-weight: 600;
+  background: #e3e4d6;
+}
+.pda-table tbody th {
+  font-weight: 500;
+}
+.pda-device-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pda-device-name svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.pda-device-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #e9efdb;
+  white-space: nowrap;
+}
+.pda-device-status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #689224;
+}
+.pda-device-status.is-revoked {
+  background: #ececec;
+}
+.pda-device-status.is-revoked::before {
+  background: #777;
+}
+.pda-table .pda-table-empty {
+  padding: 72px 24px;
+  text-align: center;
+}
+.pda-table-empty > svg {
+  width: 56px;
+  height: 56px;
+  color: #90977a;
+}
+.pda-table-empty p {
+  margin: 16px 0 0;
+}
+.pda-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: #022f2a66;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.pda-confirm {
+  width: min(480px, 100%);
+  padding: 32px;
+  border-radius: 24px;
+  background: #fff;
+  color: #022f2a;
+  box-shadow: 0 20px 80px #022f2a33;
+}
+.pda-confirm h2 {
+  margin: 0 0 20px;
+}
+.pda-confirm p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.pda-confirm > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+.campaign-main-tabs .campaign-app-tab {
+  margin-top: calc(92 * var(--owner-scale));
+}
+@media (max-width: 1199px) {
+  .pda-install-grid {
+    gap: 24px;
+  }
+  .pda-card {
+    padding: 28px 24px;
+  }
+  .pda-card h2,
+  .pda-devices h2 {
+    font-size: 26px;
+  }
+  .pda-install-steps {
+    gap: 30px;
+    margin-top: 36px;
+  }
+  .pda-step-number {
+    flex-basis: 56px;
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+  .pda-install-steps li {
+    gap: 20px;
+    min-height: 90px;
+  }
+  .pda-install-steps p {
+    font-size: 17px;
+  }
+  .pda-content .pda-action {
+    min-height: 46px;
+    font-size: 16px;
+    padding: 12px 20px;
+    gap: 10px;
+  }
+  .pda-pair-details {
+    margin: 0;
+    font-size: 18px;
+    gap: 12px 18px;
+  }
+  .pda-qr-area {
+    margin-top: 24px;
+    width: min(100%, 300px);
+  }
+  .pda-qr-area p {
+    font-size: 16px;
+  }
+}
+@media (max-width: 850px) {
+  .pda-install-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pda-card {
+    min-height: 0;
+    padding: 28px 24px;
+  }
+  .pda-content .pda-regenerate {
+    margin-top: 28px;
+  }
+  .campaign-main-tabs .campaign-app-tab {
+    margin-top: 32px;
+  }
+}
+@media (max-width: 580px) {
+  .pda-card {
+    padding: 24px 18px;
+    border-radius: 22px;
+  }
+  .pda-card h2,
+  .pda-devices h2 {
+    font-size: 22px;
+  }
+  .pda-install-steps li {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .pda-step-number {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  .pda-install-steps p {
+    font-size: 16px;
+  }
+  .pda-pair-details {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    font-size: 17px;
+  }
+  .pda-pair-details dd + dt {
+    margin-top: 10px;
+  }
+  .pda-qr-placeholder svg {
+    width: 64px;
+    height: 64px;
+  }
+  .pda-devices-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pda-confirm {
+    padding: 24px;
+  }
+}

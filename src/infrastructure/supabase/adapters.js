@@ -6,6 +6,7 @@ import {
 } from '../../ports/errores.js'
 import { crearAdministracionAdapter } from './administracionAdapter.js'
 import { crearCosechaAdapter } from './cosechaAdapter.js'
+import { crearPdaAdapter } from './pdaAdapter.js'
 import { crearTrabajadoresAdapter } from './trabajadoresAdapter.js'
 import { crearReportesAdapter } from './reportesAdapter.js'
 import { exportacionCsv } from '../exportacionCsv.js'
@@ -50,7 +51,10 @@ export function crearPuertosSupabase(cliente) {
           'harvest_admin_confirmar_impresion',
           'harvest_admin_reservar_impresion',
           'harvest_admin_resolver_impresion',
-          'harvest_reportes_campania'
+          'harvest_reportes_campania',
+          'pda_administrar_dispositivos',
+          'pda_generar_vinculacion',
+          'pda_revocar_dispositivo'
         ].includes(nombre) &&
         e.code === 'PGRST202'
       )
@@ -83,6 +87,7 @@ export function crearPuertosSupabase(cliente) {
   }
   return Object.freeze({
     harvestAdmin: crearCosechaAdapter(rpc),
+    pda: crearPdaAdapter(rpc),
     workforce: crearTrabajadoresAdapter(rpc),
     comercial: crearSuscripcionAdapter(rpc),
     reportesHarvest: crearReportesAdapter(rpc),

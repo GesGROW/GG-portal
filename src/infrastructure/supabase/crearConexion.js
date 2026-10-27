@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { crearPuertosSupabase } from './adapters.js'
 import { crearInvitacionAdapter } from './invitacionAdapter.js'
 
-export function crearConexion({ url, publicKey }) {
+export function crearConexion({ url, publicKey, enlaceAppCosecha }) {
   if (!url || !publicKey || url === 'https://example.supabase.co')
     throw new Error('Configure la conexión del Portal en su archivo .env.local.')
   const cliente = createClient(url, publicKey, {
@@ -19,6 +19,7 @@ export function crearConexion({ url, publicKey }) {
   )
   return Object.freeze({
     ...puertos,
+    enlaceAppCosecha,
     identity: Object.freeze({ ...puertos.identity, ...invitacion })
   })
 }

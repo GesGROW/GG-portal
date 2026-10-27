@@ -105,14 +105,25 @@ function SeleccionEmpresa({ portal, estado }) {
 }
 
 function ContenidoProtegido({ portal, estado, path }) {
-  const vistaCarga = path === '/' ? 'home'
-    : /\/(produccion|rendimiento)(?:\/|$)/.test(path) || path.startsWith('/reportes') ? 'report'
-      : /\/cosecha(?:\/generar)?$/.test(path) ? 'generation'
-        : path.includes('/configurar') || /\/(invitaciones|accesos)(?:\/|$)/.test(path) ? 'form'
-          : path === '/modulos' ? 'cards' : 'table'
-  const carga = path === '/'
-    ? <HomeSkeleton page owner={estado.contexto?.permite('company.manage')} />
-    : <Skeleton text="Cargando…" variant={vistaCarga} page />
+  const vistaCarga =
+    path === '/'
+      ? 'home'
+      : /\/(produccion|rendimiento)(?:\/|$)/.test(path) || path.startsWith('/reportes')
+        ? 'report'
+        : /\/cosecha(?:\/generar)?$/.test(path)
+          ? 'generation'
+          : path.includes('/configurar') ||
+              /\/(invitaciones|accesos)(?:\/|$)/.test(path)
+            ? 'form'
+            : path === '/modulos'
+              ? 'cards'
+              : 'table'
+  const carga =
+    path === '/' ? (
+      <HomeSkeleton page owner={estado.contexto?.permite('company.manage')} />
+    ) : (
+      <Skeleton text="Cargando…" variant={vistaCarga} page />
+    )
   if (!REPORTES_HABILITADOS && /^\/reportes(?:\/|$)/.test(path)) return null
   // El listado permanece montado al abrir/cerrar la invitación. El formulario
   // de destino se muestra después de revalidar el permiso de configuración.
@@ -153,6 +164,7 @@ function ContenidoProtegido({ portal, estado, path }) {
               .estado === 'permitida'
           }
           servicio={portal.cosecha}
+          appCosecha={portal.appCosecha}
           reportes={portal.reportes}
           cultivos={portal.cultivosCosecha}
           path={path}
@@ -212,6 +224,7 @@ function ContenidoProtegido({ portal, estado, path }) {
       <Suspense fallback={carga}>
         <Cosecha
           servicio={portal.cosecha}
+          appCosecha={portal.appCosecha}
           reportes={portal.reportes}
           cultivos={portal.cultivosCosecha}
           trabajadores={portal.trabajadores}
@@ -273,7 +286,7 @@ function Layout({ portal, estado }) {
   const path = location.pathname.replace(/\/$/, '') || '/'
   const cosechaFigma =
     path === '/cosecha' ||
-    /^\/cosecha\/(trabajadores|registros|tickets|generar|lotes|asignaciones|configurar|cosechadores|jaberos|supervisores|produccion|rendimiento)$/.test(
+    /^\/cosecha\/(trabajadores|registros|tickets|generar|lotes|asignaciones|configurar|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
       path
     )
   const usuariosFigma = /^\/configuracion\/(usuarios(?:\/[^/]+)?|invitaciones)$/.test(
@@ -281,8 +294,8 @@ function Layout({ portal, estado }) {
   )
   const suscripcionPortal = path === '/configuracion/suscripcion'
   const campaniaFigma =
-    portal.cultivosCosecha &&
-    /^\/cosecha\/(generar|lotes|asignaciones|tickets|cosechadores|jaberos|supervisores|produccion|rendimiento)$/.test(
+    (portal.cultivosCosecha || /\/cosecha\/(app|dispositivos)$/.test(path)) &&
+    /^\/cosecha\/(generar|lotes|asignaciones|tickets|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
       path
     )
   const modulosOwner = path === '/modulos'

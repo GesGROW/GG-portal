@@ -12,7 +12,7 @@ const collections = [
     id: 'modulos',
     name: 'Módulos',
     icon: 'layers',
-    paths: ['/modulos', '/cosecha', '/reportes']
+    paths: ['/modulos', '/cosecha', '/cosecha/app', '/reportes']
   },
   {
     id: 'configuracion',
@@ -35,12 +35,15 @@ function NavigationModules({
   const [params] = useSearchParams()
   const campania = params.get('campania')
   const query = campania ? '?campania=' + encodeURIComponent(campania) : ''
-  const harvest = rutas.some((r) => r.path === '/cosecha')
-  const destino = puedeGenerar
-    ? '/cosecha/generar'
-    : puedeConsultarCosecha
-      ? '/cosecha/lotes'
-      : '/cosecha/trabajadores'
+  const cosechaOperativa = rutas.some((r) => r.path === '/cosecha')
+  const harvest = cosechaOperativa || rutas.some((r) => r.path === '/cosecha/app')
+  const destino = !cosechaOperativa
+    ? '/cosecha/app'
+    : puedeGenerar
+      ? '/cosecha/generar'
+      : puedeConsultarCosecha
+        ? '/cosecha/lotes'
+        : '/cosecha/trabajadores'
   return (
     <div className="navigation-modules">
       {harvest ? (

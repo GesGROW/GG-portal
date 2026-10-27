@@ -6,7 +6,8 @@ export async function iniciarPortal(env = import.meta.env) {
   return crearPortal(
     crearConexion({
       url: env.VITE_SUPABASE_URL,
-      publicKey: env.VITE_SUPABASE_PUBLISHABLE_KEY
+      publicKey: env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      enlaceAppCosecha: env.VITE_COSECHA_APP_URL
     })
   )
 }

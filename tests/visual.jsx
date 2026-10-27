@@ -11,6 +11,7 @@ import { fakeComercial } from './support/fakeComercial.js'
 import { fakeTrabajadores } from './support/fakeTrabajadores.js'
 import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 import { impresionTickets } from '../src/infrastructure/impresionTickets.js'
+import { fakePda } from './support/fakePda.js'
 import '@fontsource-variable/inter'
 import '../src/presentation/styles.css'
 const params = new URLSearchParams(location.search)
@@ -103,6 +104,25 @@ if (params.has('crop-setup') || params.has('campaign')) {
     })
 }
 if (params.has('owner-empty')) puertos.modulos.A = []
+if (params.has('pda')) {
+  puertos.permisos.A = [
+    'company.manage',
+    'harvest.view',
+    'harvest.manage',
+    'reports.view'
+  ]
+  fakePda(puertos, { vacio: params.has('empty-devices') })
+  puertos.acceso.obtenerIdentidad = async () => ({
+    usuario: { id: 'U', nombre: 'Administrador', email: 'admin@example.test' },
+    membresias: [{ id: 'M-A', tenantId: 'A', usuarioId: 'U', activo: true }],
+    empresas: [{ id: 'A', nombre: 'Quijas SAC' }]
+  })
+  const resolver = puertos.acceso.resolverContexto
+  puertos.acceso.resolverContexto = async (id) => ({
+    ...(await resolver(id)),
+    empresa: 'Quijas SAC'
+  })
+}
 if (params.has('supervisor-home')) {
   puertos.permisos.A = [
     'harvest.view',

@@ -19,6 +19,7 @@ import { crearCultivosCosechaPortal } from './cultivosCosecha.js'
 import { crearTrabajadoresPortal } from './trabajadores.js'
 import { crearSuscripcionPortal } from './suscripcion.js'
 import { crearReportesPortal } from './reportes.js'
+import { crearAppCosechaPortal } from './appCosecha.js'
 
 export function crearPortal(puertos) {
   validarPuertosPortal(puertos)
@@ -640,6 +641,12 @@ export function crearPortal(puertos) {
     }),
     configuracion,
     cosecha,
+    appCosecha: crearAppCosechaPortal({
+      puerto: puertos.pda,
+      scopePara,
+      entitlements: puertos.entitlements,
+      enlaceApp: puertos.enlaceAppCosecha
+    }),
     cultivosCosecha: crearCultivosCosechaPortal({
       puerto: puertos.harvestAdmin,
       scopePara,

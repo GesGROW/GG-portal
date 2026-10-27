@@ -1,6 +1,6 @@
 import { GeneracionCampania } from './GeneracionCampania.jsx'
 export { GeneracionCampania } from './GeneracionCampania.jsx'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router'
 import { useCarga, Carga } from './GestionUi.jsx'
 import { CosechaSelector } from './CosechaSelector.jsx'
@@ -13,6 +13,10 @@ import {
   SECCIONES_TRABAJADORES
 } from './TrabajadoresCampania.jsx'
 import './campania-cosecha.css'
+import { PdaIcon } from './PdaIcon.jsx'
+const AppCosecha = lazy(() =>
+  import('./AppCosecha.jsx').then((m) => ({ default: m.AppCosecha }))
+)
 
 export function CampaignIcon({ name }) {
   const paths = {
@@ -55,6 +59,7 @@ export function CampaignIcon({ name }) {
 
 export function CampaniaCosecha({
   servicio,
+  appCosecha,
   reportes,
   contexto,
   seccion,
@@ -62,7 +67,13 @@ export function CampaniaCosecha({
   puedeTrabajadores
 }) {
   const [params, setParams] = useSearchParams()
-  const catalogo = useCarga(() => servicio.campanias(), [servicio])
+  const esApp = ['app', 'dispositivos'].includes(seccion)
+  const consultaCampanias =
+    contexto.permite('harvest.view') || contexto.permite('harvest.manage')
+  const catalogo = useCarga(
+    () => (consultaCampanias ? servicio.campanias() : []),
+    [servicio, consultaCampanias]
+  )
   const campania =
     params.get('campania') ||
     (catalogo.datos?.find((c) => c.estado === 'ACTIVA') ?? catalogo.datos?.[0])?.id ||
@@ -70,6 +81,7 @@ export function CampaniaCosecha({
   useEffect(() => {
     if (
       pendiente ||
+      esApp ||
       catalogo.cargando ||
       catalogo.error ||
       !campania ||
@@ -79,67 +91,83 @@ export function CampaniaCosecha({
     const siguientes = new URLSearchParams(params)
     siguientes.set('campania', campania)
     setParams(siguientes, { replace: true })
-  }, [pendiente, catalogo.cargando, catalogo.error, campania, params, setParams])
+  }, [pendiente, esApp, catalogo.cargando, catalogo.error, campania, params, setParams])
   const query = campania ? `?campania=${encodeURIComponent(campania)}` : ''
   const generar = contexto.permite('harvest.manage')
   const trabajadores = SECCIONES_TRABAJADORES.find((t) => t.id === seccion)
   const esReporte = ['produccion', 'rendimiento'].includes(seccion)
-  const subtabs = esReporte
+  const subtabs = esApp
     ? [
-        { id: 'produccion', label: 'Producción', icon: 'production' },
-        { id: 'rendimiento', label: 'Rendimiento', icon: 'ranking' }
+        { id: 'app', label: 'Instalar y vincular la app con el PDA', icon: 'qr' },
+        ...(contexto.permite('company.manage') || contexto.permite('harvest.manage')
+          ? [{ id: 'dispositivos', label: 'Dispositivos vinculados', icon: 'devices' }]
+          : [])
       ]
-    : trabajadores
-      ? SECCIONES_TRABAJADORES
-      : [
-          ...(generar
-            ? [
-                {
-                  id: 'generar',
-                  label: 'Generación e impresión de lotes de tickets',
-                  icon: 'generation'
-                }
-              ]
-            : []),
-          { id: 'lotes', label: 'Lotes de tickets generados', icon: 'lots' },
-          {
-            id: 'asignaciones',
-            label: 'Lotes de tickets asignados',
-            icon: 'assignments'
-          }
+    : esReporte
+      ? [
+          { id: 'produccion', label: 'Producción', icon: 'production' },
+          { id: 'rendimiento', label: 'Rendimiento', icon: 'ranking' }
         ]
+      : trabajadores
+        ? SECCIONES_TRABAJADORES
+        : [
+            ...(generar
+              ? [
+                  {
+                    id: 'generar',
+                    label: 'Generación e impresión de lotes de tickets',
+                    icon: 'generation'
+                  }
+                ]
+              : []),
+            { id: 'lotes', label: 'Lotes de tickets generados', icon: 'lots' },
+            {
+              id: 'asignaciones',
+              label: 'Lotes de tickets asignados',
+              icon: 'assignments'
+            }
+          ]
   if (
     !pendiente &&
     !catalogo.cargando &&
     !catalogo.error &&
     catalogo.datos?.length === 0 &&
-    generar
+    generar &&
+    !esApp
   )
     return <Navigate to="/cosecha/configurar" replace />
   return (
     <div className="harvest-campaign-page">
-      <CosechaSelector
-        destino={
-          trabajadores || esReporte
-            ? '/cosecha/' + seccion
-            : generar
-              ? '/cosecha/generar'
-              : '/cosecha/lotes'
-        }
-        campanias={catalogo.datos ?? []}
-        seleccion={campania}
-        pendiente={pendiente || catalogo.cargando || Boolean(catalogo.error)}
-      />
+      {consultaCampanias ? (
+        <CosechaSelector
+          destino={
+            trabajadores || esReporte || esApp
+              ? '/cosecha/' + seccion
+              : generar
+                ? '/cosecha/generar'
+                : '/cosecha/lotes'
+          }
+          campanias={catalogo.datos ?? []}
+          seleccion={campania}
+          pendiente={pendiente || catalogo.cargando || Boolean(catalogo.error)}
+        />
+      ) : (
+        <div className="cosecha-heading">
+          <h1>Cosecha</h1>
+        </div>
+      )}
       <div className="campaign-container">
         <nav className="campaign-main-tabs" aria-label="Opciones de Cosecha">
-          <Link
-            aria-current={!trabajadores && !esReporte ? 'page' : undefined}
-            to={(generar ? '/cosecha/generar' : '/cosecha/lotes') + query}
-            aria-label="Tickets"
-          >
-            <CampaignIcon name="tickets" />
-            <span>Tickets</span>
-          </Link>
+          {consultaCampanias && (
+            <Link
+              aria-current={!trabajadores && !esReporte && !esApp ? 'page' : undefined}
+              to={(generar ? '/cosecha/generar' : '/cosecha/lotes') + query}
+              aria-label="Tickets"
+            >
+              <CampaignIcon name="tickets" />
+              <span>Tickets</span>
+            </Link>
+          )}
           {puedeTrabajadores || contexto.permite('harvest.view') || generar ? (
             <Link
               to={'/cosecha/cosechadores' + query}
@@ -159,7 +187,7 @@ export function CampaniaCosecha({
               <span>Trabajadores</span>
             </button>
           )}
-          {contexto.permite('reports.view') ? (
+          {consultaCampanias && contexto.permite('reports.view') ? (
             <Link
               to={'/cosecha/produccion' + query}
               aria-label="Reportes"
@@ -178,15 +206,26 @@ export function CampaniaCosecha({
               <span>Reportes</span>
             </button>
           )}
+          <Link
+            className="campaign-app-tab"
+            to={'/cosecha/app' + query}
+            aria-label="App de Cosecha"
+            aria-current={esApp ? 'page' : undefined}
+          >
+            <PdaIcon name="phone" />
+            <span>App de Cosecha</span>
+          </Link>
         </nav>
         <nav
           className="campaign-sub-tabs"
           aria-label={
-            esReporte
-              ? 'Secciones de Reportes'
-              : trabajadores
-                ? 'Secciones de Trabajadores'
-                : 'Secciones de Tickets'
+            esApp
+              ? 'Secciones de App de Cosecha'
+              : esReporte
+                ? 'Secciones de Reportes'
+                : trabajadores
+                  ? 'Secciones de Trabajadores'
+                  : 'Secciones de Tickets'
           }
         >
           {subtabs.map((t) => (
@@ -196,7 +235,9 @@ export function CampaniaCosecha({
               aria-label={t.label}
               aria-current={seccion === t.id ? 'page' : undefined}
             >
-              {esReporte ? (
+              {esApp ? (
+                <PdaIcon name={t.icon} />
+              ) : esReporte ? (
                 <ReportIcon name={t.icon} />
               ) : trabajadores ? (
                 <IconoTrabajador tipo={t.icon} />
@@ -211,75 +252,87 @@ export function CampaniaCosecha({
           {seccion === 'lotes' && <h2>Lotes de tickets generados</h2>}
           {seccion === 'asignaciones' && <h2>Lotes de tickets asignados</h2>}
           {trabajadores && <h2>{trabajadores.label}</h2>}
-          <Carga
-            consulta={pendiente ? { cargando: true } : catalogo}
-            skeleton={
-              esReporte ? 'report' : seccion === 'generar' ? 'generation' : 'table'
-            }
-          >
-            {(campanias) => {
-              const elegida = campanias.find((c) => c.id === campania)
-              if (!elegida)
+          {esApp ? (
+            <Suspense fallback={<p role="status">Cargando App de Cosecha…</p>}>
+              <AppCosecha
+                key={`${contexto.tenantId}:${contexto.usuarioId}`}
+                servicio={appCosecha}
+                contexto={contexto}
+                dispositivos={seccion === 'dispositivos'}
+                pendiente={pendiente}
+              />
+            </Suspense>
+          ) : (
+            <Carga
+              consulta={pendiente ? { cargando: true } : catalogo}
+              skeleton={
+                esReporte ? 'report' : seccion === 'generar' ? 'generation' : 'table'
+              }
+            >
+              {(campanias) => {
+                const elegida = campanias.find((c) => c.id === campania)
+                if (!elegida)
+                  return (
+                    <p role="alert">
+                      No hay una campaña disponible. Selecciona una campaña o agrega un
+                      cultivo.
+                    </p>
+                  )
+                if (esReporte)
+                  return (
+                    <ReportesCampania
+                      key={`${elegida.id}:${seccion}`}
+                      servicio={reportes}
+                      campania={elegida}
+                      rendimiento={seccion === 'rendimiento'}
+                    />
+                  )
+                if (trabajadores)
+                  return (
+                    <TrabajadoresCampania
+                      key={`${elegida.id}:${seccion}`}
+                      servicio={servicio}
+                      campania={elegida}
+                      seccion={trabajadores}
+                      puedeEditar={generar}
+                    />
+                  )
+                if (seccion === 'generar')
+                  return (
+                    <GeneracionCampania
+                      key={`${elegida.id}:${params.get('operacion') ?? ''}`}
+                      servicio={servicio}
+                      campania={elegida}
+                      pendiente={pendiente}
+                      operacionId={params.get('operacion')}
+                      onNuevaGeneracion={() => {
+                        const siguientes = new URLSearchParams(params)
+                        siguientes.delete('operacion')
+                        setParams(siguientes, { replace: true })
+                      }}
+                    />
+                  )
+                if (seccion === 'lotes' || seccion === 'asignaciones')
+                  return (
+                    <LotesCampania
+                      key={`${elegida.id}:${seccion}`}
+                      servicio={servicio}
+                      campania={elegida}
+                      asignados={seccion === 'asignaciones'}
+                    />
+                  )
                 return (
-                  <p role="alert">
-                    No hay una campaña disponible. Selecciona una campaña o agrega un
-                    cultivo.
-                  </p>
-                )
-              if (esReporte)
-                return (
-                  <ReportesCampania
-                    key={`${elegida.id}:${seccion}`}
-                    servicio={reportes}
-                    campania={elegida}
-                    rendimiento={seccion === 'rendimiento'}
-                  />
-                )
-              if (trabajadores)
-                return (
-                  <TrabajadoresCampania
-                    key={`${elegida.id}:${seccion}`}
+                  <TicketsCosecha
                     servicio={servicio}
-                    campania={elegida}
-                    seccion={trabajadores}
-                    puedeEditar={generar}
-                  />
-                )
-              if (seccion === 'generar')
-                return (
-                  <GeneracionCampania
-                    key={`${elegida.id}:${params.get('operacion') ?? ''}`}
-                    servicio={servicio}
-                    campania={elegida}
+                    contexto={contexto}
+                    seccion={seccion}
+                    catalogo={catalogo}
                     pendiente={pendiente}
-                    operacionId={params.get('operacion')}
-                    onNuevaGeneracion={() => {
-                      const siguientes = new URLSearchParams(params)
-                      siguientes.delete('operacion')
-                      setParams(siguientes, { replace: true })
-                    }}
                   />
                 )
-              if (seccion === 'lotes' || seccion === 'asignaciones')
-                return (
-                  <LotesCampania
-                    key={`${elegida.id}:${seccion}`}
-                    servicio={servicio}
-                    campania={elegida}
-                    asignados={seccion === 'asignaciones'}
-                  />
-                )
-              return (
-                <TicketsCosecha
-                  servicio={servicio}
-                  contexto={contexto}
-                  seccion={seccion}
-                  catalogo={catalogo}
-                  pendiente={pendiente}
-                />
-              )
-            }}
-          </Carga>
+              }}
+            </Carga>
+          )}
         </section>
       </div>
     </div>

@@ -49,6 +49,10 @@ vigentes de instalación son las de este README.
 
 ## Proyectos
 
+La pantalla de [App de Cosecha y dispositivos PDA](docs/app-cosecha-pda.md)
+incluye instalación, QR de vinculación y administración de equipos. El enlace
+de la aplicación se configura opcionalmente con `VITE_COSECHA_APP_URL`.
+
 - Portal: https://github.com/GesGROW/GG-portal
 - Backend: https://github.com/GesGROW/GG-backend
 - PWA Cosecha: https://github.com/GesGROW/GG-app-m-harvest

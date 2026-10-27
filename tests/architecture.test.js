@@ -129,6 +129,6 @@ test('ninguna credencial o API administrativa de proveedor se incluye en el Port
       .trim()
       .split(/\r?\n/)
       .map((line) => line.split('=')[0]),
-    ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']
+    ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY', 'VITE_COSECHA_APP_URL']
   )
 })

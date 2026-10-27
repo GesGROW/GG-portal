@@ -195,6 +195,7 @@ function Detalle({ servicio, tipo, id }) {
 }
 export function Cosecha({
   servicio,
+  appCosecha,
   reportes,
   cultivos,
   trabajadores,
@@ -283,12 +284,15 @@ export function Cosecha({
       'jaberos',
       'supervisores',
       'produccion',
-      'rendimiento'
+      'rendimiento',
+      'app',
+      'dispositivos'
     ].includes(tipo)
   )
     return (
       <CampaniaCosecha
         servicio={servicio}
+        appCosecha={appCosecha}
         reportes={reportes}
         contexto={contexto}
         seccion={tipo}

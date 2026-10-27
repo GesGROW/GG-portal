@@ -178,3 +178,8 @@
     font-size: 20px;
   }
 }
+.owner-module-app-link {
+  color: #022f2a;
+  font-size: 16px;
+  text-decoration: underline;
+}

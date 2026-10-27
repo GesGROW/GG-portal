@@ -52,6 +52,26 @@ export const RUTAS_PORTAL = Object.freeze(
 )
 
 export function evaluarRuta(path, contexto, modulos) {
+  if (['/cosecha/app', '/cosecha/dispositivos'].includes(path)) {
+    const permisos =
+      path === '/cosecha/dispositivos'
+        ? ['company.manage', 'harvest.manage']
+        : ['company.manage', 'harvest.view', 'harvest.manage']
+    if (!contexto || !permisos.some((p) => contexto.permite(p)))
+      return {
+        estado: 'denegada',
+        mensaje: 'No tiene permiso para acceder a esta sección.'
+      }
+    if (!modulos.includes('HARVEST'))
+      return {
+        estado: 'denegada',
+        mensaje: 'Esta empresa no tiene Cosecha habilitado.'
+      }
+    return {
+      estado: 'permitida',
+      ruta: RUTAS_PORTAL.find((r) => r.path === '/cosecha')
+    }
+  }
   if (esOwnerSinOperacion(contexto) && /^\/(cosecha|reportes)(\/|$)/.test(path))
     return {
       estado: 'denegada',
@@ -134,13 +154,23 @@ export function evaluarRuta(path, contexto, modulos) {
 }
 
 export function navegacionPermitida(contexto, modulos) {
-  return Object.freeze(
-    RUTAS_PORTAL.filter(
-      (r) =>
-        evaluarRuta(r.path, contexto, modulos).estado === 'permitida' ||
-        (r.path === '/cosecha' &&
-          evaluarRuta('/cosecha/trabajadores', contexto, modulos).estado ===
-            'permitida')
-    )
+  const rutas = RUTAS_PORTAL.filter(
+    (r) =>
+      evaluarRuta(r.path, contexto, modulos).estado === 'permitida' ||
+      (r.path === '/cosecha' &&
+        evaluarRuta('/cosecha/trabajadores', contexto, modulos).estado === 'permitida')
   )
+  // El administrador accede a la app y los equipos sin recibir permisos agrícolas.
+  if (
+    !rutas.some((r) => r.path === '/cosecha') &&
+    evaluarRuta('/cosecha/app', contexto, modulos).estado === 'permitida'
+  )
+    rutas.push(
+      Object.freeze({
+        ...RUTAS_PORTAL.find((r) => r.path === '/cosecha'),
+        path: '/cosecha/app',
+        nombre: 'App de Cosecha'
+      })
+    )
+  return Object.freeze(rutas)
 }

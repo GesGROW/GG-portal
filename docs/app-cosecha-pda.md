@@ -1,0 +1,90 @@
+# App de Cosecha: instalación, QR y dispositivos
+
+Implementación local del diseño de referencia aportado el 2026-10-27.
+
+## Accesos y presentación
+
+- `/cosecha/app`: dos tarjetas, «Instalar la aplicación» y «Vincular PDA a la empresa».
+- `/cosecha/dispositivos`: tabla de dispositivos con estado, fecha de vinculación,
+  último acceso y revocación con confirmación.
+- Pestaña lateral de celular; subpestañas de QR y dispositivo con usuario.
+  Los cinco iconos proporcionados se conservan como SVG de trazo `currentColor`.
+- Las tarjetas se apilan en pantallas estrechas y la tabla tiene desplazamiento
+  horizontal dentro de su contenedor.
+- Fechas presentadas en `America/Lima`, formato de 24 horas.
+
+El enlace común de instalación es `https://gg-app-m-harvest.vercel.app/`. Puede
+reemplazarse mediante `VITE_COSECHA_APP_URL`. Solo se aceptan enlaces HTTPS,
+excepto HTTP en localhost para desarrollo; no se admiten credenciales en la URL.
+Los errores al usar el portapapeles ofrecen un enlace para abrir la aplicación.
+
+El administrador sin rol operativo también puede entrar desde el enlace
+«App de Cosecha» de su módulo adquirido. Esto no habilita tickets, trabajadores
+ni reportes operativos. Los supervisores con `harvest.manage` pueden generar y
+regenerar QR, consultar dispositivos y revocar su acceso, al igual que el
+administrador con `company.manage`. El permiso siempre se valida en su empresa.
+Todas las rutas nuevas exigen el módulo HARVEST habilitado.
+
+## Integración y estado del QR
+
+`appCosecha.js` resuelve el contexto de cuenta, comprueba permisos y módulo,
+descarta respuestas de empresas o sesiones anteriores y valida la pertenencia de
+los dispositivos recibidos. `pdaAdapter.js` transmite las solicitudes a:
+
+- `pda_administrar_dispositivos`
+- `pda_generar_vinculacion`
+- `pda_revocar_dispositivo`
+
+La generación ocurre únicamente al pulsar el botón. Abrir la página o cambiar
+de campaña no regenera códigos. El token se codifica en el fragmento de la URL:
+`https://gg-app-m-harvest.vercel.app/#vincular=<token>`. No se envía en la consulta
+HTTP ni se almacena en almacenamiento persistente del portal.
+
+Como el backend entrega el token una sola vez, el portal conserva el enlace QR
+en memoria, separado por empresa y usuario. Al cambiar de sesión o empresa,
+refrescar el navegador o detectar un código distinto en el servidor, debe
+generarse un nuevo código para mostrarlo. La fecha de vencimiento y los
+dispositivos siguen disponibles sin recuperar el secreto.
+
+Un error de regeneración oculta el código anterior, cuya validez ya no puede
+asegurarse. No se revocan dispositivos al regenerar el QR. La segunda subpestaña
+permite actualizar el listado y revocar cada equipo activo mediante un diálogo
+con foco y confirmación; los equipos revocados se conservan en la tabla.
+
+La implementación usa la migración del backend
+`20261027152741_pda_vinculacion_dispositivos.sql` y la ampliación de permisos
+`20261027175118_pda_supervisores_gestion.sql`. Si esos RPC aún no están
+disponibles, presenta un error de actualización pendiente; no simula equipos
+ni códigos en el portal real.
+
+## Límites de esta entrega
+
+Esta entrega modifica el portal local. No aplica migraciones remotas ni publica
+un despliegue. La PWA publicada todavía necesita implementar la recepción de
+`#vincular`, el acceso del supervisor y la conexión del flujo de campo al nuevo
+contrato. La pantalla de instalación puede copiar el enlace actual, pero el QR
+por sí solo no completa esa integración pendiente.
+
+## Verificación
+
+Las pruebas de aplicación verifican separación de enlace común y QR, permisos,
+módulo, validación de URL, aislamiento de empresa, respuestas tardías y contrato
+del adapter. Las pruebas de presentación comprueban tarjetas, copia, generación
+explícita, tabla, confirmación, estado vacío y error de regeneración. Incluyen
+el flujo completo del supervisor sin `company.manage` y el rechazo de usuarios
+con permiso de solo consulta.
+
+Validación final: `npm test` aprobó 147 pruebas de aplicación y 297 de
+presentación (444 en total). `npm run build` y `git diff --check` finalizaron
+correctamente. La pantalla y el generador QR se cargan bajo demanda para no
+añadirlos a la carga inicial de las otras pestañas de Cosecha.
+
+La fixture visual utiliza datos ficticios y no llama a la base desplegada:
+
+```text
+/tests/visual.html?single&pda&ruta=%2Fcosecha%2Fapp%3Fcampania%3DA-camp
+```
+
+Se inspeccionaron la instalación y la tabla en Chrome, y la distribución a
+390 píxeles de ancho. Las capturas con datos de prueba se conservan solo en
+el entorno local de verificación.
