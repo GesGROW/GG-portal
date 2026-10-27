@@ -18,7 +18,10 @@ export const fechaPda = (fecha) =>
     ? fechaLima.format(new Date(fecha))
     : 'Sin registros'
 
-function CodigoQr({ enlace }) {
+function CodigoQr({
+  enlace,
+  textoAlternativo = 'QR para vincular el PDA a la empresa'
+}) {
   const [imagen, setImagen] = useState(null)
   const [error, setError] = useState(false)
   useEffect(() => {
@@ -38,11 +41,7 @@ function CodigoQr({ enlace }) {
     }
   }, [enlace])
   return imagen ? (
-    <img
-      className="pda-qr-image"
-      src={imagen}
-      alt="QR para vincular el PDA a la empresa"
-    />
+    <img className="pda-qr-image" src={imagen} alt={textoAlternativo} />
   ) : (
     <p role={error ? 'alert' : 'status'}>
       {error ? 'No se pudo dibujar el QR. Vuelve a intentarlo.' : 'Preparando QR…'}
@@ -265,7 +264,15 @@ export function AppCosecha({
                 <span className="pda-step-number" aria-hidden="true">
                   1
                 </span>
-                <div>
+                <div className="pda-install-primary">
+                  {servicio?.enlaceInstalacion && (
+                    <div className="pda-qr-area pda-install-qr">
+                      <CodigoQr
+                        enlace={servicio.enlaceInstalacion}
+                        textoAlternativo="QR para abrir e instalar la App de Cosecha"
+                      />
+                    </div>
+                  )}
                   <button
                     className="pda-action"
                     onClick={copiar}
@@ -296,7 +303,7 @@ export function AppCosecha({
                   2
                 </span>
                 <p>
-                  Abre el enlace en el navegador del PDA.
+                  Escanea el QR y abre el enlace en el navegador del PDA.
                   <br />
                   (Google Chrome u otro)
                 </p>

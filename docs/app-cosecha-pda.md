@@ -18,6 +18,13 @@ reemplazarse mediante `VITE_COSECHA_APP_URL`. Solo se aceptan enlaces HTTPS,
 excepto HTTP en localhost para desarrollo; no se admiten credenciales en la URL.
 Los errores al usar el portapapeles ofrecen un enlace para abrir la aplicación.
 
+La tarjeta de instalación muestra siempre un QR de ese enlace público, junto a
+«Copiar enlace». Es fijo mientras se conserve la URL y es común a todas las
+empresas. No contiene tokens ni credenciales y no vence. Permite abrir la PWA
+en el navegador del PDA y después instalarla desde el menú del navegador.
+El QR de la tarjeta de vinculación es independiente: sigue siendo específico
+de la empresa, con vencimiento y regeneración.
+
 El administrador sin rol operativo también puede entrar desde el enlace
 «App de Cosecha» de su módulo adquirido. Esto no habilita tickets, trabajadores
 ni reportes operativos. Los supervisores con `harvest.manage` pueden generar y

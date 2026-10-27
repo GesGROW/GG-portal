@@ -41,7 +41,7 @@ function montar({
 }
 
 describe('App de Cosecha y PDA', () => {
-  it('muestra las dos tarjetas e iconos, copia el enlace común y genera un QR únicamente al pedirlo', async () => {
+  it('muestra el QR fijo de instalación y genera el de vinculación únicamente al pedirlo', async () => {
     const user = userEvent.setup()
     const escribir = vi.spyOn(navigator.clipboard, 'writeText')
     const { ports } = montar()
@@ -59,6 +59,16 @@ describe('App de Cosecha y PDA', () => {
         .querySelectorAll('svg rect')
     ).toHaveLength(3)
     expect(ports.calls.some((c) => c[0] === 'pdaGenerar')).toBe(false)
+    await screen.findByRole('img', {
+      name: 'QR para abrir e instalar la App de Cosecha'
+    })
+    expect(QRCode.toDataURL).toHaveBeenCalledWith(
+      'https://gg-app-m-harvest.vercel.app/',
+      expect.objectContaining({ margin: 4 })
+    )
+    expect(
+      screen.queryByRole('img', { name: 'QR para vincular el PDA a la empresa' })
+    ).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Copiar enlace' }))
     expect(escribir).toHaveBeenCalledWith('https://gg-app-m-harvest.vercel.app/')
     await screen.findByText('Enlace copiado.')
@@ -75,6 +85,11 @@ describe('App de Cosecha y PDA', () => {
     expect(screen.getByRole('button', { name: 'Regenerar QR' })).toBeEnabled()
     expect(screen.getByText('Empresa A')).toBeInTheDocument()
     expect(ports.calls.filter((c) => c[0] === 'pdaGenerar')).toHaveLength(1)
+    expect(
+      QRCode.toDataURL.mock.calls.filter(
+        ([enlace]) => enlace === 'https://gg-app-m-harvest.vercel.app/'
+      )
+    ).toHaveLength(1)
     await user.click(screen.getByRole('link', { name: 'Dispositivos vinculados' }))
     await screen.findByRole('heading', { name: 'Dispositivos vinculados' })
     await user.click(

@@ -23,22 +23,39 @@
 .pda-install-steps {
   list-style: none;
   padding: 0;
-  margin: calc(50 * var(--owner-scale)) 0 0;
+  margin: calc(35 * var(--owner-scale)) 0 0;
   display: grid;
-  gap: calc(38 * var(--owner-scale));
+  gap: calc(16 * var(--owner-scale));
 }
 .pda-install-steps li {
   display: flex;
   align-items: center;
   gap: calc(28 * var(--owner-scale));
-  min-height: calc(100 * var(--owner-scale));
+  min-height: calc(60 * var(--owner-scale));
+}
+.pda-install-steps li:first-child {
+  align-items: flex-start;
+}
+.pda-install-steps li:first-child .pda-step-number {
+  margin-top: calc(24 * var(--owner-scale));
+}
+.pda-install-primary {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(12 * var(--owner-scale));
+}
+.pda-install-primary .pda-install-qr {
+  margin: 0 auto;
 }
 .pda-step-number {
   display: grid;
   place-items: center;
-  flex: 0 0 calc(100 * var(--owner-scale));
-  width: calc(100 * var(--owner-scale));
-  height: calc(100 * var(--owner-scale));
+  flex: 0 0 calc(50 * var(--owner-scale));
+  width: calc(50 * var(--owner-scale));
+  height: calc(50 * var(--owner-scale));
   border-radius: 50%;
   background: #d9d9d9;
   font-size: calc(24 * var(--owner-scale));
@@ -294,8 +311,8 @@
     font-size: 26px;
   }
   .pda-install-steps {
-    gap: 30px;
-    margin-top: 36px;
+    gap: 18px;
+    margin-top: 24px;
   }
   .pda-step-number {
     flex-basis: 56px;
@@ -305,7 +322,7 @@
   }
   .pda-install-steps li {
     gap: 20px;
-    min-height: 90px;
+    min-height: 60px;
   }
   .pda-install-steps p {
     font-size: 17px;
