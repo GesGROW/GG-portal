@@ -28,10 +28,6 @@
   border-radius: calc(30 * var(--owner-scale));
   background: var(--owner-surface);
 }
-.owner-modules-acquired.is-dragging {
-  outline: 3px solid var(--owner-ink);
-  outline-offset: -6px;
-}
 .owner-modules :is(.owner-module-drop, .owner-module-card) {
   display: flex;
   align-items: center;
@@ -56,6 +52,34 @@
   border: 3px dashed white;
   background: #eff0e2;
   color: #a5a5a5;
+}
+.owner-modules .owner-module-card:is(:hover, :focus-visible):not(:disabled) {
+  background: linear-gradient(90deg, #e3ecd6 0%, #70bf38 100%);
+  color: var(--owner-ink);
+}
+.owner-modules .owner-module-card:active:not(:disabled) {
+  background: linear-gradient(90deg, #dbe7ca 0%, #52ac2b 100%);
+}
+.owner-modules .owner-module-card:disabled {
+  background: linear-gradient(90deg, #e3e4d6 0%, #1b9e10 100%);
+  color: var(--owner-ink);
+}
+.owner-modules .owner-module-drop:is(:hover, :focus-visible):not(:disabled),
+.owner-modules-acquired.is-dragging .owner-module-drop {
+  border-color: #95b52c;
+  background: #e3ebd5;
+  color: var(--owner-ink);
+}
+.owner-modules .owner-module-drop:active:not(:disabled) {
+  background: #dce6c8;
+}
+.owner-modules .owner-module-drop:disabled {
+  background: #eff0e2;
+  color: #829896;
+}
+.owner-modules :is(.owner-module-card, .owner-module-drop):focus-visible {
+  outline: 2px solid var(--owner-ink);
+  outline-offset: 3px;
 }
 .owner-modules button {
   font-family: inherit;
@@ -96,6 +120,15 @@
 .owner-modules .owner-module-purchase:disabled {
   color: #a5a5a5;
   background: #eff0e2;
+}
+.owner-modules .owner-module-purchase:is(:hover, :focus-visible):not(:disabled),
+.owner-module-dialog button:is(:hover, :focus-visible):not(:disabled) {
+  background: #acd939;
+  color: var(--owner-ink);
+}
+.owner-module-dialog button:disabled {
+  background: #d9d9d9;
+  color: #52635a;
 }
 .owner-module-catalog {
   margin-top: calc(38 * var(--owner-scale));
@@ -177,9 +210,4 @@
     min-height: 60px;
     font-size: 20px;
   }
-}
-.owner-module-app-link {
-  color: #022f2a;
-  font-size: 16px;
-  text-decoration: underline;
 }

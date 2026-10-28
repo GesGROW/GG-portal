@@ -56,8 +56,7 @@ export function AppCosecha({
   dispositivos = false,
   pendiente = false
 }) {
-  const puedeAdministrar =
-    contexto.permite('company.manage') || contexto.permite('harvest.manage')
+  const puedeAdministrar = contexto.permite('harvest.manage')
   const consulta = useCarga(
     () => (puedeAdministrar && servicio ? servicio.listar() : null),
     [servicio, puedeAdministrar]
@@ -339,7 +338,7 @@ export function AppCosecha({
             <h2 id="pda-pair-title">Vincular PDA a la empresa</h2>
             <div className="pda-qr-area" aria-busy={ocupado || consulta.cargando}>
               {!puedeAdministrar ? (
-                <p>Solicita el QR al supervisor de Cosecha o al administrador.</p>
+                <p>Solicita el QR al supervisor de Cosecha.</p>
               ) : ocupado ? (
                 <p role="status">Generando QR…</p>
               ) : consulta.cargando && !qrActual ? (

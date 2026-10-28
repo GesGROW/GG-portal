@@ -4,6 +4,15 @@ La ruta `/modulos` reproduce el PNG facilitado por el usuario, con lienzo de ref
 
 La pantalla contiene el área de módulos adquiridos/seleccionados, el botón con contador y el catálogo de Cosecha. No enlaza a registros, tickets, trabajadores ni reportes detallados. Los SVG de aguacate y suma utilizan los trazados entregados por el usuario: color `#022F2A`, trazo 2; y color `#A5A5A5`, trazo 3, respectivamente.
 
+La tarjeta adquirida tampoco enlaza a la App de Cosecha. La navegación y las
+rutas de la app requieren permisos de Cosecha; `company.manage` por sí solo no
+habilita esas pantallas. La gestión de QR y dispositivos en el portal exige
+`harvest.manage`, que conserva el supervisor.
+
+Las tarjetas mantienen el degradado verde al arrastrar, seleccionar y quedar
+deshabilitadas. Hover usa un verde más claro. Al arrastrar se marca únicamente
+«Arrastra un módulo» con borde verde, sin contorno sobre el contenedor completo.
+
 ## Selección y contratación
 
 Arrastrar Cosecha al área superior o seleccionarlo con clic/teclado añade una intención local. Pulsar el módulo seleccionado lo retira. Estas acciones no escriben en el servidor. Un módulo ya contratado no puede seleccionarse de nuevo ni abrir operaciones.

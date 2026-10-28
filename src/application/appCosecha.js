@@ -43,7 +43,7 @@ export function crearAppCosechaPortal({
     return d
   }
   async function ejecutar(accion) {
-    const scope = scopePara(['company.manage', 'harvest.manage'], 'HARVEST')
+    const scope = scopePara(['harvest.manage'], 'HARVEST')
     const c = await scope.tenantContext.obtener()
     const vigente = () => {
       if (!scope.vigente(c)) throw new SolicitudObsoleta()

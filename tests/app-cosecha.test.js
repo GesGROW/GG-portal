@@ -34,13 +34,13 @@ test('el enlace común y el QR de vinculación son diferentes; el token queda en
   assert.ok(ports.calls.some((c) => c[0] === 'pdaGenerar' && c[1] === 'A'))
 })
 
-test('las dos rutas requieren HARVEST; la administración no concede permisos agrícolas al owner', () => {
+test('la app exige un rol de Cosecha y los equipos requieren gestión del módulo', () => {
   const owner = { permite: (p) => p === 'company.manage' }
   const supervisor = { permite: (p) => p === 'harvest.manage' }
-  assert.equal(evaluarRuta('/cosecha/app', owner, ['HARVEST']).estado, 'permitida')
+  assert.equal(evaluarRuta('/cosecha/app', owner, ['HARVEST']).estado, 'denegada')
   assert.equal(
     evaluarRuta('/cosecha/dispositivos', owner, ['HARVEST']).estado,
-    'permitida'
+    'denegada'
   )
   assert.equal(evaluarRuta('/cosecha/generar', owner, ['HARVEST']).estado, 'denegada')
   assert.equal(evaluarRuta('/cosecha/app', owner, []).estado, 'denegada')
@@ -49,6 +49,13 @@ test('las dos rutas requieren HARVEST; la administración no concede permisos ag
     evaluarRuta('/cosecha/dispositivos', supervisor, ['HARVEST']).estado,
     'permitida'
   )
+})
+
+test('el owner sin rol del módulo no gestiona QR ni equipos mediante el servicio', async () => {
+  const { servicio, ports } = await preparar({ permisos: { A: ['company.manage', 'reports.view'] } })
+  for (const accion of [() => servicio.listar(), () => servicio.generar(), () => servicio.revocar('d'), () => servicio.renovar('d')])
+    await assert.rejects(accion())
+  assert.equal(ports.calls.some((c) => /^pda/.test(c[0])), false)
 })
 
 test('el cambio de empresa no expone ni reutiliza el QR de la anterior', async () => {

@@ -55,8 +55,8 @@ export function evaluarRuta(path, contexto, modulos) {
   if (['/cosecha/app', '/cosecha/dispositivos'].includes(path)) {
     const permisos =
       path === '/cosecha/dispositivos'
-        ? ['company.manage', 'harvest.manage']
-        : ['company.manage', 'harvest.view', 'harvest.manage']
+        ? ['harvest.manage']
+        : ['harvest.view', 'harvest.manage', 'harvest.operate']
     if (!contexto || !permisos.some((p) => contexto.permite(p)))
       return {
         estado: 'denegada',
@@ -160,7 +160,7 @@ export function navegacionPermitida(contexto, modulos) {
       (r.path === '/cosecha' &&
         evaluarRuta('/cosecha/trabajadores', contexto, modulos).estado === 'permitida')
   )
-  // El administrador accede a la app y los equipos sin recibir permisos agrícolas.
+  // Los roles operativos pueden acceder a la app sin gestionar el módulo.
   if (
     !rutas.some((r) => r.path === '/cosecha') &&
     evaluarRuta('/cosecha/app', contexto, modulos).estado === 'permitida'

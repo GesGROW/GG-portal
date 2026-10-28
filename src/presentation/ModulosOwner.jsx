@@ -3,7 +3,6 @@ import { useCarga } from './GestionUi.jsx'
 import { OwnerIcon } from './OwnerAssets.jsx'
 import { Skeleton } from './Ui.jsx'
 import './owner-modules.css'
-import { Link } from 'react-router'
 
 const TIPO_MODULO = 'application/x-gesgrow-module'
 
@@ -118,11 +117,6 @@ function CatalogoOwner({ datos, servicio, modulos, actualizar }) {
           >
             <OwnerIcon name="avocado" />
             <span>Cosecha</span>
-            {modulos.includes('HARVEST') && (
-              <Link className="owner-module-app-link" to="/cosecha/app">
-                App de Cosecha
-              </Link>
-            )}
             <span className="sr-only">
               {datos.modulosEfectivos.includes('HARVEST')
                 ? 'Activo'

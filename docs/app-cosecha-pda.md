@@ -25,11 +25,12 @@ en el navegador del PDA y después instalarla desde el menú del navegador.
 El QR de la tarjeta de vinculación es independiente: sigue siendo específico
 de la empresa, con vencimiento y regeneración.
 
-El administrador sin rol operativo también puede entrar desde el enlace
-«App de Cosecha» de su módulo adquirido. Esto no habilita tickets, trabajadores
-ni reportes operativos. Los supervisores con `harvest.manage` pueden generar y
-regenerar QR, consultar dispositivos y revocar su acceso, al igual que el
-administrador con `company.manage`. El permiso siempre se valida en su empresa.
+La tarjeta de adquisición no enlaza a la App de Cosecha. Las rutas del portal
+para instalar la app requieren un rol de Cosecha (`harvest.view`,
+`harvest.manage` o `harvest.operate`). Los supervisores con `harvest.manage`
+pueden generar y regenerar QR, consultar dispositivos y revocar o renovar su
+acceso. `company.manage` por sí solo no habilita estas pantallas ni su servicio
+de gestión en el portal. El permiso siempre se valida en su empresa.
 Todas las rutas nuevas exigen el módulo HARVEST habilitado.
 
 ## Integración y estado del QR

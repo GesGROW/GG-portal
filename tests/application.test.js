@@ -105,7 +105,7 @@ test('cambio de Tenant limpia todo estado y no acepta respuestas tardías de la 
   assert.ok(app.estadoActual().scope > scope)
   assert.deepEqual(
     app.estadoActual().navegacion.map((r) => r.path),
-    ['/'] // harvest.operate por sí solo no habilita consultas del Portal F7.4.
+    ['/', '/cosecha/app'] // Acceso a la app, sin consultas administrativas.
   )
   assert.equal(await app.abrirRuta('/cosecha/registros'), false)
 })

@@ -98,8 +98,7 @@
   font-family: inherit;
 }
 .owner-users-dialog::backdrop {
-  background: rgb(0 0 0 / 15%);
-  backdrop-filter: blur(5px);
+  background: rgb(2 47 42 / 32%);
 }
 .owner-users-dialog h2 {
   margin: 0 0 calc(55 * var(--owner-scale));
@@ -115,6 +114,10 @@
   padding: 0;
   border: 0;
   min-width: 0;
+}
+.owner-users-dialog fieldset:disabled {
+  background: transparent;
+  color: var(--owner-ink);
 }
 .owner-users-dialog label {
   display: grid;
@@ -191,6 +194,37 @@
 .owner-users-dialog-close:is(:hover, :active, :focus-visible):not(:disabled) {
   background: #c1f13d;
   color: #022f2a;
+}
+.owner-users-dialog .owner-users-send:is(:hover, :focus-visible):not(:disabled) {
+  background: #a2bf3e;
+  color: var(--owner-ink);
+}
+.owner-users-dialog .owner-users-send:active:not(:disabled) {
+  background: #85a62c;
+}
+.owner-users-dialog .owner-users-send:disabled {
+  background: #dce6c8;
+  color: #52635a;
+}
+.owner-users-dialog .owner-users-dialog-close:disabled {
+  background: #eff0e2;
+  color: #64756d;
+}
+html[data-theme] .portal-shell .owner-users-dialog input:disabled {
+  background: #e5e5e5;
+  color: #52635a;
+}
+.owner-users-dialog input[readonly] {
+  background: #e5e5e5;
+  color: var(--owner-ink);
+}
+html[data-theme] .portal-shell .owner-users-dialog select:disabled {
+  background: #eff0e2;
+  color: #52635a;
+}
+.owner-users-dialog :is(.owner-users-send, .owner-users-dialog-close):focus-visible {
+  outline: 2px solid var(--owner-ink);
+  outline-offset: 3px;
 }
 @media (max-width: 1023px) {
   .owner-layout.users-layout .content {

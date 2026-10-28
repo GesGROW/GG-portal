@@ -21,10 +21,12 @@ test('el rol organizacional del owner permite administración y resumen, sin ope
   assert.deepEqual(owner.permisos, ['company.manage', 'reports.view'])
   assert.deepEqual(
     navegacionPermitida(owner, ['HARVEST']).map((r) => r.path),
-    ['/', '/modulos', '/configuracion', '/cosecha/app']
+    ['/', '/modulos', '/configuracion']
   )
   for (const path of [
     '/cosecha',
+    '/cosecha/app',
+    '/cosecha/dispositivos',
     '/cosecha/registros',
     '/cosecha/trabajadores',
     '/cosecha/generar',

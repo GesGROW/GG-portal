@@ -153,15 +153,15 @@ describe('App de Cosecha y PDA', () => {
     expect(ports.calls).toContainEqual(['pdaRenovar', 'A', 'pda-A-1'])
   })
 
-  it('muestra el estado vacío de equipos y no necesita una campaña para administrarlos', async () => {
+  it('muestra el estado vacío de equipos al supervisor', async () => {
     const { ports } = montar({
       path: '/cosecha/dispositivos',
-      permisos: ['company.manage'],
+      permisos: ['harvest.manage'],
       vacio: true
     })
     await screen.findByText('Aún no hay dispositivos vinculados.')
     expect(ports.calls.some((c) => c[0] === 'harvestCampanias')).toBe(false)
-    expect(screen.queryByLabelText('Campaña de cosecha')).not.toBeInTheDocument()
+    expect(ports.calls).toContainEqual(['pdaListar', 'A'])
   })
 
   it('un supervisor genera y regenera QR, consulta equipos y revoca sin company.manage', async () => {
@@ -222,7 +222,7 @@ describe('App de Cosecha y PDA', () => {
     const { ports } = montar({ permisos: ['harvest.view'] })
     await screen.findByRole('heading', { name: 'Instalar la aplicación' })
     expect(
-      screen.getByText('Solicita el QR al supervisor de Cosecha o al administrador.')
+      screen.getByText('Solicita el QR al supervisor de Cosecha.')
     ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Generar QR' })).not.toBeInTheDocument()
     expect(

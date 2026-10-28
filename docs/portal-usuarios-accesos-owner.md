@@ -29,6 +29,11 @@ La migración está preparada y probada en PostgreSQL embebido PGlite; no se ha 
 
 ## Verificación
 
+El panel de invitación oscurece el fondo con una capa verde translúcida, sin
+`backdrop-filter`. Sus botones tienen estados hover claros y, durante el envío,
+el fieldset sigue transparente y los controles conservan fondos claros y texto
+legible. El bloqueo de envío y los reintentos mantienen el comportamiento previo.
+
 Pruebas de formulario, rol único, envío pendiente, actualización de aceptación, foco y teclado, errores, reintentos idempotentes, ausencia de contratación, permisos y cambio de empresa. Pruebas SQL con destinatarios nuevos y existentes, cuenta ajena, roles de otra empresa, ACL, aceptación repetida y conservación de roles de un miembro existente. Pruebas de adapters para confirmación fallida tras guardar contraseña y para entrada de cuentas existentes.
 
 Revisión visual de vacío, diálogo, pendiente y aceptada en 1920, 1440, 1024, 768, 390 y 320 px. En pantallas pequeñas la tabla se desplaza dentro de su contenedor y el diálogo permite desplazamiento vertical.

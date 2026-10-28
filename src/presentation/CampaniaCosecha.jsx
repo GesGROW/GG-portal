@@ -99,7 +99,7 @@ export function CampaniaCosecha({
   const subtabs = esApp
     ? [
         { id: 'app', label: 'Instalar y vincular la app con el PDA', icon: 'qr' },
-        ...(contexto.permite('company.manage') || contexto.permite('harvest.manage')
+        ...(contexto.permite('harvest.manage')
           ? [{ id: 'dispositivos', label: 'Dispositivos vinculados', icon: 'devices' }]
           : [])
       ]
