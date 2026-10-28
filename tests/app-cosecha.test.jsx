@@ -110,8 +110,8 @@ describe('App de Cosecha y PDA', () => {
     ).toBeInTheDocument()
     expect(within(tabla).getByText(/10:00/)).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Revocar acceso de PDA Almacén' })
-    ).toBeDisabled()
+      screen.getByRole('button', { name: 'Renovar acceso de PDA Almacén' })
+    ).toBeEnabled()
     const origen = screen.getByRole('button', {
       name: 'Revocar acceso de PDA Campo Norte'
     })
@@ -128,12 +128,29 @@ describe('App de Cosecha y PDA', () => {
     await screen.findByText('Acceso revocado para PDA Campo Norte.')
     await waitFor(() =>
       expect(
-        screen.getByRole('button', { name: 'Revocar acceso de PDA Campo Norte' })
-      ).toBeDisabled()
+        screen.getByRole('button', { name: 'Renovar acceso de PDA Campo Norte' })
+      ).toBeEnabled()
     )
     expect(ports.calls.filter((c) => c[0] === 'pdaRevocar')).toEqual([
       ['pdaRevocar', 'A', 'pda-A-1']
     ])
+    expect(tabla).toHaveClass('portal-data-table')
+    await user.click(
+      screen.getByRole('button', { name: 'Renovar acceso de PDA Campo Norte' })
+    )
+    await user.click(
+      within(screen.getByRole('dialog', { name: 'Renovar acceso del PDA' })).getByRole(
+        'button',
+        { name: 'Renovar acceso' }
+      )
+    )
+    await screen.findByText('Acceso renovado para PDA Campo Norte.')
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Revocar acceso de PDA Campo Norte' })
+      ).toBeEnabled()
+    )
+    expect(ports.calls).toContainEqual(['pdaRenovar', 'A', 'pda-A-1'])
   })
 
   it('muestra el estado vacío de equipos y no necesita una campaña para administrarlos', async () => {
@@ -170,6 +187,35 @@ describe('App de Cosecha y PDA', () => {
     )
     await screen.findByText('Acceso revocado para PDA Campo Norte.')
     expect(ports.calls).toContainEqual(['pdaRevocar', 'A', 'pda-A-1'])
+    await user.click(
+      await screen.findByRole('button', { name: 'Renovar acceso de PDA Campo Norte' })
+    )
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', { name: 'Renovar acceso' })
+    )
+    await screen.findByText('Acceso renovado para PDA Campo Norte.')
+    expect(ports.calls).toContainEqual(['pdaRenovar', 'A', 'pda-A-1'])
+  })
+
+  it('un fallo al renovar conserva el estado revocado y permite reintentar', async () => {
+    const user = userEvent.setup()
+    const { ports } = montar({ path: '/cosecha/dispositivos' })
+    await user.click(
+      await screen.findByRole('button', { name: 'Renovar acceso de PDA Almacén' })
+    )
+    ports.pda.renovar = async () => {
+      throw new Error('No se pudo renovar el acceso.')
+    }
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', { name: 'Renovar acceso' })
+    )
+    await screen.findByText('No se pudo renovar el acceso.')
+    expect(
+      within(screen.getByRole('dialog')).getByRole('button', { name: 'Renovar acceso' })
+    ).toBeEnabled()
+    expect(
+      screen.getByRole('button', { name: 'Renovar acceso de PDA Almacén' })
+    ).toBeEnabled()
   })
 
   it('un usuario de consulta puede instalar pero no administrar QR ni equipos', async () => {

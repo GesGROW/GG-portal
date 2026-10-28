@@ -98,6 +98,14 @@ export function crearAppCosechaPortal({
         codigos.set(clave(c), { qr, contexto: c, scope })
         return qr
       }),
+    renovar: (id) =>
+      ejecutar(async (c) => {
+        if (typeof id !== 'string' || !id) throw new Error('Selecciona un dispositivo.')
+        const r = validarDispositivo(await puerto.renovar(c.tenantId, id), c.tenantId)
+        if (r.id !== id || r.estado !== 'ACTIVO')
+          throw new Error('No se pudo confirmar la renovación del dispositivo.')
+        return r
+      }),
     revocar: (id) =>
       ejecutar(async (c) => {
         if (typeof id !== 'string' || !id) throw new Error('Selecciona un dispositivo.')

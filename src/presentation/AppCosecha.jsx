@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
 import { useCarga } from './GestionUi.jsx'
+import { DataTable } from './DataTable.jsx'
 import { PdaIcon } from './PdaIcon.jsx'
 import './app-cosecha.css'
 
@@ -124,13 +125,16 @@ export function AppCosecha({
       setOcupado(false)
     }
   }
-  async function revocar() {
+  const renovando = confirmar?.estado === 'REVOCADO'
+  async function cambiarAcceso() {
     setOcupado(true)
     setError('')
     setAviso('')
     try {
-      await servicio.revocar(confirmar.id)
-      setAviso(`Acceso revocado para ${confirmar.nombre}.`)
+      await servicio[renovando ? 'renovar' : 'revocar'](confirmar.id)
+      setAviso(
+        `Acceso ${renovando ? 'renovado' : 'revocado'} para ${confirmar.nombre}.`
+      )
       setConfirmar(null)
       consulta.refrescar()
     } catch (e) {
@@ -186,69 +190,74 @@ export function AppCosecha({
             <p role="status">Cargando dispositivos…</p>
           ) : (
             !errorCarga && (
-              <div className="pda-table-scroll">
-                <table className="pda-table">
-                  <caption className="sr-only">
-                    Dispositivos de {contexto.empresa}
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Dispositivo</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">Vinculado</th>
-                      <th scope="col">Último acceso</th>
-                      <th scope="col">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {consulta.datos?.dispositivos.length ? (
-                      consulta.datos.dispositivos.map((d) => (
-                        <tr key={d.id}>
-                          <th scope="row">
-                            <span className="pda-device-name">
-                              <PdaIcon name="phone" />
-                              {d.nombre}
-                            </span>
-                          </th>
-                          <td>
-                            <span
-                              className={`pda-device-status ${d.estado === 'ACTIVO' ? 'is-active' : 'is-revoked'}`}
-                            >
-                              {d.estado === 'ACTIVO' ? 'Activo' : 'Revocado'}
-                            </span>
-                          </td>
-                          <td>{fechaPda(d.vinculadoEn)}</td>
-                          <td>{fechaPda(d.ultimoAccesoEn)}</td>
-                          <td>
-                            <button
-                              className="pda-revoke"
-                              disabled={ocupado || pendiente || d.estado === 'REVOCADO'}
-                              onClick={(e) => {
-                                botonOrigen.current = e.currentTarget
-                                setConfirmar(d)
-                              }}
-                              aria-label={`Revocar acceso de ${d.nombre}`}
-                            >
-                              Revocar acceso
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td className="pda-table-empty" colSpan="5">
-                          <PdaIcon name="devices" />
-                          <p>Aún no hay dispositivos vinculados.</p>
-                          <p>
-                            Vincula el primer PDA desde la opción de instalar y
-                            vincular.
-                          </p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+              <DataTable
+                label={`Dispositivos de ${contexto.empresa}`}
+                tableClassName="pda-table"
+                data={consulta.datos?.dispositivos ?? []}
+                columns={[
+                  {
+                    key: 'nombre',
+                    header: 'Dispositivo',
+                    width: '26%',
+                    rowHeader: true,
+                    render: (d) => (
+                      <span className="pda-device-name">
+                        <PdaIcon name="phone" />
+                        {d.nombre}
+                      </span>
+                    )
+                  },
+                  {
+                    key: 'estado',
+                    header: 'Estado',
+                    width: '14%',
+                    render: (d) => (
+                      <span
+                        className={`pda-device-status ${d.estado === 'ACTIVO' ? 'is-active' : 'is-revoked'}`}
+                      >
+                        {d.estado === 'ACTIVO' ? 'Activo' : 'Revocado'}
+                      </span>
+                    )
+                  },
+                  {
+                    key: 'vinculadoEn',
+                    header: 'Vinculado',
+                    width: '20%',
+                    render: (d) => fechaPda(d.vinculadoEn)
+                  },
+                  {
+                    key: 'ultimoAccesoEn',
+                    header: 'Último acceso',
+                    width: '22%',
+                    render: (d) => fechaPda(d.ultimoAccesoEn)
+                  },
+                  {
+                    key: 'acciones',
+                    header: 'Acciones',
+                    width: '18%',
+                    render: (d) => (
+                      <button
+                        className="pda-revoke"
+                        disabled={ocupado || pendiente}
+                        onClick={(e) => {
+                          botonOrigen.current = e.currentTarget
+                          setConfirmar(d)
+                        }}
+                        aria-label={`${d.estado === 'REVOCADO' ? 'Renovar' : 'Revocar'} acceso de ${d.nombre}`}
+                      >
+                        {d.estado === 'REVOCADO' ? 'Renovar acceso' : 'Revocar acceso'}
+                      </button>
+                    )
+                  }
+                ]}
+                emptyState={
+                  <div className="pda-table-empty">
+                    <PdaIcon name="devices" />
+                    <p>Aún no hay dispositivos vinculados.</p>
+                    <p>Vincula el primer PDA desde la opción de instalar y vincular.</p>
+                  </div>
+                }
+              />
             )
           )}
         </section>
@@ -415,10 +424,13 @@ export function AppCosecha({
             ref={confirmacion}
             tabIndex={-1}
           >
-            <h2 id="pda-confirm-title">Revocar acceso del PDA</h2>
+            <h2 id="pda-confirm-title">
+              {renovando ? 'Renovar' : 'Revocar'} acceso del PDA
+            </h2>
             <p id="pda-confirm-text">
-              {confirmar.nombre} perderá el acceso al conectarse. Sus registros
-              guardados se conservarán.
+              {renovando
+                ? `${confirmar.nombre} volverá a tener acceso con su vinculación actual. No necesita escanear otro QR.`
+                : `${confirmar.nombre} perderá el acceso al conectarse. Sus registros guardados se conservarán.`}
             </p>
             <div>
               <button
@@ -428,8 +440,14 @@ export function AppCosecha({
               >
                 Cancelar
               </button>
-              <button className="pda-action" onClick={revocar} disabled={ocupado}>
-                {ocupado ? 'Revocando…' : 'Revocar acceso'}
+              <button className="pda-action" onClick={cambiarAcceso} disabled={ocupado}>
+                {ocupado
+                  ? renovando
+                    ? 'Renovando…'
+                    : 'Revocando…'
+                  : renovando
+                    ? 'Renovar acceso'
+                    : 'Revocar acceso'}
               </button>
             </div>
           </section>

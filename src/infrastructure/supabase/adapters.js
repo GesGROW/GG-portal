@@ -54,7 +54,8 @@ export function crearPuertosSupabase(cliente) {
           'harvest_reportes_campania',
           'pda_administrar_dispositivos',
           'pda_generar_vinculacion',
-          'pda_revocar_dispositivo'
+          'pda_revocar_dispositivo',
+          'pda_renovar_dispositivo'
         ].includes(nombre) &&
         e.code === 'PGRST202'
       )

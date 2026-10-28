@@ -41,6 +41,7 @@ los dispositivos recibidos. `pdaAdapter.js` transmite las solicitudes a:
 - `pda_administrar_dispositivos`
 - `pda_generar_vinculacion`
 - `pda_revocar_dispositivo`
+- `pda_renovar_dispositivo`
 
 La generación ocurre únicamente al pulsar el botón. Abrir la página o cambiar
 de campaña no regenera códigos. El token se codifica en el fragmento de la URL:
@@ -57,17 +58,26 @@ Un error de regeneración oculta el código anterior, cuya validez ya no puede
 asegurarse. No se revocan dispositivos al regenerar el QR. La segunda subpestaña
 permite actualizar el listado y revocar cada equipo activo mediante un diálogo
 con foco y confirmación; los equipos revocados se conservan en la tabla.
+Estos equipos muestran «Renovar acceso»: la confirmación vuelve a habilitar
+el mismo PDA, sin repetir el QR ni perder registros. Usa los mismos permisos
+de gestión y el mismo aislamiento por empresa que la revocación.
+
+La tabla usa `DataTable` y `portal-tables.css`, igual que las demás tablas del
+portal: encabezado verde, filas claras y resaltado suave para mouse y foco.
+Las etiquetas de estado se muestran sin punto decorativo.
 
 La implementación usa la migración del backend
 `20261027152741_pda_vinculacion_dispositivos.sql` y la ampliación de permisos
-`20261027175118_pda_supervisores_gestion.sql`. Si esos RPC aún no están
+`20261027175118_pda_supervisores_gestion.sql`. La renovación añade
+`20261028163604_pda_renovar_acceso.sql`. Si esos RPC aún no están
 disponibles, presenta un error de actualización pendiente; no simula equipos
 ni códigos en el portal real.
 
 ## Límites de esta entrega
 
-Esta entrega modifica el portal local. No aplica migraciones remotas ni publica
-un despliegue. La primera pantalla de vinculación y el acceso de supervisor se
+El portal modificado permanece local, pendiente de publicación. La migración
+de renovación ya se aplicó en Quijas-SCC y se verificaron sus permisos sin
+reactivar dispositivos reales. La primera pantalla de vinculación y el acceso de supervisor se
 implementan en GG-app-m-harvest; requieren desplegar esa versión y aplicar
 `20261027181414_pda_ingreso_supervisor.sql` en el backend. La migración completa
 del flujo de campo a `pda_operar` sigue pendiente; no activar todavía el acceso
@@ -82,8 +92,8 @@ explícita, tabla, confirmación, estado vacío y error de regeneración. Incluy
 el flujo completo del supervisor sin `company.manage` y el rechazo de usuarios
 con permiso de solo consulta.
 
-Validación final: `npm test` aprobó 147 pruebas de aplicación y 297 de
-presentación (444 en total). `npm run build` y `git diff --check` finalizaron
+Validación final: `npm test` aprobó 147 pruebas de aplicación y 298 de
+presentación (445 en total). `npm run build` y `git diff --check` finalizaron
 correctamente. La pantalla y el generador QR se cargan bajo demanda para no
 añadirlos a la carga inicial de las otras pestañas de Cosecha.
 

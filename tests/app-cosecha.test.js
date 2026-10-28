@@ -93,6 +93,8 @@ test('rechaza respuestas y revocaciones que no corresponden a la empresa solicit
   await assert.rejects(servicio.listar(), /no corresponde/)
   ports.pda.revocar = async () => ({ id: 'd', tenantId: 'B', estado: 'REVOCADO' })
   await assert.rejects(servicio.revocar('d'), /no corresponde/)
+  ports.pda.renovar = async () => ({ id: 'd', tenantId: 'B', estado: 'ACTIVO' })
+  await assert.rejects(servicio.renovar('d'), /no corresponde/)
 })
 
 test('URL insegura bloquea la generación y el permiso revocado evita consultar equipos', async () => {
@@ -116,6 +118,7 @@ test('URL insegura bloquea la generación y el permiso revocado evita consultar 
   )
   ports.permisos.A = ['harvest.view']
   await assert.rejects(servicio.listar())
+  await assert.rejects(servicio.renovar('d'))
   assert.equal(
     ports.calls.some((c) => c[0] === 'pdaListar'),
     false
@@ -130,9 +133,11 @@ test('el adapter transmite exclusivamente el tenant y dispositivo a las RPC auto
   await adapter.listar('A')
   await adapter.generar('A')
   await adapter.revocar('A', 'd')
+  await adapter.renovar('A', 'd')
   assert.deepEqual(calls, [
     ['pda_administrar_dispositivos', { p_tenant_id: 'A' }],
     ['pda_generar_vinculacion', { p_tenant_id: 'A' }],
-    ['pda_revocar_dispositivo', { p_tenant_id: 'A', p_dispositivo_id: 'd' }]
+    ['pda_revocar_dispositivo', { p_tenant_id: 'A', p_dispositivo_id: 'd' }],
+    ['pda_renovar_dispositivo', { p_tenant_id: 'A', p_dispositivo_id: 'd' }]
   ])
 })

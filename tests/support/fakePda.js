@@ -45,6 +45,13 @@ export function fakePda(ports, { vacio = false } = {}) {
       vinculaciones[tenantId] = { id: r.id, venceEn: r.venceEn, estado: 'ACTIVA' }
       return r
     },
+    async renovar(tenantId, id) {
+      ports.calls.push(['pdaRenovar', tenantId, id])
+      const d = dispositivos[tenantId].find((item) => item.id === id)
+      d.estado = 'ACTIVO'
+      d.revocadoEn = null
+      return structuredClone(d)
+    },
     async revocar(tenantId, id) {
       ports.calls.push(['pdaRevocar', tenantId, id])
       const d = dispositivos[tenantId].find((item) => item.id === id)
