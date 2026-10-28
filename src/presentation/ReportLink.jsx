@@ -1,8 +1,8 @@
 import { Link } from 'react-router'
-import { REPORTES_HABILITADOS } from './reportesDisponibles.js'
+import { reportePublicado } from './rutasReportesHome.js'
 
 export function ReportLink({ to, children, disponible = true, ...props }) {
-  if (REPORTES_HABILITADOS && disponible)
+  if (reportePublicado(to) && disponible)
     return (
       <Link to={to} {...props}>
         {children}

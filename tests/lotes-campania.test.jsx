@@ -92,8 +92,12 @@ describe('Listados de lotes de la campaña', () => {
         .getAllByRole('columnheader')
         .map((x) => x.textContent)
     ).toEqual(['Código'])
-    expect(within(panel).getByRole('button', { name: 'Anterior lote' })).toBeDisabled()
-    expect(within(panel).getByRole('button', { name: 'Siguiente lote' })).toBeDisabled()
+    expect(
+      within(panel).queryByRole('button', { name: 'Anterior lote' })
+    ).not.toBeInTheDocument()
+    expect(
+      within(panel).queryByRole('button', { name: 'Siguiente lote' })
+    ).not.toBeInTheDocument()
     expect(servicio.listar).toHaveBeenCalledWith('lotes', {
       campaniaId: 'camp-1',
       offset: 0,
@@ -121,85 +125,32 @@ describe('Listados de lotes de la campaña', () => {
       ...sinFiltros
     })
   })
-  it('asignados presenta estado disponible y utilizado, con navegación entre filas', async () => {
+  it('solo consulta los tickets del lote elegido, sin precargas de otros lotes', async () => {
     const servicio = {
-      listar: vi.fn(async (tipo, f) =>
-        tipo === 'tickets'
-          ? {
-              filas: [
-                { codigo: f.loteId + '-1', estado: 'DISPONIBLE' },
-                { codigo: f.loteId + '-2', estado: 'UTILIZADO' }
-              ],
-              total: 2
-            }
-          : { filas: [lote, { ...lote, id: 'LT-456' }], total: 2 }
-      )
+      listar: vi.fn(async () => ({
+        filas: [lote, { ...lote, id: 'LT-456' }],
+        total: 2
+      })),
+      ticketsLote: vi.fn(async (_campania, id) => ({
+        filas: [{ codigo: id + '-1', estado: 'DISPONIBLE' }],
+        total: 1
+      }))
     }
     const { user } = montar({ asignados: true, servicio })
     await user.click(
       await screen.findByRole('button', { name: 'Tickets del lote LT-123' })
     )
-    let panel = screen.getByRole('dialog')
-    expect(await within(panel).findByText('Disponible')).toHaveClass('available')
-    expect(within(panel).getByText('Utilizado')).toHaveClass('neutral')
-    await user.click(within(panel).getByRole('button', { name: 'Siguiente lote' }))
-    expect(await within(panel).findByText('LT-456-1')).toBeInTheDocument()
-    expect(panel).toHaveAccessibleName('Lote de tickets: LT-456')
-    expect(within(panel).getByRole('button', { name: 'Siguiente lote' })).toBeDisabled()
-    await user.click(within(panel).getByRole('button', { name: 'Anterior lote' }))
-    expect(await within(panel).findByText('LT-123-1')).toBeInTheDocument()
-  })
-  it('sigue el orden filtrado entre páginas, incluso al cruzar una consulta de 50 lotes', async () => {
-    const lotes = Array.from({ length: 52 }, (_, i) => ({ ...lote, id: `LT-${i}` }))
-    const servicio = {
-      listar: vi.fn(async (tipo, f) =>
-        tipo === 'tickets'
-          ? { filas: [{ codigo: f.loteId + '-ticket' }], total: 1 }
-          : { filas: lotes.slice(f.offset, f.offset + 50), total: 52 }
-      )
-    }
-    const { user } = montar({ servicio })
-    await screen.findByText('LT-0')
-    for (let i = 0; i < 4; i++)
-      await user.click(screen.getByRole('button', { name: 'Siguiente' }))
-    await user.click(screen.getByRole('button', { name: 'Tickets del lote LT-49' }))
     const panel = screen.getByRole('dialog')
-    await within(panel).findByText('LT-49-ticket')
-    await user.click(within(panel).getByRole('button', { name: 'Siguiente lote' }))
-    expect(await within(panel).findByText('LT-50-ticket')).toBeInTheDocument()
-    expect(servicio.listar).toHaveBeenCalledWith('lotes', {
-      campaniaId: 'camp-1',
-      offset: 50,
-      ...sinFiltros
-    })
-    await user.click(within(panel).getByRole('button', { name: 'Anterior lote' }))
-    expect(await within(panel).findByText('LT-49-ticket')).toBeInTheDocument()
-  })
-  it('descarta tickets tardíos al avanzar y permite cerrar con Escape', async () => {
-    let liberar
-    const servicio = {
-      listar: vi.fn(async (tipo, f) =>
-        tipo !== 'tickets'
-          ? { filas: [lote, { ...lote, id: 'LT-next' }], total: 2 }
-          : f.loteId === 'LT-123'
-            ? new Promise((r) => {
-                liberar = r
-              })
-            : { filas: [{ codigo: 'ACTUAL' }], total: 1 }
-      )
-    }
-    const { user } = montar({ servicio })
-    await user.click(
-      await screen.findByRole('button', { name: 'Tickets del lote LT-123' })
-    )
-    const panel = screen.getByRole('dialog')
-    await user.click(within(panel).getByRole('button', { name: 'Siguiente lote' }))
-    await within(panel).findByText('ACTUAL')
-    await act(async () => liberar({ filas: [{ codigo: 'OBSOLETO' }], total: 1 }))
-    expect(within(panel).queryByText('OBSOLETO')).not.toBeInTheDocument()
-    within(panel).getByRole('button', { name: 'Cerrar panel' }).focus()
-    await user.keyboard('{Escape}')
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await within(panel).findByText('LT-123-1')
+    expect(
+      within(panel).queryByRole('button', { name: /Anterior|Siguiente/ })
+    ).not.toBeInTheDocument()
+    expect(servicio.ticketsLote).toHaveBeenCalledExactlyOnceWith('camp-1', 'LT-123', 0)
+    await user.click(within(panel).getByRole('button', { name: 'Cerrar panel' }))
+    await user.click(screen.getByRole('button', { name: 'Tickets del lote LT-456' }))
+    await within(screen.getByRole('dialog')).findByText('LT-456-1')
+    expect(servicio.ticketsLote).toHaveBeenCalledTimes(2)
+    expect(servicio.listar).toHaveBeenCalledTimes(1)
   })
   it('un histórico sin fecha de asignación informa la ausencia aunque exista fecha de creación', async () => {
     montar({ asignados: true, filas: [{ ...lote, asignadoEn: null }] })

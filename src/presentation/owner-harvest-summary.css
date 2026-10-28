@@ -99,7 +99,8 @@
 }
 .owner-home-harvest .home-ranking-empty {
   min-height: calc(134 * var(--owner-scale));
-  margin: calc(38 * var(--owner-scale)) calc(-14 * var(--owner-scale)) 0 calc(-40 * var(--owner-scale));
+  margin: calc(38 * var(--owner-scale)) calc(-14 * var(--owner-scale)) 0
+    calc(-40 * var(--owner-scale));
   padding: calc(12 * var(--owner-scale)) calc(20 * var(--owner-scale));
   border-radius: 0 calc(30 * var(--owner-scale)) calc(30 * var(--owner-scale)) 0;
   font-size: calc(40 * var(--owner-scale));
@@ -418,4 +419,8 @@
     border-left: 0;
     border-top: 1px solid var(--owner-ink);
   }
+}
+.owner-home-harvest .home-link:is(:hover, :focus-visible) {
+  text-decoration: none;
+  color: #336a29;
 }

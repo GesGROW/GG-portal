@@ -20,6 +20,45 @@ function mount(configure = () => {}, path = '/') {
 }
 
 describe('Home desde Figma con datos de la campaña', () => {
+  it('muestra trabajadores, lotes y variedades configurados antes de la primera lectura', async () => {
+    mount((ports) => {
+      const consultar = ports.reportesHarvest.consultar
+      ports.reportesHarvest.consultar = async (...args) => {
+        const result = await consultar(...args)
+        if (result.tipo === 'DASHBOARD') {
+          result.datos.hoy.total_jabas = 0
+          Object.assign(result.datos.resumen, {
+            total_jabas: 0,
+            dias_con_produccion: 0,
+            total_cosechadores: 0,
+            total_jaberos: 0,
+            total_lotes: 0,
+            total_cosechadores_registrados: 2,
+            total_jaberos_registrados: 1,
+            total_lotes_configurados: 2,
+            total_variedades_configuradas: 3
+          })
+        }
+        if (result.tipo === 'RANKING') result.datos.ranking = []
+        if (result.tipo === 'LOTES') result.datos.produccion = []
+        return result
+      }
+    })
+    await waitFor(() => {
+      for (const [label, value] of [
+        ['Cosechadores', '2'],
+        ['Jaberos', '1'],
+        ['Lotes operativos', '2'],
+        ['Variedades', '3'],
+        ['Días en producción', '0']
+      ]) {
+        expect(screen.getByText(label).nextElementSibling).toHaveTextContent(value)
+      }
+    })
+    const produccion = screen.getByRole('region', { name: 'Producción' })
+    expect(within(produccion).getAllByText('0')).toHaveLength(2)
+  })
+
   it('usa el usuario, el primer puesto y el conteo de jaberos reales', async () => {
     mount()
     const top = await screen.findByRole('region', { name: 'Top cosechador' })
@@ -33,13 +72,13 @@ describe('Home desde Figma con datos de la campaña', () => {
     await waitFor(() =>
       expect(screen.getByText('Variedades').nextElementSibling).toHaveTextContent('2')
     )
+    expect(screen.getByRole('link', { name: 'Ver ranking completo' })).toHaveAttribute(
+      'href',
+      '/reportes/ranking?campania=A-camp'
+    )
     expect(
       screen.getByRole('link', { name: 'Ver ranking completo' })
-    ).not.toHaveAttribute('href')
-    expect(screen.getByRole('link', { name: 'Ver ranking completo' })).toHaveAttribute(
-      'aria-disabled',
-      'true'
-    )
+    ).not.toHaveAttribute('aria-disabled')
   })
 
   it('actualiza juntos producción, ranking y variedades sin mostrar cifras anteriores', async () => {
@@ -90,18 +129,17 @@ describe('Home desde Figma con datos de la campaña', () => {
     )
   })
 
-  it('conserva la campaña elegida con los accesos a reportes inactivos', async () => {
+  it('conserva la campaña elegida al abrir el ranking', async () => {
     mount()
     await screen.findByText('Ana A')
     const user = userEvent.setup()
     await user.selectOptions(screen.getByLabelText('Campaña'), 'A-cerrada')
     await screen.findByText('43')
     const ranking = screen.getByRole('link', { name: 'Ver ranking completo' })
-    expect(ranking).not.toHaveAttribute('href')
+    expect(ranking).toHaveAttribute('href', '/reportes/ranking?campania=A-cerrada')
     await user.click(ranking)
+    await screen.findByRole('heading', { name: 'Ranking de cosechadores', exact: true })
     expect(screen.getByLabelText('Campaña')).toHaveValue('A-cerrada')
-    expect(screen.getByText('43')).toBeInTheDocument()
-    expect(screen.queryByText('Más acciones')).not.toBeInTheDocument()
   })
 
   it('una campaña ajena no llega a consultar producción, ranking ni lotes', async () => {

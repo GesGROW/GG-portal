@@ -51,38 +51,15 @@ export function TicketsLotePanel({
   campaniaId,
   lote,
   asignados,
-  indice,
-  total,
   cargando,
   error,
   onRetry,
-  onMove,
   onClose
 }) {
   return (
     <PanelLateral
       titulo={lote ? `Lote de tickets: ${lote.codigo ?? lote.id}` : 'Lote de tickets'}
       onClose={onClose}
-      acciones={
-        <>
-          <button
-            type="button"
-            aria-label="Anterior lote"
-            disabled={cargando || Boolean(error) || indice <= 0}
-            onClick={() => onMove(indice - 1)}
-          >
-            Anterior
-          </button>
-          <button
-            type="button"
-            aria-label="Siguiente lote"
-            disabled={cargando || Boolean(error) || indice >= total - 1}
-            onClick={() => onMove(indice + 1)}
-          >
-            Siguiente
-          </button>
-        </>
-      }
     >
       <h3>Tickets</h3>
       {error ? (

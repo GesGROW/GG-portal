@@ -57,13 +57,13 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
       key: 'tickets',
       header: 'Tickets',
       width: asignados ? '16%' : '35%',
-      render: (l, indice) => (
+      render: (l) => (
         <button
           type="button"
           className="lot-tickets-button"
           aria-label={`Tickets del lote ${l.codigo ?? l.id}`}
-          aria-pressed={seleccionado === paginacion.offset + indice}
-          onClick={() => setSeleccionado(paginacion.offset + indice)}
+          aria-pressed={seleccionado?.id === l.id}
+          onClick={() => setSeleccionado(l)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -148,18 +148,8 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
           servicio={servicio}
           campaniaId={campania.id}
           asignados={asignados}
-          lote={filas[seleccionado - paginacion.offset]}
-          indice={seleccionado}
-          total={paginacion.total}
-          cargando={consulta.cargando}
-          error={consulta.error}
-          onRetry={consulta.refrescar}
+          lote={seleccionado}
           onClose={() => setSeleccionado(null)}
-          onMove={(indice) => {
-            if (indice < 0 || indice >= paginacion.total) return
-            setSeleccionado(indice)
-            paginacion.onPageChange(Math.floor(indice / paginacion.pageSize) + 1)
-          }}
         />
       )}
     </section>

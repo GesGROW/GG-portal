@@ -2,7 +2,6 @@ import { Select } from './Select.jsx'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { OwnerIcon } from './OwnerAssets.jsx'
 import { HomeSkeleton } from './HomeSkeleton.jsx'
-import { esOwnerSinOperacion } from '../application/accesoOwner.js'
 import { SupervisorSetupEmpty } from './SupervisorSetupEmpty.jsx'
 import './supervisor-home.css'
 
@@ -115,7 +114,7 @@ export function OwnerHome({ estado, servicio }) {
               empresa={estado.contexto.empresa}
               usuario={estado.usuario}
               embedded
-              puedeDetalles={!esOwnerSinOperacion(estado.contexto)}
+              puedeDetalles={estado.contexto.permite('reports.view')}
               sinCampanias={
                 vistaModulo
                   ? (actualizar) => <SupervisorSetupEmpty actualizar={actualizar} />

@@ -1,4 +1,5 @@
 import { Select } from './Select.jsx'
+import { reportePublicado } from './rutasReportesHome.js'
 import { useId, useState } from 'react'
 import { NavLink, useSearchParams } from 'react-router'
 import { useCarga } from './GestionUi.jsx'
@@ -31,7 +32,8 @@ export const fecha = (value, soloDia = false) => {
 const periodos = { HOY: 'Hoy', SEMANA: 'Semana', MES: 'Mes', CAMPANIA: 'Campaña' }
 
 export function EstadoConsulta({ consulta, children, skeleton = 'report' }) {
-  if (consulta.cargando) return <Skeleton text="Cargando reportes…" variant={skeleton} />
+  if (consulta.cargando)
+    return <Skeleton text="Cargando reportes…" variant={skeleton} />
   if (consulta.error) {
     const e = consulta.error
     const titulo =
@@ -96,18 +98,20 @@ export function Reportes({ servicio, path = '/', dashboard = false }) {
           }
           aria-label="Reportes disponibles"
         >
-          {vistas.map(([ruta, nombre]) => (
-            <NavLink
-              key={ruta}
-              to={
-                '/reportes/' +
-                ruta +
-                (seleccion ? '?campania=' + encodeURIComponent(seleccion) : '')
-              }
-            >
-              {nombre}
-            </NavLink>
-          ))}
+          {vistas
+            .filter(([ruta]) => reportePublicado('/reportes/' + ruta))
+            .map(([ruta, nombre]) => (
+              <NavLink
+                key={ruta}
+                to={
+                  '/reportes/' +
+                  ruta +
+                  (seleccion ? '?campania=' + encodeURIComponent(seleccion) : '')
+                }
+              >
+                {nombre}
+              </NavLink>
+            ))}
         </nav>
       )}
       <section

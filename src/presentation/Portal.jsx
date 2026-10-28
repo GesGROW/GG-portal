@@ -10,7 +10,7 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { Icon, routeIcon, Skeleton, UserMenu } from './Ui.jsx'
 import { NavigationRail } from './Navigation.jsx'
 import { evaluarRuta } from '../application/rutas.js'
-import { REPORTES_HABILITADOS } from './reportesDisponibles.js'
+import { reportePublicado } from './rutasReportesHome.js'
 import { Login } from './Login.jsx'
 import { Registro } from './Registro.jsx'
 import { CrearEmpresa } from './CrearEmpresa.jsx'
@@ -124,7 +124,7 @@ function ContenidoProtegido({ portal, estado, path }) {
     ) : (
       <Skeleton text="Cargando…" variant={vistaCarga} page />
     )
-  if (!REPORTES_HABILITADOS && /^\/reportes(?:\/|$)/.test(path)) return null
+  if (!reportePublicado(path) && /^\/reportes(?:\/|$)/.test(path)) return null
   // El listado permanece montado al abrir/cerrar la invitación. El formulario
   // de destino se muestra después de revalidar el permiso de configuración.
   if (
@@ -302,7 +302,7 @@ function Layout({ portal, estado }) {
   const figmaShell =
     path === '/' || cosechaFigma || usuariosFigma || suscripcionPortal || modulosOwner
   useEffect(() => {
-    if (!REPORTES_HABILITADOS && /^\/reportes(?:\/|$)/.test(path)) {
+    if (!reportePublicado(path) && /^\/reportes(?:\/|$)/.test(path)) {
       navigate('/', { replace: true })
       return
     }

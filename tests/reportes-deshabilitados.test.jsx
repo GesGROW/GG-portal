@@ -30,18 +30,18 @@ function mount(path = '/') {
   )
 }
 
-describe('Reportes temporalmente fuera del Portal', () => {
-  it('los accesos del Home y el menú lateral no navegan con mouse ni teclado', async () => {
+describe('Accesos publicados a reportes', () => {
+  it('el Home enlaza a producción y ranking mientras el menú general permanece oculto', async () => {
     mount()
     const user = userEvent.setup()
     await screen.findByText('Ana A')
-    for (const name of ['Ver producción diaria', 'Ver ranking completo']) {
+    for (const [name, route] of [
+      ['Ver producción diaria', 'diaria'],
+      ['Ver ranking completo', 'ranking']
+    ]) {
       const link = screen.getByRole('link', { name })
-      expect(link).toHaveAttribute('aria-disabled', 'true')
-      expect(link).not.toHaveAttribute('href')
-      await user.click(link)
-      await user.keyboard('{Enter}')
-      expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+      expect(link).not.toHaveAttribute('aria-disabled')
+      expect(link).toHaveAttribute('href', '/reportes/' + route + '?campania=A-camp')
     }
     await user.hover(screen.getByRole('button', { name: 'Módulos', exact: true }))
     expect(
@@ -51,24 +51,36 @@ describe('Reportes temporalmente fuera del Portal', () => {
     expect(screen.getByRole('region', { name: 'Módulos', exact: true })).toBeVisible()
   })
 
+  it.each(['/reportes', '/reportes/resumen', '/reportes/lotes'])(
+    'la URL %s vuelve al Home sin mostrar reportes',
+    async (path) => {
+      mount(path)
+      await screen.findByText('Ana A')
+      expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+      expect(
+        screen.queryByRole('heading', { name: 'Reportes', exact: true })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('heading', { name: 'Ranking de cosechadores', exact: true })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('navigation', { name: 'Reportes disponibles' })
+      ).not.toBeInTheDocument()
+    }
+  )
+
   it.each([
-    '/reportes',
-    '/reportes/resumen',
-    '/reportes/ranking',
-    '/reportes/diaria',
-    '/reportes/lotes'
-  ])('la URL %s vuelve al Home sin mostrar reportes', async (path) => {
-    mount(path)
-    await screen.findByText('Ana A')
-    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
-    expect(
-      screen.queryByRole('heading', { name: 'Reportes', exact: true })
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByRole('heading', { name: 'Ranking de cosechadores', exact: true })
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByRole('navigation', { name: 'Reportes disponibles' })
-    ).not.toBeInTheDocument()
-  })
+    ['diaria', 'Producción diaria'],
+    ['ranking', 'Ranking de cosechadores']
+  ])(
+    'permite abrir directamente el reporte %s de la campaña',
+    async (route, heading) => {
+      mount('/reportes/' + route + '?campania=A-camp')
+      await screen.findByRole('heading', { name: heading, exact: true })
+      expect(screen.getByLabelText('Campaña')).toHaveValue('A-camp')
+      expect(screen.getByTestId('location')).toHaveTextContent(
+        '/reportes/' + route + '?campania=A-camp'
+      )
+    }
+  )
 })

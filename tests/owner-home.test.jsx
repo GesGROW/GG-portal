@@ -28,6 +28,21 @@ async function montar(options = {}) {
 }
 
 describe('Home del owner', () => {
+  for (const [enlace, titulo] of [
+    ['Ver producción diaria', 'Producción diaria'],
+    ['Ver ranking completo', 'Ranking de cosechadores']
+  ]) {
+    it(`E024: ${enlace} abre el reporte de la campaña seleccionada`, async () => {
+      const { user } = await montar({ modulos: { A: ['HARVEST'] } })
+      const link = await screen.findByRole('link', { name: enlace })
+      expect(link).toHaveAttribute('href', expect.stringContaining('campania=A-camp'))
+      await user.click(link)
+      await screen.findByRole('heading', { name: titulo, exact: true })
+      expect(
+        screen.queryByRole('heading', { name: 'Acceso restringido' })
+      ).not.toBeInTheDocument()
+    })
+  }
   it('sin Cosecha muestra la invitación a adquirir y no presenta selector ni consulta datos', async () => {
     const { campanias, reportes } = await montar()
     expect(

@@ -74,8 +74,7 @@ describe('Trabajadores dentro de una campaña', () => {
         seccion.rol,
         persona.id
       )
-      await user.clear(within(panel).getByLabelText('DNI'))
-      await user.type(within(panel).getByLabelText('DNI'), '12345678')
+      expect(within(panel).getByLabelText('DNI')).toHaveAttribute('readonly')
       await user.clear(within(panel).getByLabelText('Nombres'))
       await user.type(within(panel).getByLabelText('Nombres'), 'Ana')
       await user.selectOptions(
@@ -90,7 +89,12 @@ describe('Trabajadores dentro de una campaña', () => {
         campania.id,
         seccion.rol,
         persona.id,
-        { dni: '12345678', nombres: 'Ana', apellidos: 'De la Cruz Rojas', activo: true }
+        {
+          dni: persona.dni,
+          nombres: 'Ana',
+          apellidos: 'De la Cruz Rojas',
+          activo: true
+        }
       )
       expect(servicio.trabajadoresCampania).toHaveBeenCalledTimes(2)
     }

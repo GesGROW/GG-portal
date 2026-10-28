@@ -46,7 +46,9 @@ describe('Módulos del owner', () => {
       await screen.findByRole('button', { name: 'Seleccionar Cosecha' })
     ).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Adquirir 0 módulo(s)' })).toBeDisabled()
-    expect(screen.queryByRole('link', { name: 'App de Cosecha' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: 'App de Cosecha' })
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByRole('link', { name: /Registros|Tickets|Reportes/ })
     ).not.toBeInTheDocument()
@@ -85,7 +87,9 @@ describe('Módulos del owner', () => {
       await screen.findByRole('group', { name: 'Cosecha adquirido' })
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Cosecha ya adquirido' })).toBeDisabled()
-    expect(screen.queryByRole('link', { name: 'App de Cosecha' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: 'App de Cosecha' })
+    ).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Adquirir 0 módulo(s)' })).toBeDisabled()
   })
 
@@ -145,18 +149,21 @@ describe('Módulos del owner', () => {
   it('el owner con Cosecha contratado tampoco abre la app por URL directa', async () => {
     montar({ adquirido: true, path: '/cosecha/app' })
     await screen.findByRole('heading', { name: 'Acceso restringido' })
-    expect(screen.queryByRole('link', { name: 'App de Cosecha' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: 'App de Cosecha' })
+    ).not.toBeInTheDocument()
   })
 
-  it('Home conserva el resumen del owner y los enlaces a detalles no navegan', async () => {
+  it('Home enlaza al reporte diario y al ranking de la campaña elegida', async () => {
     montar({ adquirido: true, path: '/' })
     await screen.findByText('Ana A')
     expect(screen.getByRole('link', { name: 'Ver producción diaria' })).toHaveAttribute(
-      'aria-disabled',
-      'true'
+      'href',
+      '/reportes/diaria?campania=A-camp'
     )
-    expect(
-      screen.getByRole('link', { name: 'Ver ranking completo' })
-    ).not.toHaveAttribute('href')
+    expect(screen.getByRole('link', { name: 'Ver ranking completo' })).toHaveAttribute(
+      'href',
+      '/reportes/ranking?campania=A-camp'
+    )
   })
 })

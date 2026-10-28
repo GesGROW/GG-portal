@@ -5,6 +5,7 @@ import { useCarga } from './GestionUi.jsx'
 import { EstadoConsulta, fecha, numero } from './Reportes.jsx'
 import { DataTable, EmptyState, Icon } from './Ui.jsx'
 import { ReportActions } from './ReportActions.jsx'
+import { reportePublicado } from './rutasReportesHome.js'
 
 const periods = { HOY: 'Hoy', SEMANA: 'Semana', MES: 'Mes', CAMPANIA: 'Campaña' }
 
@@ -45,8 +46,11 @@ export function Ranking({ servicio }) {
   return (
     <div className="ranking-page">
       <div className="page-heading">
-        <Link className="eyebrow" to="/reportes">
-          Reportes / Ranking
+        <Link
+          className="eyebrow"
+          to={reportePublicado('/reportes') ? '/reportes' : '/'}
+        >
+          {reportePublicado('/reportes') ? 'Reportes' : 'Inicio'} / Ranking
         </Link>
         <h1>Ranking de cosechadores</h1>
         <p>

@@ -162,8 +162,7 @@
   box-shadow: var(--shadow-lg);
 }
 .worker-drawer::backdrop {
-  background: rgb(0 0 0 / 55%);
-  backdrop-filter: blur(3px);
+  background: rgb(2 47 42 / 32%);
 }
 .worker-drawer > header {
   display: flex;

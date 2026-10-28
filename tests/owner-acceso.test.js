@@ -31,7 +31,7 @@ test('el rol organizacional del owner permite administración y resumen, sin ope
     '/cosecha/trabajadores',
     '/cosecha/generar',
     '/reportes',
-    '/reportes/ranking'
+    '/reportes/resumen'
   ])
     assert.equal(
       evaluarRuta(path, owner, ['HARVEST', 'WORKFORCE']).estado,

@@ -223,11 +223,15 @@ function DashboardData({
             </div>
           </div>
         )}
-        <EstadoConsulta consulta={consulta} skeleton={embedded ? 'summary-data' : 'summary'}>
+        <EstadoConsulta
+          consulta={consulta}
+          skeleton={embedded ? 'summary-data' : 'summary'}
+        >
           {(r) => {
             const s = r.datos.resumen
             const filas = lotes.datos?.datos.produccion
             const variedades =
+              s.total_variedades_configuradas ??
               s.total_variedades ??
               (filas
                 ? new Set(filas.map((f) => f.variedad_id ?? f.variedad).filter(Boolean))
@@ -249,11 +253,15 @@ function DashboardData({
                     <div className="home-production-values">
                       <dl>
                         <dt>Total jabas</dt>
-                        <dd><HomeNumber value={s.total_jabas} /></dd>
+                        <dd>
+                          <HomeNumber value={s.total_jabas} />
+                        </dd>
                       </dl>
                       <div className="home-today">
                         <span>Jabas hoy</span>
-                        <strong><HomeNumber value={r.datos.hoy.total_jabas} /></strong>
+                        <strong>
+                          <HomeNumber value={r.datos.hoy.total_jabas} />
+                        </strong>
                       </div>
                     </div>
                     <ReportLink
@@ -285,7 +293,9 @@ function DashboardData({
                               <img className="home-laurel" src={homeLaurel} alt="" />
                               <dl>
                                 <dt>Jabas</dt>
-                                <dd><HomeNumber value={top.total_jabas} /></dd>
+                                <dd>
+                                  <HomeNumber value={top.total_jabas} />
+                                </dd>
                               </dl>
                             </div>
                           </div>
@@ -310,24 +320,24 @@ function DashboardData({
                   <HomeStat
                     icon="harvesters"
                     label="Cosechadores"
-                    value={s.total_cosechadores}
-                    detail="Cosechadores con producción en la campaña"
+                    value={s.total_cosechadores_registrados ?? s.total_cosechadores}
+                    detail="Cosechadores activos registrados en la campaña"
                   />
                   <HomeStat
                     icon="carriers"
                     label="Jaberos"
-                    value={s.total_jaberos}
+                    value={s.total_jaberos_registrados ?? s.total_jaberos}
                     detail={
                       s.total_jaberos == null
                         ? 'Cantidad de jaberos no disponible en el reporte actual'
-                        : 'Jaberos con producción en la campaña'
+                        : 'Jaberos activos registrados en la campaña'
                     }
                   />
                   <HomeStat
                     icon={embedded ? 'calendar' : 'lots'}
                     label="Lotes operativos"
-                    value={s.total_lotes}
-                    detail="Lotes operativos con producción"
+                    value={s.total_lotes_configurados ?? s.total_lotes}
+                    detail="Lotes operativos configurados en la campaña"
                   />
                   <HomeStat
                     icon="varieties"
@@ -336,7 +346,7 @@ function DashboardData({
                     detail={
                       lotes.error
                         ? 'No se pudieron consultar las variedades; actualice los datos para reintentar'
-                        : 'Variedades con producción en la campaña'
+                        : 'Variedades configuradas en los lotes de la campaña'
                     }
                   />
                   <HomeStat

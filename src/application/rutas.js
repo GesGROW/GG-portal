@@ -72,7 +72,11 @@ export function evaluarRuta(path, contexto, modulos) {
       ruta: RUTAS_PORTAL.find((r) => r.path === '/cosecha')
     }
   }
-  if (esOwnerSinOperacion(contexto) && /^\/(cosecha|reportes)(\/|$)/.test(path))
+  if (
+    esOwnerSinOperacion(contexto) &&
+    /^\/(cosecha|reportes)(\/|$)/.test(path) &&
+    !['/reportes/diaria', '/reportes/ranking'].includes(path)
+  )
     return {
       estado: 'denegada',
       mensaje:

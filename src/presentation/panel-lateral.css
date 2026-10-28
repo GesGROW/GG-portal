@@ -22,8 +22,7 @@
   gap: calc(34 * var(--owner-scale, 1px));
 }
 .campaign-side-panel::backdrop {
-  background: rgb(255 255 255 / 15%);
-  backdrop-filter: blur(3px);
+  background: rgb(2 47 42 / 32%);
 }
 .campaign-panel-header {
   display: flex;
@@ -71,11 +70,24 @@ body:has(.campaign-side-panel[open]) {
 }
 .campaign-worker-form fieldset {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   border: 0;
   padding: 0;
   margin: 0;
   min-width: 0;
+}
+.campaign-worker-form fieldset > label:first-child,
+.campaign-worker-form fieldset > label:last-child {
+  grid-column: 1 / -1;
+}
+.campaign-worker-form fieldset > label:first-child input {
+  max-width: 260px;
+}
+@media (max-width: 599px) {
+  .campaign-worker-form fieldset {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .campaign-worker-form label {
   display: grid;
@@ -104,7 +116,20 @@ body:has(.campaign-side-panel[open]) {
   font-size: 15px;
 }
 .campaign-worker-form fieldset:disabled {
-  opacity: 0.7;
+  background: transparent;
+  color: #022f2a;
+}
+.campaign-worker-form input[readonly] {
+  background: #e3e4d6;
+  color: #52635a;
+}
+html[data-theme]
+  .campaign-side-panel
+  .campaign-worker-form
+  :is(input, select):disabled {
+  background: #eff0e2;
+  color: #52635a;
+  opacity: 1;
 }
 .campaign-worker-form fieldset:disabled :is(input, select) {
   cursor: not-allowed;

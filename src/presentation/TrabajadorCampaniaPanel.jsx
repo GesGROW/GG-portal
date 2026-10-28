@@ -77,7 +77,7 @@ function FichaTrabajador({
             pattern="[0-9]{8}"
             maxLength={8}
             value={datos.dni}
-            onChange={(e) => setDatos({ ...datos, dni: e.target.value })}
+            readOnly
           />
         </label>
         <label>
@@ -114,14 +114,10 @@ function FichaTrabajador({
           </Select>
         </label>
       </fieldset>
-      <p>
-        El estado solo cambia su participación como{' '}
-        {rol === 'JABERO' ? 'jabero' : 'cosechador'} en esta campaña.
-      </p>
-      {!persona.trabajadorActivo && <p>El trabajador está inactivo a nivel general.</p>}
-      {rol === 'JABERO' && (
-        <p>La habilitación diaria del jabero se conserva por separado.</p>
+      {rol !== 'JABERO' && (
+        <p>El estado solo cambia su participación como cosechador en esta campaña.</p>
       )}
+      {!persona.trabajadorActivo && <p>El trabajador está inactivo a nivel general.</p>}
       {!puedeEditar && (
         <p>Solo consulta. Se requiere permiso de gestión de Cosecha para editar.</p>
       )}
