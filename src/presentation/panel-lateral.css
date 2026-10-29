@@ -81,7 +81,10 @@ body:has(.campaign-side-panel[open]) {
 .campaign-worker-form fieldset > label:last-child {
   grid-column: 1 / -1;
 }
-.campaign-worker-form fieldset > label:first-child input {
+.campaign-worker-form
+  fieldset
+  > label:first-child
+  :is(input, .campaign-worker-control-placeholder) {
   max-width: 260px;
 }
 @media (max-width: 599px) {
@@ -95,7 +98,7 @@ body:has(.campaign-side-panel[open]) {
   color: #022f2a;
   font-size: calc(20 * var(--owner-scale, 1px));
 }
-.campaign-worker-form :is(input, select) {
+.campaign-worker-form :is(input, select, .campaign-worker-control-placeholder) {
   width: 100%;
   min-width: 0;
   min-height: 46px;
@@ -105,6 +108,19 @@ body:has(.campaign-side-panel[open]) {
   background: #eff0e2;
   color: #022f2a;
   font: inherit;
+}
+.loading-state.skeleton.campaign-worker-skeleton {
+  padding: 0;
+}
+.campaign-worker-form .skeleton-block.campaign-worker-control-placeholder {
+  height: calc(1lh + 22px);
+  background: var(--skeleton-fill, #dfe2d3);
+  border-color: transparent;
+}
+.campaign-worker-form label:last-child .campaign-worker-control-placeholder {
+  min-height: 44px;
+  height: calc(1lh + 20px);
+  border: 0;
 }
 .campaign-worker-form :is(input, select):focus-visible {
   outline: 2px solid #95b52c;

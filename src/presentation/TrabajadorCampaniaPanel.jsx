@@ -2,6 +2,45 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { PanelLateral } from './PanelLateral.jsx'
 import { Aviso, Carga, useCarga } from './GestionUi.jsx'
 import { Select } from './Select.jsx'
+import { SkeletonBlock } from './Skeleton.jsx'
+
+function NotasTrabajador({ rol, puedeEditar, trabajadorActivo = true }) {
+  return (
+    <>
+      {rol !== 'JABERO' && (
+        <p>El estado solo cambia su participación como cosechador en esta campaña.</p>
+      )}
+      {!trabajadorActivo && <p>El trabajador está inactivo a nivel general.</p>}
+      {!puedeEditar && (
+        <p>Solo consulta. Se requiere permiso de gestión de Cosecha para editar.</p>
+      )}
+    </>
+  )
+}
+
+function FichaTrabajadorSkeleton({ rol, puedeEditar }) {
+  return (
+    <div
+      className="loading-state skeleton campaign-worker-skeleton"
+      role="status"
+      aria-busy="true"
+    >
+      <span className="sr-only">Cargando datos del trabajador…</span>
+      <div className="campaign-worker-form" aria-hidden="true" inert>
+        <h3>Datos del trabajador</h3>
+        <fieldset>
+          {['DNI', 'Nombres', 'Apellidos', 'Estado en esta campaña'].map((label) => (
+            <label key={label}>
+              {label}
+              <SkeletonBlock className="campaign-worker-control-placeholder" />
+            </label>
+          ))}
+        </fieldset>
+        <NotasTrabajador rol={rol} puedeEditar={puedeEditar} />
+      </div>
+    </div>
+  )
+}
 
 function FichaTrabajador({
   persona,
@@ -65,7 +104,7 @@ function FichaTrabajador({
     }
   }
   return (
-    <form id={formId} className="campaign-worker-form" onSubmit={guardar}>
+    <form id={formId} className="campaign-worker-form content-ready" onSubmit={guardar}>
       <h3>Datos del trabajador</h3>
       <Aviso error={error} mensaje={mensaje} />
       <fieldset disabled={!puedeEditar || ocupado}>
@@ -114,13 +153,11 @@ function FichaTrabajador({
           </Select>
         </label>
       </fieldset>
-      {rol !== 'JABERO' && (
-        <p>El estado solo cambia su participación como cosechador en esta campaña.</p>
-      )}
-      {!persona.trabajadorActivo && <p>El trabajador está inactivo a nivel general.</p>}
-      {!puedeEditar && (
-        <p>Solo consulta. Se requiere permiso de gestión de Cosecha para editar.</p>
-      )}
+      <NotasTrabajador
+        rol={rol}
+        puedeEditar={puedeEditar}
+        trabajadorActivo={persona.trabajadorActivo}
+      />
     </form>
   )
 }
@@ -162,7 +199,12 @@ export function TrabajadorCampaniaPanel({
         )
       }
     >
-      <Carga consulta={consulta}>
+      <Carga
+        consulta={consulta}
+        skeleton={
+          <FichaTrabajadorSkeleton rol={seccion.rol} puedeEditar={puedeEditar} />
+        }
+      >
         {(persona) => (
           <FichaTrabajador
             key={persona.participacionId}

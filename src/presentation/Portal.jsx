@@ -15,6 +15,7 @@ import { Login } from './Login.jsx'
 import { Registro } from './Registro.jsx'
 import { CrearEmpresa } from './CrearEmpresa.jsx'
 import { ActivacionCuenta } from './ActivacionCuenta.jsx'
+import { SessionAccessError } from './SessionAccessError.jsx'
 import { OwnerHome } from './OwnerHome.jsx'
 import { HomeSkeleton } from './HomeSkeleton.jsx'
 import { CampaignPageSkeleton } from './CampaignSkeleton.jsx'
@@ -455,32 +456,25 @@ export function Portal({ portal }) {
         </div>
       </main>
     )
+  if (['sin-acceso', 'error', 'salida-fallida'].includes(estado.fase))
+    return (
+      <SessionAccessError
+        titulo={
+          estado.fase === 'salida-fallida'
+            ? 'Cierre de sesión pendiente'
+            : 'No se pudo validar el acceso'
+        }
+        mensaje={estado.mensaje}
+        onRetry={
+          estado.fase !== 'salida-fallida' ? () => portal.restaurar() : undefined
+        }
+        onLogout={() => portal.logout()}
+      />
+    )
   return (
     <SessionScreen>
       {estado.fase === 'seleccion' && (
         <SeleccionEmpresa portal={portal} estado={estado} />
-      )}
-      {['sin-acceso', 'error', 'salida-fallida'].includes(estado.fase) && (
-        <Estado
-          titulo={
-            estado.fase === 'salida-fallida'
-              ? 'Cierre de sesión pendiente'
-              : 'No se pudo validar el acceso'
-          }
-          mensaje={estado.mensaje}
-          acciones={
-            <>
-              {estado.fase !== 'salida-fallida' && (
-                <button className="secondary" onClick={() => portal.restaurar()}>
-                  Reintentar
-                </button>
-              )}
-              <button className="quiet" onClick={() => portal.logout()}>
-                Cerrar sesión
-              </button>
-            </>
-          }
-        />
       )}
     </SessionScreen>
   )

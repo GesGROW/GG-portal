@@ -1,0 +1,98 @@
+.session-access-error {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 48px 24px;
+  background: #fff;
+  color: #022f2a;
+  color-scheme: light;
+}
+.session-access-error-content {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 560px);
+  text-align: center;
+}
+.session-access-error-icon {
+  display: block;
+  width: 144px;
+  height: 144px;
+  margin-bottom: 40px;
+  color: #377648;
+}
+.session-access-error-content h1 {
+  margin: 0;
+  font-size: clamp(26px, 2.2vw, 36px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.session-access-error-content p[role='alert'] {
+  max-width: 480px;
+  margin: 20px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #526e67;
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.session-access-error-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  margin-top: 36px;
+}
+.session-access-error-actions button {
+  min-width: 160px;
+  min-height: 52px;
+  padding: 14px 28px;
+  border: 0;
+  border-radius: 30px;
+  background: #98b62b;
+  color: #022f2a;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.session-access-error-actions button:hover:not(:disabled) {
+  background: #a2bf3e;
+}
+.session-access-error-actions button:active:not(:disabled) {
+  background: #89a628;
+}
+.session-access-error-actions .session-error-logout {
+  background: #e4e5d6;
+}
+.session-access-error-actions .session-error-logout:hover:not(:disabled) {
+  background: #d3d8c4;
+}
+.session-access-error-actions .session-error-logout:active:not(:disabled) {
+  background: #c9cebd;
+}
+.session-access-error-actions button:focus-visible {
+  outline: 2px solid #022f2a;
+  outline-offset: 4px;
+}
+@media (max-width: 599px) {
+  .session-access-error-icon {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 32px;
+  }
+  .session-access-error-content p[role='alert'] {
+    font-size: 16px;
+  }
+  .session-access-error-actions {
+    gap: 12px;
+  }
+  .session-access-error-actions button {
+    min-width: min(100%, 220px);
+  }
+}
