@@ -294,8 +294,15 @@
   opacity: 1;
 }
 .portal-shell .figma-navigation .navigation-panel {
+  --sidebar-bg: var(--owner-surface, #e3e4d6);
+  --sidebar-border: transparent;
+  --sidebar-selected: var(--owner-selected, #c1f13d);
+  --sidebar-text: var(--owner-ink, #022f2a);
+  --sidebar-heading: var(--owner-ink, #022f2a);
+  --sidebar-icon-filter: none;
   color: var(--sidebar-text);
   background: var(--sidebar-bg);
+  color-scheme: light;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
