@@ -59,7 +59,7 @@ export function fakeReportes(ports, { vacio = false } = {}) {
       await exigir(t, f.campaniaId)
       ports.calls.push(['reporteCampania', t, { ...f }])
       const hoy = '2026-10-22',
-        desde = f.desde ?? (f.tipo === 'RENDIMIENTO' ? hoy : '2026-10-15'),
+        desde = f.desde ?? '2026-10-15',
         hasta = f.hasta ?? hoy
       const filtrados = hechos.filter(
         (p) =>
@@ -68,12 +68,20 @@ export function fakeReportes(ports, { vacio = false } = {}) {
           (!f.loteId || p.loteId === f.loteId) &&
           (!f.variedadId || p.variedadId === f.variedadId)
       )
+      const diariaPersona = new Map()
       const grupos = new Map(),
         dias = new Map()
       for (const p of filtrados) {
+        const clave = `${p.id}:${p.fecha}`
+        diariaPersona.set(clave, {
+          trabajadorId: p.id,
+          fecha: p.fecha,
+          jabas: (diariaPersona.get(clave)?.jabas ?? 0) + 1
+        })
         dias.set(p.fecha, (dias.get(p.fecha) ?? 0) + 1)
         grupos.set(p.id, {
           id: p.id,
+          dni: String(10000000 + Number(p.id.slice(1))),
           nombre: p.nombre,
           jabas: (grupos.get(p.id)?.jabas ?? 0) + 1
         })
@@ -84,6 +92,10 @@ export function fakeReportes(ports, { vacio = false } = {}) {
       let posicion = 0,
         previo = null
       ranking.forEach((p) => {
+        p.diasRegistros = [...diariaPersona.values()].filter(
+          (d) => d.trabajadorId === p.id
+        ).length
+        p.promedioDiario = Math.round((p.jabas / p.diasRegistros) * 10) / 10
         if (p.jabas !== previo) posicion++
         previo = p.jabas
         p.posicion = posicion
@@ -131,6 +143,8 @@ export function fakeReportes(ports, { vacio = false } = {}) {
             mayorRendimiento: ranking[0]?.jabas ?? 0
           },
           evolucion,
+          evolucionCosechadores:
+            f.tipo === 'RENDIMIENTO' ? [...diariaPersona.values()] : [],
           ranking
         }
       }

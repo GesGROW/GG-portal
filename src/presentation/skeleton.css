@@ -271,6 +271,17 @@
   width: 60%;
   height: 1lh;
 }
+.campaign-report-toolbar > .skeleton-control {
+  height: calc(46 * var(--owner-scale));
+}
+.campaign-report-toolbar > .campaign-report-select.skeleton-control {
+  width: calc(235 * var(--owner-scale));
+  height: max(44px, calc(46 * var(--owner-scale)));
+}
+.campaign-report-toolbar > .campaign-report-period.skeleton-control {
+  width: calc(242 * var(--owner-scale));
+  height: max(40px, calc(46 * var(--owner-scale)));
+}
 .campaign-content-skeleton .campaign-report-section > h3 > .skeleton-block {
   width: 20%;
   height: 1lh;
@@ -323,6 +334,21 @@
   animation: content-appear 160ms ease-out both;
 }
 @media (max-width: 1023px) {
+  .campaign-report-toolbar > .skeleton-control {
+    height: 46px;
+  }
+  .campaign-report-toolbar > .campaign-report-select.skeleton-control {
+    width: min(235px, 100%);
+    height: 46px;
+  }
+  .campaign-report-toolbar > .campaign-report-period.skeleton-control {
+    width: 242px;
+    max-width: 100%;
+    height: 46px;
+  }
+  .campaign-content-skeleton > .cosecha-heading > .skeleton-control {
+    width: 100%;
+  }
   .skeleton-summary {
     grid-template-columns: minmax(0, 1fr);
   }

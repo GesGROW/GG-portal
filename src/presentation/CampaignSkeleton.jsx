@@ -1,3 +1,4 @@
+import { RendimientoSkeleton } from './RendimientoCosechadores.jsx'
 import { SkeletonBlock as Block, SkeletonTable } from './Skeleton.jsx'
 import './campania-cosecha.css'
 import './cosecha-selector.css'
@@ -166,10 +167,17 @@ export function CampaignGenerationSkeleton() {
               </span>
               {step < 3 && (
                 <label>
-                  {step === 1 ? 'Cantidad total de tickets' : 'Tickets por lote'}
+                  {step === 1 ? 'Cantidad de personas' : 'Tickets por persona'}
                   <span className="campaign-number">
                     <Block />
                   </span>
+                  {step === 2 && (
+                    <span className="campaign-generation-details">
+                      <span>
+                        Total de tickets: <strong>0</strong>
+                      </span>
+                    </span>
+                  )}
                 </label>
               )}
             </div>
@@ -194,7 +202,7 @@ export function CampaignGenerationSkeleton() {
 export function CampaignReportSkeleton({ ranking = false }) {
   const labels = ranking
     ? [
-        'Cosechadores activos',
+        'Cosechadores con registros',
         'Promedio por cosechador',
         'Mayor rendimiento',
         'Total cosechado'
@@ -218,33 +226,14 @@ export function CampaignReportSkeleton({ ranking = false }) {
             </article>
           ))}
         </div>
-        <section
-          className="campaign-report-section"
-          data-report-type={ranking ? 'ranking' : 'production'}
-        >
-          <h3>{ranking ? 'Ranking' : 'Evolución'}</h3>
-          {ranking ? (
-            <div className="campaign-ranking">
-              <ol className="campaign-podium">
-                {[2, 1, 3].map((i) => (
-                  <li key={i} className={`podium-place podium-place-${i}`}>
-                    <Block className="podium-name" />
-                    <Block className="podium-column" />
-                  </li>
-                ))}
-              </ol>
-              <div className="campaign-ranking-results">
-                <ol className="campaign-ranking-list">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <li key={i}>
-                      <Block />
-                      <Block />
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-          ) : (
+        {ranking ? (
+          <RendimientoSkeleton />
+        ) : (
+          <section
+            className="campaign-report-section"
+            data-report-type={ranking ? 'ranking' : 'production'}
+          >
+            <h3>Evolución</h3>
             <figure className="campaign-evolution">
               <div className="campaign-evolution-axis">
                 {[1, 2, 3, 4, 5].map((i) => (
@@ -267,8 +256,8 @@ export function CampaignReportSkeleton({ ranking = false }) {
                 </ol>
               </div>
             </figure>
-          )}
-        </section>
+          </section>
+        )}
       </div>
     </div>
   )
@@ -280,7 +269,7 @@ export function CampaignReportPageSkeleton({ ranking = false }) {
       <div className="campaign-report-toolbar" aria-hidden="true">
         <h2>{ranking ? 'Rendimiento' : 'Producción'}</h2>
         <Block className="campaign-report-select skeleton-control" />
-        {!ranking && <Block className="campaign-report-select skeleton-control" />}
+        <Block className="campaign-report-select skeleton-control" />
         <Block className="campaign-report-period skeleton-control" />
       </div>
       <CampaignReportSkeleton ranking={ranking} />

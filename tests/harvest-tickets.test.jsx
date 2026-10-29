@@ -21,7 +21,7 @@ function mount(path = '/cosecha') {
 }
 it('mantiene cabecera, contenedor y sidebar durante la autorización de otra sección', async () => {
   const ports = mount()
-  await screen.findByLabelText('Cantidad total de tickets')
+  await screen.findByLabelText('Cantidad de personas')
   const heading = screen.getByRole('heading', { name: 'Cosecha', exact: true })
   const main = screen.getByRole('main')
   const tabs = screen.getByRole('navigation', { name: 'Opciones de Cosecha' })
@@ -44,7 +44,7 @@ it('mantiene cabecera, contenedor y sidebar durante la autorización de otra sec
 it('la entrada muestra generación y recorre subopciones solo dentro del contenedor', async () => {
   mount('/cosecha?campania=A-camp')
   const user = userEvent.setup()
-  await screen.findByLabelText('Cantidad total de tickets')
+  await screen.findByLabelText('Cantidad de personas')
   const tabs = () =>
     within(screen.getByRole('navigation', { name: 'Secciones de Tickets' }))
   expect(

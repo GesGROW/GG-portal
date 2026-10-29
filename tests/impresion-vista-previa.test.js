@@ -174,7 +174,7 @@ test('puerto real prepara un blob PDF sin window/document y libera la URL una so
   )
   assert.ok(v.url.startsWith('blob:'))
   assert.equal((await fetch(v.url)).headers.get('Content-Type'), 'application/pdf')
-  assert.equal(v.filas, 7)
+  assert.equal(v.filas, 8)
   assert.equal(permisos, 1)
   v.cerrar()
   v.cerrar()

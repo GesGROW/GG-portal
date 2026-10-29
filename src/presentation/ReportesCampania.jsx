@@ -2,7 +2,8 @@ import { Select } from './Select.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { Carga, useCarga } from './GestionUi.jsx'
 import { CampaignReportSkeleton } from './CampaignSkeleton.jsx'
-import { homeLaurel } from './HomeAssets.jsx'
+import { RendimientoCosechadores } from './RendimientoCosechadores.jsx'
+export { RankingCampania } from './RendimientoCosechadores.jsx'
 import './reportes-campania.css'
 
 const numero = (n) =>
@@ -62,7 +63,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
       campaniaId: campania.id,
       tipo,
       loteId,
-      variedadId: rendimiento ? null : variedadId,
+      variedadId,
       ...periodo
     })
   }, [servicio, campania.id, tipo, loteId, variedadId, periodo.desde, periodo.hasta])
@@ -103,25 +104,23 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
           </Select>
           <ReportIcon name="chevron" />
         </label>
-        {!rendimiento && (
-          <label className="campaign-report-select">
-            <span className="sr-only">Variedad del reporte</span>
-            <Select
-              aria-label="Variedad del reporte"
-              value={variedadId}
-              disabled={!datos}
-              onChange={(e) => setVariedad(e.target.value)}
-            >
-              <option value="">Todas las variedades</option>
-              {variedades.map((v) => (
-                <option key={v.id} value={v.id}>
-                  {v.nombre}
-                </option>
-              ))}
-            </Select>
-            <ReportIcon name="chevron" />
-          </label>
-        )}
+        <label className="campaign-report-select">
+          <span className="sr-only">Variedad del reporte</span>
+          <Select
+            aria-label="Variedad del reporte"
+            value={variedadId}
+            disabled={!datos}
+            onChange={(e) => setVariedad(e.target.value)}
+          >
+            <option value="">Todas las variedades</option>
+            {variedades.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.nombre}
+              </option>
+            ))}
+          </Select>
+          <ReportIcon name="chevron" />
+        </label>
         <PeriodoFiltro
           key={`${datos?.desde}:${datos?.hasta}`}
           datos={datos}
@@ -135,7 +134,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
             m = d.metricas
           const tarjetas = rendimiento
             ? [
-                ['Cosechadores activos', m.cosechadoresActivos],
+                ['Cosechadores con registros', m.cosechadoresActivos],
                 ['Promedio por cosechador', m.promedioCosechador],
                 ['Mayor rendimiento', m.mayorRendimiento],
                 ['Total cosechado', m.totalJabas]
@@ -159,20 +158,18 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
                   </article>
                 ))}
               </div>
-              <section
-                className="campaign-report-section"
-                data-report-type={rendimiento ? 'ranking' : 'production'}
-                aria-label={
-                  rendimiento ? 'Ranking de cosechadores' : 'Evolución de producción'
-                }
-              >
-                <h3>{rendimiento ? 'Ranking' : 'Evolución'}</h3>
-                {rendimiento ? (
-                  <RankingCampania filas={d.ranking} />
-                ) : (
+              {rendimiento ? (
+                <RendimientoCosechadores datos={d} />
+              ) : (
+                <section
+                  className="campaign-report-section"
+                  data-report-type="production"
+                  aria-label="Evolución de producción"
+                >
+                  <h3>Evolución</h3>
                   <EvolucionCampania dias={d.evolucion} hoy={d.hoy} />
-                )}
-              </section>
+                </section>
+              )}
             </>
           )
         }}
@@ -207,9 +204,7 @@ export function PeriodoFiltro({ datos, rendimiento, cambiar, etiqueta = 'Períod
       : datos.desde === hoy && datos.hasta === hoy
       ? 'Hoy'
       : `${fecha(datos.desde)} - ${datos.hasta === hoy ? 'Hoy' : fecha(datos.hasta)}`
-    : rendimiento
-      ? 'Hoy'
-      : 'Campaña - Hoy'
+    : 'Campaña - Hoy'
   return (
     <details
       className="campaign-report-period"
@@ -338,68 +333,4 @@ export function EvolucionCampania({ dias, hoy }) {
 
 function MensajeRanking({ children }) {
   return <p className="campaign-report-banner" role="status">{children}</p>
-}
-
-export function RankingCampania({ filas }) {
-  const top = filas.slice(0, 3),
-    resto = filas.slice(3),
-    mayor = filas[0]?.jabas || 1
-  if (filas.length === 0) return (
-    <div className="campaign-ranking campaign-ranking-empty">
-      <MensajeRanking>Nadie ha cosechado aún</MensajeRanking>
-    </div>
-  )
-  return (
-    <div className="campaign-ranking">
-      <ol className="campaign-podium" aria-label="Primeros tres cosechadores">
-        {[1, 0, 2]
-          .filter((i) => top[i])
-          .map((i) => {
-            const p = top[i]
-            return (
-              <li
-                key={p.id}
-                className={`podium-place podium-place-${i + 1}`}
-                aria-label={`Puesto ${p.posicion}: ${p.nombre}, ${numero(p.jabas)} jabas`}
-              >
-                <span className="podium-name">{p.nombre}</span>
-                <div className="podium-column">
-                  <strong>{numero(p.jabas)}</strong>
-                  <span>Jabas</span>
-                  {i === 0 && <img src={homeLaurel} alt="" />}
-                </div>
-              </li>
-            )
-          })}
-      </ol>
-      {resto.length === 0 ? (
-        <div className="campaign-ranking-summary">
-          <MensajeRanking>
-            {['', 'Por el momento es uno', 'Por el momento son dos', 'Por el momento son tres'][filas.length]}
-          </MensajeRanking>
-        </div>
-      ) : <div className="campaign-ranking-results"><ol
-        className="campaign-ranking-list"
-        aria-label="Resto del ranking"
-        start="4"
-        tabIndex="0"
-      >
-        {resto.map((p) => (
-          <li
-            key={p.id}
-            aria-label={`Puesto ${p.posicion}: ${p.nombre}, ${numero(p.jabas)} jabas`}
-          >
-            <span>{p.nombre}</span>
-            <div className="ranking-bar-track">
-              <div
-                className="ranking-bar"
-                style={{ width: `${(p.jabas / (resto[0]?.jabas || mayor)) * 100}%` }}
-              />
-              <strong>{numero(p.jabas)}</strong>
-            </div>
-          </li>
-        ))}
-      </ol></div>}
-    </div>
-  )
 }

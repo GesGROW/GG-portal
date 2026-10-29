@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 const geometria = Object.freeze({
   separacionColumnasMm: 2,
@@ -13,8 +13,9 @@ export function GeneracionCampania({
   operacionId = null,
   onNuevaGeneracion
 }) {
-  const [cantidad, setCantidad] = useState('0'),
+  const [personas, setPersonas] = useState('0'),
     [tamanio, setTamanio] = useState('0')
+  const ayudaId = useId()
   const [resultado, setResultado] = useState(null),
     [borrador, setBorrador] = useState(null)
   const [vista, setVista] = useState(null),
@@ -93,7 +94,7 @@ export function GeneracionCampania({
           cantidadTickets: r.cantidadTickets,
           tamanioLote: r.tamanioLote
         })
-        setCantidad(String(r.cantidadTickets))
+        setPersonas(String(Math.ceil(r.cantidadTickets / r.tamanioLote)))
         setTamanio(String(r.tamanioLote))
         if (r.formatoImpresion === 'TSC_30X20_3') {
           const v = await leerVistaGuardada(r)
@@ -115,9 +116,17 @@ export function GeneracionCampania({
   }, [servicio, campania.id, operacionId, revision, pendiente])
   const valido = (v) =>
     Number.isSafeInteger(Number(v)) && Number(v) > 0 && Number(v) <= 100000
-  const uno = valido(cantidad),
-    dos = valido(tamanio),
-    lista = uno && dos && campania.estado === 'ACTIVA'
+  const cantidad = resultado?.cantidadTickets ?? Number(personas) * Number(tamanio)
+  const uno = valido(personas),
+    dos = valido(tamanio) && (Boolean(resultado) || Number(tamanio) % 3 === 0),
+    lista = uno && dos && valido(cantidad) && campania.estado === 'ACTIVA'
+  const validacion = resultado
+    ? ''
+    : valido(tamanio) && Number(tamanio) % 3 !== 0
+      ? 'Los tickets por persona deben ser múltiplos de 3: 3, 6, 9, 12…'
+      : uno && dos && !valido(cantidad)
+        ? 'El total no puede superar los 100.000 tickets por generación.'
+        : ''
   const esperandoRecibo = Boolean(operacionId) && !resultado
   const bloqueado =
     pendiente || ocupado || recuperando || esperandoRecibo || cuenta !== null
@@ -158,7 +167,7 @@ export function GeneracionCampania({
         const solicitud = {
           operacionId: operacion.current,
           campaniaId: campania.id,
-          cantidadTickets: Number(cantidad),
+          cantidadTickets: cantidad,
           tamanioLote: Number(tamanio)
         }
         const p = await servicio.previsualizarGeneracion(solicitud, geometria)
@@ -270,7 +279,7 @@ export function GeneracionCampania({
     operacion.current = crypto.randomUUID()
     setIntento(null)
     setResultado(null)
-    setCantidad('0')
+    setPersonas('0')
     setTamanio('0')
     setCuenta(null)
     setConfirmandoSalida(false)
@@ -297,13 +306,13 @@ export function GeneracionCampania({
             1
           </span>
           <label>
-            Cantidad total de tickets
+            Cantidad de personas
             <Numero
-              label="Cantidad total de tickets"
-              valor={cantidad}
+              label="Cantidad de personas"
+              valor={personas}
               cambiar={(v) => {
                 invalidar()
-                setCantidad(v)
+                setPersonas(v)
               }}
               disabled={deshabilitado}
             />
@@ -317,16 +326,35 @@ export function GeneracionCampania({
             2
           </span>
           <label>
-            Tickets por lote
+            Tickets por persona
             <Numero
-              label="Tickets por lote"
+              label="Tickets por persona"
               valor={tamanio}
+              step={resultado ? 1 : 3}
+              max={resultado ? 100000 : 99999}
+              invalid={Boolean(validacion)}
+              describedBy={validacion || resultado ? ayudaId : undefined}
               cambiar={(v) => {
                 invalidar()
                 setTamanio(v)
               }}
               disabled={deshabilitado}
             />
+            <span className="campaign-generation-details">
+              <span>
+                Total de tickets:{' '}
+                <strong>
+                  {Number.isSafeInteger(cantidad) && cantidad >= 0
+                    ? cantidad.toLocaleString('es-PE')
+                    : '—'}
+                </strong>
+              </span>
+              {(validacion || resultado) && (
+                <small id={ayudaId} className={validacion ? 'is-invalid' : undefined}>
+                  {validacion || 'Cada lote conserva sus tickets originales.'}
+                </small>
+              )}
+            </span>
           </label>
         </div>
         <div
@@ -498,17 +526,28 @@ export function GeneracionCampania({
   )
 }
 
-function Numero({ label, valor, cambiar, disabled }) {
+function Numero({
+  label,
+  valor,
+  cambiar,
+  disabled,
+  step = 1,
+  max = 100000,
+  invalid = false,
+  describedBy
+}) {
   const ref = useRef(null)
   return (
     <span className="campaign-number">
       <input
         ref={ref}
         aria-label={label}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
         type="number"
         min="0"
-        max="100000"
-        step="1"
+        max={max}
+        step={step}
         value={valor}
         disabled={disabled}
         onChange={(e) => cambiar(e.target.value)}

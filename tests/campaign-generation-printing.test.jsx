@@ -69,8 +69,8 @@ function montar(props = {}, configurar = () => {}) {
 }
 async function preparar(user) {
   for (const [label, v] of [
-    ['Cantidad total de tickets', '43'],
-    ['Tickets por lote', '10']
+    ['Cantidad de personas', '5'],
+    ['Tickets por persona', '9']
   ]) {
     await user.clear(screen.getByLabelText(label))
     await user.type(screen.getByLabelText(label), v)
@@ -99,7 +99,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       servicio.confirmarGeneracion.mock.calls[0][0].operacionId,
       false
     )
-    expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(0)
+    expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(0)
     expect(screen.getByText('Acá aparecerá la vista previa')).toBeInTheDocument()
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
     expect(vistas[0].cerrar).toHaveBeenCalledTimes(1)
@@ -112,7 +112,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     servicio.resolverImpresion.mockRejectedValueOnce(new Error('Sin conexión'))
     await user.click(screen.getByRole('button', { name: 'No, cancelar' }))
     expect(screen.getByRole('alert')).toHaveTextContent('Sin conexión')
-    expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(43)
+    expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(5)
     expect(screen.getByRole('button', { name: 'No, cancelar' })).toBeEnabled()
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'No, cancelar' }))
@@ -165,7 +165,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     expect(servicio.confirmarGeneracion).not.toHaveBeenCalled()
     expect(servicio.generar).not.toHaveBeenCalled()
     expect(servicio.abrirImpresion).not.toHaveBeenCalled()
-    expect(screen.getByLabelText('Cantidad total de tickets')).toBeEnabled()
+    expect(screen.getByLabelText('Cantidad de personas')).toBeEnabled()
   })
   it('presenta el recuadro vacío y solo el flujo PDF sin configuración técnica', () => {
     const { servicio } = montar()
@@ -192,8 +192,8 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     await preparar(user)
     const anterior = servicio.previsualizarGeneracion.mock.calls[0][0].operacionId
     await user.click(screen.getByRole('button', { name: 'Descartar generación' }))
-    expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(0)
-    expect(screen.getByLabelText('Tickets por lote')).toHaveValue(0)
+    expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(0)
+    expect(screen.getByLabelText('Tickets por persona')).toHaveValue(0)
     expect(screen.getByText('Acá aparecerá la vista previa')).toBeInTheDocument()
     expect(vistas[0].cerrar).toHaveBeenCalledTimes(1)
     expect(onNuevaGeneracion).toHaveBeenCalledTimes(1)
@@ -230,8 +230,8 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       }
       await act(async () => vi.advanceTimersByTime(1000))
       expect(screen.queryByRole('status')).not.toBeInTheDocument()
-      expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(0)
-      expect(screen.getByLabelText('Tickets por lote')).toHaveValue(0)
+      expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(0)
+      expect(screen.getByLabelText('Tickets por persona')).toHaveValue(0)
       expect(screen.getByLabelText('Paso 4: pendiente')).toBeInTheDocument()
       expect(screen.getByText('Acá aparecerá la vista previa')).toBeInTheDocument()
       expect(vistas[0].cerrar).toHaveBeenCalledTimes(1)
@@ -260,7 +260,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       await act(async () => vi.advanceTimersByTime(4000))
       expect(screen.getByRole('alert')).toHaveTextContent('Impresora desconectada')
       expect(screen.queryByRole('status')).not.toBeInTheDocument()
-      expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(43)
+      expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(5)
       expect(onNuevaGeneracion).not.toHaveBeenCalled()
       await act(async () =>
         screen.getByRole('button', { name: 'Imprimir mismo recibo' }).click()
@@ -281,8 +281,8 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
   it('editar cantidades invalida la revisión y libera su PDF', async () => {
     const { user, servicio, vistas } = montar()
     await preparar(user)
-    await user.clear(screen.getByLabelText('Tickets por lote'))
-    await user.type(screen.getByLabelText('Tickets por lote'), '5')
+    await user.clear(screen.getByLabelText('Tickets por persona'))
+    await user.type(screen.getByLabelText('Tickets por persona'), '6')
     expect(screen.queryByTitle('Vista previa PDF de tickets')).not.toBeInTheDocument()
     expect(vistas[0].cerrar).toHaveBeenCalledTimes(1)
     await user.click(screen.getByRole('button', { name: 'Ver vista previa' }))
@@ -314,7 +314,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     expect(
       screen.queryByRole('button', { name: 'Preparar otra generación' })
     ).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Cantidad total de tickets')).toBeDisabled()
+    expect(screen.getByLabelText('Cantidad de personas')).toBeDisabled()
     const s = servicio.confirmarGeneracion.mock.calls[0][0]
     await act(async () => d.resolver({ ...recibo, ...s }))
     expect(servicio.imprimirGeneracion).toHaveBeenCalledExactlyOnceWith(
@@ -338,7 +338,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       'Impresión no disponible'
     )
     expect(servicio.confirmarGeneracion).not.toHaveBeenCalled()
-    expect(screen.getByLabelText('Cantidad total de tickets')).toBeEnabled()
+    expect(screen.getByLabelText('Cantidad de personas')).toBeEnabled()
   })
   it('respuesta perdida reintenta la misma confirmación y bloquea editar la intención', async () => {
     const { user, servicio } = montar()
@@ -346,7 +346,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     servicio.confirmarGeneracion.mockRejectedValueOnce(new Error('Respuesta perdida'))
     await user.click(screen.getByRole('button', { name: 'Imprimir y guardar' }))
     await screen.findByRole('alert')
-    expect(screen.getByLabelText('Cantidad total de tickets')).toBeDisabled()
+    expect(screen.getByLabelText('Cantidad de personas')).toBeDisabled()
     expect(
       screen.getByRole('button', { name: 'Actualizar vista previa' })
     ).toBeDisabled()
@@ -409,7 +409,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       expect(
         screen.queryByRole('button', { name: 'Preparar otra generación' })
       ).not.toBeInTheDocument()
-      expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(43)
+      expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(5)
       expect(
         screen.getByRole('button', { name: 'Actualizar vista previa' })
       ).toBeDisabled()
@@ -442,7 +442,7 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
         expect(onNuevaGeneracion).not.toHaveBeenCalled()
       }
       await act(async () => vi.advanceTimersByTime(1000))
-      expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(0)
+      expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(0)
       expect(onNuevaGeneracion).toHaveBeenCalledTimes(1)
       expect(servicio.confirmarGeneracion).toHaveBeenCalledTimes(1)
     } finally {
@@ -455,9 +455,9 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       d = diferida(),
       cerrar = vi.fn()
     servicio.previsualizarGeneracion.mockReturnValue(d.promesa)
-    for (const label of ['Cantidad total de tickets', 'Tickets por lote']) {
+    for (const label of ['Cantidad de personas', 'Tickets por persona']) {
       await user.clear(screen.getByLabelText(label))
-      await user.type(screen.getByLabelText(label), '10')
+      await user.type(screen.getByLabelText(label), '9')
     }
     await user.click(screen.getByRole('button', { name: 'Ver vista previa' }))
     unmount()
@@ -485,8 +485,8 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
     await user.click(screen.getByRole('button', { name: 'Descartar generación' }))
     expect(vistas[0].cerrar).toHaveBeenCalledTimes(1)
     expect(servicio.confirmarGeneracion).not.toHaveBeenCalled()
-    expect(screen.getByLabelText('Cantidad total de tickets')).toHaveValue(0)
-    expect(screen.getByLabelText('Tickets por lote')).toHaveValue(0)
+    expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(0)
+    expect(screen.getByLabelText('Tickets por persona')).toHaveValue(0)
     await preparar(user)
     await user.dblClick(screen.getByRole('button', { name: 'Imprimir y guardar' }))
     expect(servicio.confirmarGeneracion).toHaveBeenCalledTimes(1)
@@ -497,6 +497,9 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       campania: { id: 'c1', estado: 'CERRADA' }
     })
     await screen.findByTitle('Vista previa PDF de tickets')
+    expect(screen.getByLabelText('Cantidad de personas')).toHaveValue(5)
+    expect(screen.getByLabelText('Tickets por persona')).toHaveValue(10)
+    expect(screen.getByText('43')).toBeInTheDocument()
     expect(servicio.confirmarGeneracion).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Imprimir mismo recibo' }))
     expect(servicio.imprimirGeneracion).toHaveBeenCalledTimes(2)

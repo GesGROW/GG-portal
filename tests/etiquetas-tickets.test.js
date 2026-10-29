@@ -10,18 +10,29 @@ import {
 } from '../src/infrastructure/etiquetasTickets.js'
 import { documentoEtiquetas } from './support/etiquetasTickets.js'
 
-test('tres columnas continuas cruzan lotes y dejan blancos solo al final', () => {
+test('cada lote empieza en una fila nueva y deja espacios blancos sin mezclar cosechadores', () => {
   const documento = prepararEtiquetas(documentoEtiquetas())
-  assert.equal(documento.filas.length, 7)
+  assert.equal(documento.filas.length, 8)
   assert.deepEqual(
     documento.filas[3].map((t) => [t.numeroLote, t.numeroTicket]),
+    [[1, 10]]
+  )
+  assert.deepEqual(
+    documento.filas[4].map((t) => [t.numeroLote, t.numeroTicket]),
     [
-      [1, 10],
       [2, 1],
-      [2, 2]
+      [2, 2],
+      [2, 3]
     ]
   )
-  assert.equal(documento.filas.at(-1).length, 2)
+  assert.equal(documento.filas.at(-1).length, 1)
+  assert.ok(
+    documento.filas.every((fila) => new Set(fila.map((t) => t.codigoLote)).size === 1)
+  )
+  assert.deepEqual(
+    documento.filas.flat().map((t) => t.codigo),
+    documentoEtiquetas().filas.map((t) => t.codigo)
+  )
   assert.deepEqual(
     documento.filas[0].map((t) => t.x),
     [24, 280, 536]
@@ -57,6 +68,38 @@ test('el orden se conserva al pasar de ticket99 a100, sin clasificación de text
     for (const b of segmentosBarras(t)) {
       assert.ok(Number.isInteger(b.x) && Number.isInteger(b.ancho))
       assert.ok(b.x >= t.x && b.x + b.ancho <= t.x + 240)
+    }
+  }
+})
+
+test('bloques de 3 × 9 y lotes antiguos incompletos conservan cada ticket sin compartir filas', () => {
+  for (const cantidades of [
+    [27, 27],
+    [1, 1],
+    [2, 2],
+    [3, 4, 1],
+    [103, 2]
+  ]) {
+    const original = documentoEtiquetas(cantidades)
+    const d = prepararEtiquetas(original)
+    assert.equal(d.total, original.total)
+    assert.equal(
+      d.filas.length,
+      cantidades.reduce((n, c) => n + Math.ceil(c / 3), 0)
+    )
+    assert.deepEqual(
+      d.filas.flat().map((t) => t.codigo),
+      original.filas.map((t) => t.codigo)
+    )
+    for (const fila of d.filas) {
+      assert.ok(fila.length >= 1 && fila.length <= 3)
+      assert.equal(new Set(fila.map((t) => t.codigoLote)).size, 1)
+      assert.equal(fila[0].x, 24)
+    }
+    if (cantidades[0] === 27) {
+      assert.ok(d.filas.every((f) => f.length === 3))
+      assert.equal(d.filas[8][2].numeroTicket, 27)
+      assert.equal(d.filas[9][0].numeroLote, 2)
     }
   }
 })
@@ -105,8 +148,8 @@ test('TSPL imprime una vez cada fila y mantiene exactamente las barras del PDF',
   const tspl = generarTspl(d)
   assert.ok(tspl.startsWith('SIZE 100 mm,20 mm\r\nGAP 3 mm,0 mm\r\n'))
   assert.equal(d.rollo.margenDerechoMm, 6)
-  assert.equal(tspl.match(/^PRINT 1,1$/gm).length, 7)
-  assert.equal(tspl.match(/^CLS$/gm).length, 7)
+  assert.equal(tspl.match(/^PRINT 1,1$/gm).length, 8)
+  assert.equal(tspl.match(/^CLS$/gm).length, 8)
   assert.equal(tspl.match(/^TEXT /gm).length, 80)
   assert.ok(tspl.includes('"010613|10"'))
   assert.ok(tspl.includes('"010614|01"'))
@@ -115,7 +158,7 @@ test('TSPL imprime una vez cada fila y mantiene exactamente las barras del PDF',
     d.filas.flat().reduce((n, t) => n + segmentosBarras(t).length, 0)
   )
   const pdf = await generarPdfEtiquetas(d)
-  assert.equal(pdf.getNumberOfPages(), 7)
+  assert.equal(pdf.getNumberOfPages(), 8)
   assert.ok(Math.abs(pdf.internal.pageSize.getWidth() - 100) < 0.001)
   assert.ok(Math.abs(pdf.internal.pageSize.getHeight() - 20) < 0.001)
   assert.ok(pdf.output().startsWith('%PDF-'))
@@ -129,7 +172,7 @@ test('impresión vectorial conserva todas las barras, textos y páginas físicas
   assert.ok(html.includes('@page{size:100mm 20mm;margin:0!important}'))
   assert.doesNotMatch(html, /<script|<embed|<iframe|<img/)
   const paginas = [...html.matchAll(/<svg [^>]*>(.*?)<\/svg>/g)]
-  assert.equal(paginas.length, 7)
+  assert.equal(paginas.length, 8)
   assert.match(paginas[0][0], /width="100mm" height="20mm" viewBox="0 0 100 20"/)
   d.filas.forEach((fila, i) => {
     const barras = [
@@ -154,6 +197,7 @@ test('impresión vectorial conserva todas las barras, textos y páginas físicas
     assert.equal([...paginas[i][1].matchAll(/<text /g)].length, fila.length * 4)
   })
   assert.ok(paginas[3][1].includes('010613|10'))
-  assert.ok(paginas[3][1].includes('010614|01'))
+  assert.ok(!paginas[3][1].includes('010614|01'))
+  assert.ok(paginas[4][1].includes('010614|01'))
   assert.ok(html.includes('font-size="1.905"'))
 })

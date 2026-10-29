@@ -29,7 +29,7 @@ it.each(['/cosecha', '/cosecha/registros', '/cosecha/registros/recurso-antiguo']
   'el enlace %s abre Generación y elimina la página antigua',
   async (path) => {
     const p = mount(path + '?campania=A-camp')
-    await screen.findByLabelText('Cantidad total de tickets')
+    await screen.findByLabelText('Cantidad de personas')
     expect(screen.getByTestId('location')).toHaveTextContent(
       '/cosecha/generar?campania=A-camp'
     )
@@ -50,5 +50,5 @@ it('el enlace antiguo de consulta abre lotes sin ofrecer generación', async () 
   expect(screen.getByTestId('location')).toHaveTextContent(
     '/cosecha/lotes?campania=A-camp'
   )
-  expect(screen.queryByLabelText('Cantidad total de tickets')).not.toBeInTheDocument()
+  expect(screen.queryByLabelText('Cantidad de personas')).not.toBeInTheDocument()
 })

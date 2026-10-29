@@ -59,7 +59,7 @@ test('TSPL del portal llega al servicio real en modo seco; respuesta perdida con
     )
     assert.equal(resultado.simulado, true)
     assert.equal(resultado.estado, 'simulado')
-    assert.equal(resultado.filas, 7)
+    assert.equal(resultado.filas, 8)
     assert.equal(resultado.bytesEscritos, 0)
     assert.equal(solicitudes[0].trabajoId, solicitudes[1].trabajoId)
     await impresionTickets.imprimir(

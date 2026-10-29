@@ -58,7 +58,7 @@ describe('Cosecha administrativa del Portal', () => {
     montar('/cosecha/generar', { permisos: { A: ['harvest.view'] } })
     await screen.findByRole('heading', { name: 'Acceso restringido' })
     expect(screen.getByText(/Se requiere harvest.manage/)).toBeInTheDocument()
-    expect(screen.queryByLabelText('Cantidad total de tickets')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Cantidad de personas')).not.toBeInTheDocument()
   })
   it('búsqueda y cambio de empresa eliminan resultados anteriores', async () => {
     montar('/cosecha/tickets', {

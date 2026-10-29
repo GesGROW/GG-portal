@@ -1,0 +1,396 @@
+.rendimiento-cosechadores {
+  color: #022f2a;
+}
+.rendimiento-ranking,
+.rendimiento-evolucion {
+  margin-top: calc(48 * var(--owner-scale, 1px));
+}
+.rendimiento-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-height: 46px;
+  margin-bottom: 24px;
+}
+.rendimiento-section-heading h3 {
+  margin: 0;
+  font-size: calc(24 * var(--owner-scale, 1px));
+  font-weight: 500;
+  line-height: 1.2;
+}
+.rendimiento-legend-help {
+  margin: -8px 0 16px;
+  color: #526e67;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.rendimiento-select {
+  display: block;
+  width: 250px;
+  max-width: 100%;
+}
+.portal-layout.owner-layout .rendimiento-select select {
+  width: 100%;
+  min-height: 46px;
+  height: 46px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 30px;
+  background: #d9d9d9;
+  color: #022f2a;
+  font: inherit;
+  font-size: 16px;
+}
+.rendimiento-ranking-table {
+  min-width: 980px;
+}
+.rendimiento-ranking-table :is(th, td):first-child {
+  white-space: nowrap;
+}
+.rendimiento-ranking-table th {
+  white-space: nowrap;
+}
+.rendimiento-persona {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--owner-scale, 1px));
+  min-width: 0;
+}
+.rendimiento-persona-nombre {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rendimiento-persona small,
+.rendimiento-personas-options small {
+  display: block;
+  color: #526e67;
+  font-size: 12px;
+  line-height: 16px;
+}
+.rendimiento-persona small {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.rendimiento-puesto-1 {
+  --ranking-medalla: #f3e4ad;
+  --ranking-medalla-hover: #ecd58e;
+}
+.rendimiento-puesto-2 {
+  --ranking-medalla: #e4e7e9;
+  --ranking-medalla-hover: #d5dbdf;
+}
+.rendimiento-puesto-3 {
+  --ranking-medalla: #e9cbb5;
+  --ranking-medalla-hover: #dfb99b;
+}
+.portal-layout.owner-layout
+  .rendimiento-ranking-table
+  tbody
+  tr[class*='rendimiento-puesto-']
+  > td {
+  background: var(--ranking-medalla);
+  color: #022f2a;
+}
+.portal-layout.owner-layout
+  .rendimiento-ranking-table
+  tbody
+  tr[class*='rendimiento-puesto-']:is(:hover, :focus-within)
+  > td {
+  background: var(--ranking-medalla-hover);
+}
+.rendimiento-personas-picker {
+  margin-bottom: 20px;
+}
+.rendimiento-personas-options {
+  display: grid;
+  gap: 16px;
+  margin-top: 0;
+  padding: 20px;
+  border-radius: 24px;
+  background: #fff;
+}
+.rendimiento-personas-options input[type='search'] {
+  width: 100%;
+  border: 1px solid #c9ceca;
+  border-radius: 30px;
+  background: #eff0e2;
+  color: #022f2a;
+}
+.rendimiento-personas-options fieldset {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: 12px;
+  max-height: 260px;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.rendimiento-personas-options label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #022f2a;
+  cursor: pointer;
+}
+.rendimiento-personas-options input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  flex: none;
+  margin: 0;
+  accent-color: #137d15;
+}
+.rendimiento-legend {
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 96px;
+  margin-bottom: 16px;
+}
+.rendimiento-legend button {
+  min-height: 38px;
+  padding: 8px 14px;
+  gap: 8px;
+  border: 1px solid #c9ceca;
+  border-radius: 24px;
+  background: #fff;
+  color: #022f2a;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+.rendimiento-legend button:hover:not(:disabled) {
+  background: #e3e4d6;
+  color: #022f2a;
+}
+.rendimiento-legend button[aria-pressed='false'] {
+  background: #e3e4d6;
+  color: #526e67;
+  text-decoration: line-through;
+}
+.rendimiento-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--serie-color);
+}
+.rendimiento-chart {
+  padding: 20px;
+  border-radius: 30px;
+  background: #fff;
+}
+.rendimiento-chart-scroll {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 0;
+  height: 346px;
+  border-radius: 16px;
+}
+.rendimiento-chart-scroll svg {
+  display: block;
+  height: 330px;
+  max-width: none;
+  color: #526e67;
+}
+.rendimiento-chart-scroll text {
+  fill: currentColor;
+  font-size: 12px;
+  font-family: inherit;
+}
+.rendimiento-gridline {
+  stroke: #e3e4d6;
+  stroke-width: 1;
+}
+.rendimiento-dia-line {
+  stroke: #829896;
+  stroke-dasharray: 4 4;
+}
+.rendimiento-chart-empty {
+  position: absolute;
+  inset: 30px 24px 60px 48px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 20px;
+  color: #526e67;
+  background: rgb(255 255 255 / 92%);
+  text-align: center;
+  pointer-events: none;
+}
+.rendimiento-dia-detalle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 20px 28px 1fr;
+  gap: 12px;
+  min-height: 270px;
+  padding-top: 16px;
+  font-size: 14px;
+}
+.rendimiento-dia-detalle input[type='range'] {
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+.rendimiento-dia-detalle input[type='range']::-webkit-slider-runnable-track {
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #137d15 0 var(--rendimiento-range-progress, 0%),
+    #b0b4ae var(--rendimiento-range-progress, 0%) 100%
+  );
+  box-shadow: none;
+}
+.rendimiento-dia-detalle input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: #137d15;
+  box-shadow: none;
+}
+.rendimiento-dia-detalle input[type='range']::-moz-range-track {
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: #b0b4ae;
+  box-shadow: none;
+}
+.rendimiento-dia-detalle input[type='range']::-moz-range-progress {
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: #137d15;
+}
+.rendimiento-dia-detalle input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: #137d15;
+  box-shadow: none;
+}
+.rendimiento-dia-detalle dl {
+  margin: 0;
+}
+.rendimiento-dia-detalle dl > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 36px;
+  padding-inline: 8px;
+  border-bottom: 1px solid #eff0e2;
+}
+.rendimiento-dia-detalle dl > div[class*='rendimiento-puesto-'] {
+  background: var(--ranking-medalla);
+  color: #022f2a;
+}
+.rendimiento-dia-detalle dl > div[class*='rendimiento-puesto-']:hover {
+  background: var(--ranking-medalla-hover);
+}
+.rendimiento-dia-detalle dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.rendimiento-dia-detalle dd {
+  flex-shrink: 0;
+  margin: 0;
+  font-weight: 500;
+}
+.rendimiento-chart-placeholder.skeleton-block {
+  width: 100%;
+  height: 346px;
+}
+.rendimiento-section-heading > .skeleton-control {
+  width: 250px;
+}
+.rendimiento-legend-placeholder.skeleton-block {
+  width: 180px;
+  height: 38px;
+  border-radius: 24px;
+}
+.rendimiento-dia-placeholder.skeleton-block {
+  width: 180px;
+  height: 20px;
+}
+.rendimiento-range-placeholder.skeleton-block {
+  height: 28px;
+}
+.rendimiento-nombre-placeholder.skeleton-block {
+  width: 170px;
+  max-width: min(100%, 30vw);
+  height: 16px;
+}
+.rendimiento-valor-placeholder.skeleton-block {
+  width: 80px;
+  height: 16px;
+}
+.rendimiento-cosechadores :is(button, summary, input, select):focus-visible,
+.rendimiento-chart-scroll:focus-visible {
+  outline: 2px solid #022f2a;
+  outline-offset: 3px;
+}
+@media (max-width: 1023px) {
+  .rendimiento-section-heading h3 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 580px) {
+  .rendimiento-ranking,
+  .rendimiento-evolucion {
+    margin-top: 36px;
+  }
+  .rendimiento-section-heading {
+    align-items: stretch;
+  }
+  .rendimiento-section-heading h3 {
+    width: 100%;
+    font-size: 22px;
+  }
+  .rendimiento-select,
+  .rendimiento-section-heading > .skeleton-control {
+    width: 100%;
+  }
+  .rendimiento-legend {
+    min-height: 240px;
+  }
+  .rendimiento-legend button {
+    width: 100%;
+  }
+  .rendimiento-legend-placeholder.skeleton-block {
+    width: 100%;
+  }
+  .rendimiento-chart {
+    padding: 12px;
+    border-radius: 24px;
+  }
+  .rendimiento-dia-detalle dl > div {
+    align-items: flex-start;
+    padding-block: 6px;
+  }
+  .rendimiento-dia-detalle dt {
+    overflow-wrap: anywhere;
+  }
+}

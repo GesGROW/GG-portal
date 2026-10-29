@@ -180,6 +180,20 @@
   background: #e3e4d6;
   border-radius: calc(30 * var(--owner-scale));
 }
+.campaign-generation-details {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.campaign-generation-details small {
+  color: #526e67;
+  font-size: 14px;
+}
+.campaign-generation-details .is-invalid {
+  color: #a13a28;
+}
 .campaign-number input {
   appearance: textfield;
   display: block;
@@ -197,6 +211,12 @@
 }
 .campaign-number input::-webkit-inner-spin-button {
   appearance: none;
+}
+html[data-theme] .campaign-generation .campaign-number input:disabled {
+  background: transparent;
+  color: #52635a;
+  -webkit-text-fill-color: #52635a;
+  opacity: 1;
 }
 .campaign-number-arrows {
   position: absolute;
@@ -225,6 +245,11 @@
 .campaign-number-arrows button:active:not(:disabled) {
   background: #c1f13d;
   color: #022f2a;
+}
+.campaign-number-arrows button:disabled {
+  background: transparent;
+  color: #52635a;
+  opacity: 1;
 }
 .campaign-number-arrows svg {
   width: calc(16 * var(--owner-scale));
@@ -421,7 +446,9 @@
   }
 }
 .campaign-preview-actions button:disabled {
-  opacity: 0.6;
+  background: #d9d9d9;
+  color: #52635a;
+  opacity: 1;
   cursor: not-allowed;
 }
 .campaign-confirm-step.is-complete .campaign-preview-actions button:disabled {
@@ -433,7 +460,9 @@
   outline-offset: 3px;
 }
 .campaign-print-reveal > button:disabled {
-  opacity: 0.6;
+  background: #d9d9d9;
+  color: #52635a;
+  opacity: 1;
 }
 .campaign-generation.is-printing .campaign-print-reveal > button:disabled {
   opacity: 1;

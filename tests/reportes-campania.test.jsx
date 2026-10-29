@@ -41,23 +41,25 @@ describe('Reportes dentro de Cosecha', () => {
     )
     expect(screen.getByRole('option', { name: 'Biloxi' })).toBeInTheDocument()
   })
-  it('rendimiento abre en Hoy, usa ranking del servidor, reparte podio y resto sin repetir personas', async () => {
+  it('rendimiento abre toda la campaña con tabla, promedios y evolución diaria', async () => {
     const api = servicio()
     render(<ReportesCampania servicio={api} campania={campania} rendimiento />)
     await screen.findByRole('article', { name: 'Mayor rendimiento' })
-    expect(screen.queryByLabelText('Variedad del reporte')).not.toBeInTheDocument()
-    expect(screen.getByText('Hoy')).toBeInTheDocument()
-    expect(
-      within(screen.getByRole('article', { name: 'Mayor rendimiento' })).getByText('67')
-    ).toBeInTheDocument()
-    const top = screen.getByRole('list', { name: 'Primeros tres cosechadores' })
-    expect(within(top).getAllByRole('listitem')).toHaveLength(3)
-    expect(within(top).getByText('Gianella Sotil')).toBeInTheDocument()
-    expect(within(top).getByText('Romina Salazar')).toBeInTheDocument()
-    const resto = screen.getByRole('list', { name: 'Resto del ranking' })
-    expect(within(resto).getAllByRole('listitem')).toHaveLength(8)
-    expect(within(resto).queryByText('Gianella Sotil')).not.toBeInTheDocument()
-    expect(within(resto).getByText('Lucía Mendoza')).toBeInTheDocument()
+    expect(screen.getByLabelText('Variedad del reporte')).toBeInTheDocument()
+    expect(screen.getByText('15/10/2026 - Hoy')).toBeInTheDocument()
+    const tabla = screen.getByRole('table', { name: 'Ranking de cosechadores' })
+    expect(within(tabla).getAllByRole('row')).toHaveLength(11)
+    expect(within(tabla).getByText('Gianella Sotil')).toBeInTheDocument()
+    expect(within(tabla).getByRole('columnheader', { name: 'Días con registros' })).toBeInTheDocument()
+    expect(within(tabla).getByRole('columnheader', { name: 'Promedio por día con registros' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /Evolución diaria/ })).toBeInTheDocument()
+    const user = userEvent.setup()
+    await user.selectOptions(screen.getByLabelText('Orden del ranking'), 'MENOR')
+    expect(within(tabla).getAllByRole('row')[1]).toHaveTextContent('Diego Castillo')
+    await user.selectOptions(screen.getByLabelText('Cosechadores del gráfico'), '10')
+    expect(api.campania).toHaveBeenCalledTimes(1)
+    await user.selectOptions(screen.getByLabelText('Variedad del reporte'), 'v1')
+    await waitFor(() => expect(api.campania).toHaveBeenLastCalledWith(expect.objectContaining({ variedadId: 'v1' })))
   })
   it('aplica rango de fechas y permite restablecer; no acepta un fin posterior a hoy', async () => {
     const api = servicio(),
@@ -135,7 +137,7 @@ describe('Reportes dentro de Cosecha', () => {
     await screen.findByRole('alert')
     await user.click(screen.getByRole('button', { name: 'Reintentar' }))
     await screen.findByRole('article', { name: 'Total cosechado' })
-    await user.click(screen.getByText('Hoy'))
+    await user.click(screen.getByText('15/10/2026 - Hoy'))
     await user.clear(screen.getByLabelText('Desde'))
     await user.type(screen.getByLabelText('Desde'), '2026-10-10')
     await user.clear(screen.getByLabelText('Hasta'))
@@ -164,18 +166,13 @@ describe('Reportes dentro de Cosecha', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
     expect(screen.queryByText('22/10/2026')).not.toBeInTheDocument()
   })
-  it.each([
-    [1, 'Por el momento es uno'],
-    [2, 'Por el momento son dos'],
-    [3, 'Por el momento son tres']
-  ])('muestra solo los %i cosechadores disponibles en el podio y el mensaje correspondiente', (cantidad, mensaje) => {
+  it.each([1, 2, 3])('muestra solo los %i cosechadores disponibles en la tabla', (cantidad) => {
     const filas = Array.from({ length: cantidad }, (_, i) => ({
-      id: `p-${i}`, nombre: `Persona ${i + 1}`, jabas: 67 - i * 20, posicion: i + 1
+      id: `p-${i}`, nombre: `Persona ${i + 1}`, jabas: 67 - i * 20, posicion: i + 1,
+      diasRegistros: 1, promedioDiario: 67 - i * 20
     }))
     render(<RankingCampania filas={filas} />)
-    expect(screen.getAllByRole('listitem')).toHaveLength(cantidad)
-    expect(screen.getByRole('status')).toHaveTextContent(mensaje)
-    expect(screen.queryByRole('list', { name: 'Resto del ranking' })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('row')).toHaveLength(cantidad + 1)
     for (const fila of filas) expect(screen.getByText(fila.nombre)).toBeInTheDocument()
   })
 })

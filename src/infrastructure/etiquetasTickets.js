@@ -54,7 +54,7 @@ export function prepararEtiquetas(datos, opciones) {
   const codigos = new Set()
   let previo = null
   const filas = []
-  datos.filas.forEach((ticket, indice) => {
+  datos.filas.forEach((ticket) => {
     if (
       !/^\d{6}$/.test(ticket.codigoLote ?? '') ||
       !entero(ticket.numeroTicket, 1, 100000) ||
@@ -99,8 +99,16 @@ export function prepararEtiquetas(datos, opciones) {
     const modulo = maximo >= 1.95 ? Math.min(2, maximo) : Math.floor(maximo)
     if (modulo < 1)
       throw new Error('El código es demasiado largo para una etiqueta de 30 mm.')
-    const columna = indice % 3
-    if (columna === 0) filas.push([])
+    // Cada lote ocupa filas propias, también al reimprimir lotes antiguos
+    // cuyo tamaño no era múltiplo de tres. Los espacios sobrantes quedan vacíos.
+    const filaActual = filas.at(-1)
+    if (
+      !filaActual ||
+      filaActual.length === 3 ||
+      filaActual[0].codigoLote !== ticket.codigoLote
+    )
+      filas.push([])
+    const columna = filas.at(-1).length
     filas.at(-1).push({
       ...ticket,
       numero,

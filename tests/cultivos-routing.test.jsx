@@ -32,7 +32,9 @@ describe('Integración de cultivos con Cosecha', () => {
     expect(
       screen.getByRole('option', { name: 'Agregar campaña / cultivo' })
     ).toBeInTheDocument()
-    expect(portal.estadoActual().ruta.path).toBe('/cosecha/configurar')
+    await waitFor(() =>
+      expect(portal.estadoActual().ruta.path).toBe('/cosecha/configurar')
+    )
     expect(document.querySelector('.crop-setup-layout')).toBeInTheDocument()
   })
   it('el selector alterna campañas y configurador desde una vista operativa', async () => {
