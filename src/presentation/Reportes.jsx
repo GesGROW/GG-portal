@@ -3,6 +3,9 @@ import { reportePublicado } from './rutasReportesHome.js'
 import { useId, useState } from 'react'
 import { NavLink, useSearchParams } from 'react-router'
 import { useCarga } from './GestionUi.jsx'
+import { ContentReady } from './ContentReady.jsx'
+import { numero } from './formatoNumero.js'
+export { numero } from './formatoNumero.js'
 import {
   ChartCard,
   DataTable,
@@ -33,7 +36,11 @@ const periodos = { HOY: 'Hoy', SEMANA: 'Semana', MES: 'Mes', CAMPANIA: 'Campaña
 
 export function EstadoConsulta({ consulta, children, skeleton = 'report' }) {
   if (consulta.cargando)
-    return <Skeleton text="Cargando reportes…" variant={skeleton} />
+    return typeof skeleton === 'string' ? (
+      <Skeleton text="Cargando reportes…" variant={skeleton} />
+    ) : (
+      skeleton
+    )
   if (consulta.error) {
     const e = consulta.error
     const titulo =
@@ -52,7 +59,7 @@ export function EstadoConsulta({ consulta, children, skeleton = 'report' }) {
       </div>
     )
   }
-  return children(consulta.datos)
+  return <ContentReady>{children(consulta.datos)}</ContentReady>
 }
 
 export function Reportes({ servicio, path = '/', dashboard = false }) {
@@ -323,8 +330,6 @@ function Consulta({ servicio, filtros }) {
   )
 }
 
-export const numero = (value) =>
-  value == null ? '—' : new Intl.NumberFormat('es-PE').format(value)
 function Resumen({ datos, dashboard }) {
   const s = datos.resumen
   const metrics = dashboard

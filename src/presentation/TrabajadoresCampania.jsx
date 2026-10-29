@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { DataTable } from './DataTable.jsx'
+import { SkeletonTable } from './Skeleton.jsx'
 import { Carga } from './GestionUi.jsx'
 import { usePaginaCampania } from './usePaginaCampania.js'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
@@ -125,7 +126,18 @@ export function TrabajadoresCampania({
           reiniciar()
         }}
       />
-      <Carga consulta={consulta}>
+      <Carga
+        consulta={consulta}
+        skeleton={
+          <SkeletonTable
+            columns={columnas}
+            tableClassName="campaign-workers-table"
+            rows={paginacion.pageSize}
+            reserveRows={paginacion.pageSize}
+            pagination
+          />
+        }
+      >
         {() => (
           <>
             <DataTable
@@ -133,6 +145,7 @@ export function TrabajadoresCampania({
               tableClassName="campaign-workers-table"
               columns={columnas}
               data={filas}
+              reserveRows={paginacion.pageSize}
               onRowActivate={conFicha ? setSeleccionado : undefined}
               rowClassName={(t) => (t.id === seleccionado?.id ? 'is-selected' : '')}
               emptyState={

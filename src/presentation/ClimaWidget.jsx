@@ -71,7 +71,7 @@ export function ClimaWidget({ servicio, momento, owner = false, figma = false })
         {datos ? `Clima en ${datos.ubicacion}` : 'Clima no configurado'}
       </h2>
       {datos ? (
-        <div className="weather-live-content">
+        <div className="weather-live-content content-ready">
           <span
             className="weather-location"
             title={

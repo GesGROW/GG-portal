@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { DataTable } from './DataTable.jsx'
+import { SkeletonTable } from './Skeleton.jsx'
 import { Carga } from './GestionUi.jsx'
 import { usePaginaCampania } from './usePaginaCampania.js'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
@@ -115,7 +116,18 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
           setSeleccionado(null)
         }}
       />
-      <Carga consulta={consulta}>
+      <Carga
+        consulta={consulta}
+        skeleton={
+          <SkeletonTable
+            columns={columnas}
+            tableClassName="campaign-lots-table"
+            rows={paginacion.pageSize}
+            reserveRows={paginacion.pageSize}
+            pagination
+          />
+        }
+      >
         {() => (
           <>
             <DataTable
@@ -123,6 +135,7 @@ export function LotesCampania({ servicio, campania, asignados = false }) {
               tableClassName={`campaign-lots-table ${asignados ? 'campaign-assigned-table' : ''}`}
               columns={columnas}
               data={filas}
+              reserveRows={paginacion.pageSize}
               emptyState={
                 <CampaignTableEmpty>
                   {filtros.busqueda || filtros.estado || filtros.desde || filtros.hasta

@@ -144,7 +144,8 @@ describe('Interacción y accesibilidad del rediseño', () => {
     const user = userEvent.setup()
     await user.click(await screen.findByRole('button', { name: /Empresa A/ }))
     await waiting
-    expect(screen.queryByRole('heading', { name: 'Producción', exact: true })).not.toBeInTheDocument()
+    expect(await within(screen.getByRole('region', { name: 'Producción' })).findByText('43')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Top cosechador' })).toHaveAttribute('aria-busy', 'true')
     await user.click(screen.getByRole('button', { name: 'Menú de usuario' }))
     await user.selectOptions(screen.getByLabelText('Empresa activa'), 'B')
     await screen.findByText('Ana B')

@@ -14,6 +14,12 @@ import {
 } from './TrabajadoresCampania.jsx'
 import './campania-cosecha.css'
 import { PdaIcon } from './PdaIcon.jsx'
+import {
+  AppCosechaSkeleton,
+  CampaignGenerationSkeleton,
+  CampaignListSkeleton,
+  CampaignReportPageSkeleton
+} from './CampaignSkeleton.jsx'
 const AppCosecha = lazy(() =>
   import('./AppCosecha.jsx').then((m) => ({ default: m.AppCosecha }))
 )
@@ -253,7 +259,11 @@ export function CampaniaCosecha({
           {seccion === 'asignaciones' && <h2>Lotes de tickets asignados</h2>}
           {trabajadores && <h2>{trabajadores.label}</h2>}
           {esApp ? (
-            <Suspense fallback={<p role="status">Cargando App de Cosecha…</p>}>
+            <Suspense
+              fallback={
+                <AppCosechaSkeleton dispositivos={seccion === 'dispositivos'} />
+              }
+            >
               <AppCosecha
                 key={`${contexto.tenantId}:${contexto.usuarioId}`}
                 servicio={appCosecha}
@@ -266,7 +276,16 @@ export function CampaniaCosecha({
             <Carga
               consulta={pendiente ? { cargando: true } : catalogo}
               skeleton={
-                esReporte ? 'report' : seccion === 'generar' ? 'generation' : 'table'
+                esReporte ? (
+                  <CampaignReportPageSkeleton ranking={seccion === 'rendimiento'} />
+                ) : seccion === 'generar' ? (
+                  <CampaignGenerationSkeleton />
+                ) : (
+                  <CampaignListSkeleton
+                    trabajadores={Boolean(trabajadores)}
+                    asignados={seccion === 'asignaciones'}
+                  />
+                )
               }
             >
               {(campanias) => {

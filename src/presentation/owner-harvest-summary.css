@@ -65,6 +65,10 @@
   line-height: calc(29 * var(--owner-scale));
   font-weight: 500;
 }
+.owner-home-harvest .home-feature-cards :is(header, .home-link) > .home-icon {
+  width: calc(24 * var(--owner-scale));
+  height: calc(24 * var(--owner-scale));
+}
 .owner-home-harvest .home-production-values {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: calc(20 * var(--owner-scale));
@@ -370,6 +374,7 @@
   .owner-home-harvest .home-feature-cards .home-winner {
     margin: 32px -24px 0;
     grid-template-columns: minmax(0, 1fr) 130px;
+    min-height: 126px;
   }
   .owner-home-harvest .home-winner .home-winner-name {
     font-size: 30px;

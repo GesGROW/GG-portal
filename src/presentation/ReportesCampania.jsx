@@ -1,6 +1,7 @@
 import { Select } from './Select.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { Carga, useCarga } from './GestionUi.jsx'
+import { CampaignReportSkeleton } from './CampaignSkeleton.jsx'
 import { homeLaurel } from './HomeAssets.jsx'
 import './reportes-campania.css'
 
@@ -128,7 +129,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
           cambiar={setPeriodo}
         />
       </div>
-      <Carga consulta={consulta} skeleton="report">
+      <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking={rendimiento} />}>
         {(respuesta) => {
           const d = respuesta.datos,
             m = d.metricas
@@ -160,6 +161,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
               </div>
               <section
                 className="campaign-report-section"
+                data-report-type={rendimiento ? 'ranking' : 'production'}
                 aria-label={
                   rendimiento ? 'Ranking de cosechadores' : 'Evolución de producción'
                 }

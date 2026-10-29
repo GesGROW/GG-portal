@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Skeleton } from './Ui.jsx'
+import { ContentReady } from './ContentReady.jsx'
 
 export function useCarga(cargar, claves) {
   const [revision, setRevision] = useState(0),
@@ -31,7 +32,8 @@ export function Aviso({ error, mensaje }) {
   ) : null
 }
 export function Carga({ consulta, children, skeleton = 'table' }) {
-  if (consulta.cargando) return <Skeleton variant={skeleton} />
+  if (consulta.cargando)
+    return typeof skeleton === 'string' ? <Skeleton variant={skeleton} /> : skeleton
   if (consulta.error)
     return (
       <>
@@ -39,7 +41,7 @@ export function Carga({ consulta, children, skeleton = 'table' }) {
         <button onClick={consulta.refrescar}>Reintentar</button>
       </>
     )
-  return children(consulta.datos)
+  return <ContentReady>{children(consulta.datos)}</ContentReady>
 }
 export function useMutacion() {
   const [estado, setEstado] = useState({ ocupado: false, error: null })

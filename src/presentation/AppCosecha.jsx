@@ -42,7 +42,7 @@ function CodigoQr({
     }
   }, [enlace])
   return imagen ? (
-    <img className="pda-qr-image" src={imagen} alt={textoAlternativo} />
+    <img className="pda-qr-image content-ready" src={imagen} alt={textoAlternativo} />
   ) : (
     <p role={error ? 'alert' : 'status'}>
       {error ? 'No se pudo dibujar el QR. Vuelve a intentarlo.' : 'Preparando QR…'}
@@ -144,7 +144,7 @@ export function AppCosecha({
   }
   const errorCarga = puedeAdministrar && (!servicio || consulta.error)
   return (
-    <div className="pda-content" aria-busy={pendiente || ocupado}>
+    <div className="pda-content content-ready" aria-busy={pendiente || ocupado}>
       {error && (
         <p className="pda-notice" role="alert">
           {error}

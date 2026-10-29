@@ -280,7 +280,7 @@ export function GeneracionCampania({
   const deshabilitado = bloqueado || Boolean(intento) || Boolean(resultado)
   return (
     <form
-      className={`campaign-generation ${ocupado === 'impresion' ? 'is-printing' : ''}`}
+      className={`campaign-generation content-ready ${ocupado === 'impresion' ? 'is-printing' : ''}`}
       onSubmit={previsualizar}
       noValidate
       aria-busy={Boolean(ocupado || recuperando)}

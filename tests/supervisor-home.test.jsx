@@ -51,7 +51,7 @@ describe('Home de Supervisor de Cosecha', () => {
       name: 'Producción',
       exact: true
     })
-    expect(within(produccion).getByText('43')).toBeVisible()
+    expect(await within(produccion).findByText('43')).toBeVisible()
     expect(await screen.findByText('Ana A')).toBeVisible()
     expect(screen.getByRole('listbox', { name: 'Campaña' })).toHaveValue('A-camp')
     expect(

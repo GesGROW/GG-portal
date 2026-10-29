@@ -65,24 +65,27 @@
   z-index: 1;
 }
 .campaign-main-tabs :is(a, button) {
+  --campaign-tab-background: #d9d9d9;
   display: grid;
   place-items: center;
   width: calc(90 * var(--owner-scale));
   height: calc(121 * var(--owner-scale));
   border: 0;
   border-radius: calc(30 * var(--owner-scale)) 0 0 calc(30 * var(--owner-scale));
-  background: #d9d9d9;
+  background: var(--campaign-tab-background);
   color: #022f2a;
   padding: 0 calc(16 * var(--owner-scale)) 0 0;
 }
 .campaign-main-tabs [aria-current] {
-  background: #eff0e2;
+  --campaign-tab-background: #eff0e2;
 }
 .campaign-main-tabs .campaign-app-tab {
   margin-top: calc(92 * var(--owner-scale));
 }
 .campaign-main-tabs :is(a, button):disabled,
 .campaign-main-tabs [aria-disabled] {
+  background: var(--campaign-tab-background);
+  color: #022f2a;
   opacity: 1;
   cursor: default;
 }

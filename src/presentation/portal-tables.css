@@ -1,4 +1,11 @@
 /* Base única: encabezado y filas de Usuarios y accesos para todo el Portal. */
+.portal-layout.owner-layout .table-scroll[data-reserve-rows] {
+  min-height: calc((var(--table-reserved-rows) + 1) * 47 * var(--owner-scale, 1px));
+}
+.campaign-lots-table time,
+.campaign-workers-table time {
+  white-space: nowrap;
+}
 .portal-layout.owner-layout .table-scroll:has(> .portal-data-table) {
   width: 100%;
   max-width: none;
@@ -58,7 +65,11 @@
 .portal-layout.owner-layout .portal-data-table tbody tr:last-child > :is(th, td) {
   border-bottom: 2px solid white;
 }
-.portal-layout.owner-layout .portal-data-table tbody tr:is(:hover, :focus-within, .is-selected) > :is(th, td),
+.portal-layout.owner-layout
+  .portal-data-table
+  tbody
+  tr:is(:hover, :focus-within, .is-selected)
+  > :is(th, td),
 .portal-layout.owner-layout
   .portal-data-table
   tbody

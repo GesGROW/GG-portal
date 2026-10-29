@@ -17,6 +17,7 @@ import { CrearEmpresa } from './CrearEmpresa.jsx'
 import { ActivacionCuenta } from './ActivacionCuenta.jsx'
 import { OwnerHome } from './OwnerHome.jsx'
 import { HomeSkeleton } from './HomeSkeleton.jsx'
+import { CampaignPageSkeleton } from './CampaignSkeleton.jsx'
 import { ModulosOwner } from './ModulosOwner.jsx'
 import { esOwnerSinOperacion } from '../application/accesoOwner.js'
 import loginPhoto from '../assets/login/seedling.png'
@@ -121,6 +122,10 @@ function ContenidoProtegido({ portal, estado, path }) {
   const carga =
     path === '/' ? (
       <HomeSkeleton page owner={estado.contexto?.permite('company.manage')} />
+    ) : /^\/cosecha\/(generar|lotes|asignaciones|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
+        path
+      ) ? (
+      <CampaignPageSkeleton seccion={path.split('/')[2]} />
     ) : (
       <Skeleton text="Cargando…" variant={vistaCarga} page />
     )

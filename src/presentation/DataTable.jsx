@@ -35,6 +35,7 @@ export function DataTable({
   emptyState,
   pagination = true,
   pageSize = 50,
+  reserveRows = 0,
   actions,
   actionsHeader = 'Acciones'
 }) {
@@ -57,7 +58,9 @@ export function DataTable({
   return (
     <>
       <div
-        className={`table-scroll ${className}`.trim()}
+        className={`table-scroll content-ready ${className}`.trim()}
+        data-reserve-rows={reserveRows || undefined}
+        style={reserveRows ? { '--table-reserved-rows': reserveRows } : undefined}
         role="region"
         aria-label={label}
         tabIndex={0}
