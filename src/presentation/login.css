@@ -42,23 +42,20 @@
 }
 .session-loading {
   display: grid;
-  justify-items: center;
-  gap: 20px;
+  place-items: center;
   width: 100%;
-  color: #bee6d7;
-  font-size: 16px;
-  line-height: 24px;
-}
-.session-loading p {
+  min-height: 100dvh;
   margin: 0;
+  padding: 24px;
+  background: #fff;
+  color: #377648;
+  color-scheme: light;
 }
 .session-loading-indicator {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #24352b;
-  border-top-color: #b1b617;
-  border-radius: 50%;
-  animation: session-spin 0.9s linear infinite;
+  display: block;
+  width: 96px;
+  height: 96px;
+  animation: session-spin 1.2s linear infinite;
 }
 @keyframes session-spin {
   to {

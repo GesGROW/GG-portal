@@ -42,7 +42,7 @@ describe('Portal React con Application real y puertos controlados', () => {
     )
     expect(screen.getByText('Validando su acceso…')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true')
-    expect(screen.getByRole('img', { name: 'GesGROW' })).toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: 'GesGROW' })).not.toBeInTheDocument()
     expect(screen.queryByText('Preparando su espacio')).not.toBeInTheDocument()
     expect(screen.queryByText('Una visión clara.')).not.toBeInTheDocument()
     expect(

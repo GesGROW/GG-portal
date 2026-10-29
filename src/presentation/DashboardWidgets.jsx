@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { AgriculturalVisual } from './AgriculturalVisual.jsx'
 import { Icon } from './Ui.jsx'
-import { HomeIcon, harvestPhoto } from './HomeAssets.jsx'
+import { harvestPhoto } from './HomeAssets.jsx'
+import { momentoDia } from './momentoDia.js'
+import { ClimaWidget } from './ClimaWidget.jsx'
 
 export function PortalHero({ empresa, campania, hoy, usuario, figma = false }) {
   const date = new Intl.DateTimeFormat('es-PE', {
@@ -49,26 +51,11 @@ export function PortalHero({ empresa, campania, hoy, usuario, figma = false }) {
   )
 }
 
-function weatherTimeOfDay() {
-  const hour = Number(
-    new Intl.DateTimeFormat('en-GB', {
-      hour: '2-digit',
-      hourCycle: 'h23',
-      timeZone: 'America/Lima'
-    }).format(new Date())
-  )
-  return hour >= 6 && hour < 16
-    ? 'day'
-    : hour >= 16 && hour < 19
-      ? 'afternoon'
-      : 'night'
-}
-
-export function WeatherCard({ figma = false }) {
-  const [timeOfDay, setTimeOfDay] = useState(weatherTimeOfDay)
+export function WeatherCard({ figma = false, servicio }) {
+  const [timeOfDay, setTimeOfDay] = useState(momentoDia)
 
   useEffect(() => {
-    const updateTimeOfDay = () => setTimeOfDay(weatherTimeOfDay())
+    const updateTimeOfDay = () => setTimeOfDay(momentoDia())
     const timer = window.setInterval(updateTimeOfDay, 60_000)
     document.addEventListener('visibilitychange', updateTimeOfDay)
     return () => {
@@ -77,24 +64,5 @@ export function WeatherCard({ figma = false }) {
     }
   }, [])
 
-  return (
-    <section
-      className={`weather-card ${figma ? 'home-weather' : ''}`}
-      data-time-of-day={timeOfDay}
-      aria-labelledby="weather-title"
-      title={
-        figma
-          ? 'Clima no configurado. La información meteorológica aún no está disponible.'
-          : undefined
-      }
-    >
-      <div className="weather-symbol">
-        {figma ? <HomeIcon name="weather" /> : <Icon name="weather" />}
-      </div>
-      <span className="eyebrow">En el campo</span>
-      <h2 id="weather-title">Clima no configurado</h2>
-      <p>La información meteorológica aún no está disponible.</p>
-      <span className="weather-footer">Contexto meteorológico</span>
-    </section>
-  )
+  return <ClimaWidget servicio={servicio} momento={timeOfDay} figma={figma} />
 }

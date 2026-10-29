@@ -210,7 +210,8 @@ function ContenidoProtegido({ portal, estado, path }) {
         )}
       </Suspense>
     )
-  if (path === '/') return <OwnerHome estado={estado} servicio={portal.reportes} />
+  if (path === '/')
+    return <OwnerHome estado={estado} servicio={portal.reportes} clima={portal.clima} />
   if (path === '/modulos')
     return (
       <ModulosOwner
@@ -419,14 +420,38 @@ export function Portal({ portal }) {
         estado={{ ...estado, mensaje: estado.fase === 'login' ? estado.mensaje : '' }}
       />
     )
+  if (estado.fase === 'restaurando')
+    return (
+      <main className="session-loading" aria-label="Acceso a GesGROW">
+        <div role="status" aria-busy="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="session-loading-indicator"
+            width="96"
+            height="96"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 2v4" />
+            <path d="m16.2 7.8 2.9-2.9" />
+            <path d="M18 12h4" />
+            <path d="m16.2 16.2 2.9 2.9" />
+            <path d="M12 18v4" />
+            <path d="m4.9 19.1 2.9-2.9" />
+            <path d="M2 12h4" />
+            <path d="m4.9 4.9 2.9 2.9" />
+          </svg>
+          <span className="sr-only">Validando su acceso…</span>
+        </div>
+      </main>
+    )
   return (
     <SessionScreen>
-      {estado.fase === 'restaurando' && (
-        <div className="session-loading" role="status" aria-busy="true">
-          <span className="session-loading-indicator" aria-hidden="true" />
-          <p>Validando su acceso…</p>
-        </div>
-      )}
       {estado.fase === 'seleccion' && (
         <SeleccionEmpresa portal={portal} estado={estado} />
       )}

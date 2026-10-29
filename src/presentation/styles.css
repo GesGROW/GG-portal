@@ -12,6 +12,7 @@
 @import './light-theme.css';
 @import './owner-home.css';
 @import './owner-harvest-summary.css';
+@import './weather-theme.css';
 @import './skeleton.css';
 @import '@gesgrow/core/presentation/select.css';
 

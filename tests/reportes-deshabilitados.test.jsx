@@ -77,7 +77,7 @@ describe('Accesos publicados a reportes', () => {
     async (route, heading) => {
       mount('/reportes/' + route + '?campania=A-camp')
       await screen.findByRole('heading', { name: heading, exact: true })
-      expect(screen.getByLabelText('Campaña')).toHaveValue('A-camp')
+      expect(await screen.findByLabelText('Campaña')).toHaveValue('A-camp')
       expect(screen.getByTestId('location')).toHaveTextContent(
         '/reportes/' + route + '?campania=A-camp'
       )

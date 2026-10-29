@@ -7,6 +7,7 @@ import {
 import { crearAdministracionAdapter } from './administracionAdapter.js'
 import { crearCosechaAdapter } from './cosechaAdapter.js'
 import { crearPdaAdapter } from './pdaAdapter.js'
+import { crearClimaAdapter } from './climaAdapter.js'
 import { crearTrabajadoresAdapter } from './trabajadoresAdapter.js'
 import { crearReportesAdapter } from './reportesAdapter.js'
 import { exportacionCsv } from '../exportacionCsv.js'
@@ -87,6 +88,7 @@ export function crearPuertosSupabase(cliente) {
     return respuesta.data
   }
   return Object.freeze({
+    clima: crearClimaAdapter(cliente),
     harvestAdmin: crearCosechaAdapter(rpc),
     pda: crearPdaAdapter(rpc),
     workforce: crearTrabajadoresAdapter(rpc),

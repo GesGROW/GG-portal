@@ -629,6 +629,7 @@ export function crearPortal(puertos) {
     entitlements: puertos.entitlements
   })
   return Object.freeze({
+    clima: puertos.clima ?? null,
     suscripcion: crearSuscripcionPortal({
       comercial: puertos.comercial,
       scope: scopePara('company.manage')

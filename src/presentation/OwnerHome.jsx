@@ -3,6 +3,8 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { OwnerIcon } from './OwnerAssets.jsx'
 import { HomeSkeleton } from './HomeSkeleton.jsx'
 import { SupervisorSetupEmpty } from './SupervisorSetupEmpty.jsx'
+import { momentoDia } from './momentoDia.js'
+import { ClimaWidget } from './ClimaWidget.jsx'
 import './supervisor-home.css'
 
 const Dashboard = lazy(() =>
@@ -29,11 +31,16 @@ function fecha(hoy) {
   return `${capitalizar(dia)}, ${numero} de ${capitalizar(mes)}`
 }
 
-export function OwnerHome({ estado, servicio }) {
+export function OwnerHome({ estado, servicio, clima }) {
   const [hoy, setHoy] = useState(() => new Date())
   useEffect(() => {
-    const timer = setInterval(() => setHoy(new Date()), 60_000)
-    return () => clearInterval(timer)
+    const actualizar = () => setHoy(new Date())
+    const timer = setInterval(actualizar, 60_000)
+    document.addEventListener('visibilitychange', actualizar)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', actualizar)
+    }
   }, [])
   const adquirido = estado.modulos.includes('HARVEST')
   const vistaModulo = !estado.contexto.permite('company.manage')
@@ -63,16 +70,7 @@ export function OwnerHome({ estado, servicio }) {
           </div>
           <OwnerIcon name="greeting" />
         </section>
-        <section
-          className="owner-weather"
-          title="La información meteorológica aún no está disponible."
-          aria-labelledby="owner-weather-title"
-        >
-          <h2 id="owner-weather-title" className="sr-only">
-            Clima no configurado
-          </h2>
-          <OwnerIcon name="weather" />
-        </section>
+        <ClimaWidget owner servicio={clima} momento={momentoDia(hoy)} />
       </div>
       <section className="owner-summary" aria-labelledby="owner-summary-title">
         <div className="owner-summary-heading">

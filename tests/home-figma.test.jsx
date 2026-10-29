@@ -139,7 +139,7 @@ describe('Home desde Figma con datos de la campaña', () => {
     expect(ranking).toHaveAttribute('href', '/reportes/ranking?campania=A-cerrada')
     await user.click(ranking)
     await screen.findByRole('heading', { name: 'Ranking de cosechadores', exact: true })
-    expect(screen.getByLabelText('Campaña')).toHaveValue('A-cerrada')
+    expect(await screen.findByLabelText('Campaña')).toHaveValue('A-cerrada')
   })
 
   it('una campaña ajena no llega a consultar producción, ranking ni lotes', async () => {
