@@ -78,6 +78,9 @@
 .campaign-main-tabs [aria-current] {
   background: #eff0e2;
 }
+.campaign-main-tabs .campaign-app-tab {
+  margin-top: calc(92 * var(--owner-scale));
+}
 .campaign-main-tabs :is(a, button):disabled,
 .campaign-main-tabs [aria-disabled] {
   opacity: 1;
@@ -547,6 +550,11 @@
   }
   .campaign-print-reveal > button {
     font-size: 20px;
+  }
+}
+@media (max-width: 850px) {
+  .campaign-main-tabs .campaign-app-tab {
+    margin-top: 32px;
   }
 }
 @media (max-width: 580px) {

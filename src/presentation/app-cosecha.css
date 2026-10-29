@@ -5,7 +5,8 @@
 }
 .pda-card {
   min-width: 0;
-  min-height: calc(717 * var(--owner-scale));
+  /* 803 del panel compartido menos sus dos márgenes interiores de 44. */
+  min-height: calc(715 * var(--owner-scale));
   padding: calc(35 * var(--owner-scale)) calc(44 * var(--owner-scale));
   border-radius: calc(30 * var(--owner-scale));
   background: #fff;
@@ -119,8 +120,8 @@
   display: grid;
   place-items: center;
   aspect-ratio: 1;
-  width: min(100%, calc(360 * var(--owner-scale)));
-  margin: calc(35 * var(--owner-scale)) auto calc(20 * var(--owner-scale));
+  width: min(100%, calc(300 * var(--owner-scale)));
+  margin: calc(24 * var(--owner-scale)) auto calc(20 * var(--owner-scale));
   text-align: center;
 }
 .pda-qr-image {
@@ -162,7 +163,7 @@
 .pda-content .pda-regenerate {
   display: flex;
   width: fit-content;
-  margin: calc(55 * var(--owner-scale)) auto 0;
+  margin: calc(28 * var(--owner-scale)) auto 0;
 }
 .pda-content .pda-install-unavailable {
   margin-top: 12px;
@@ -263,10 +264,7 @@
   gap: 16px;
   margin-top: 24px;
 }
-.campaign-main-tabs .campaign-app-tab {
-  margin-top: calc(92 * var(--owner-scale));
-}
-@media (max-width: 1199px) {
+@media (max-width: 1023px) {
   .pda-install-grid {
     gap: 24px;
   }
@@ -307,7 +305,6 @@
   }
   .pda-qr-area {
     margin-top: 24px;
-    width: min(100%, 300px);
   }
   .pda-qr-area p {
     font-size: 16px;
@@ -324,8 +321,8 @@
   .pda-content .pda-regenerate {
     margin-top: 28px;
   }
-  .campaign-main-tabs .campaign-app-tab {
-    margin-top: 32px;
+  .pda-qr-area {
+    width: min(100%, 300px);
   }
 }
 @media (max-width: 580px) {
