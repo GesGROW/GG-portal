@@ -35,16 +35,6 @@ export function FiltrosCampania({
   )
   return (
     <>
-      <p
-        className="campaign-table-total"
-        aria-live="polite"
-        aria-busy={Boolean(consulta?.cargando)}
-      >
-        Total:{' '}
-        {consulta?.datos
-          ? `${new Intl.NumberFormat('es-PE').format(consulta.datos.total)} ${consulta.datos.total === 1 ? 'fila' : 'filas'}`
-          : '—'}
-      </p>
       <div
         className="campaign-table-filters"
         role="search"

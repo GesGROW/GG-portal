@@ -51,7 +51,7 @@ const filasVisibles = () =>
 
 describe('Paginación y recarga de las tablas de Cosecha', () => {
   it.each(tablas)(
-    '$label muestra diez filas, el total completo y la recarga respeta filtros y reinicia página',
+    '$label muestra diez filas sin contador y la recarga respeta filtros y reinicia página',
     async (tabla) => {
       const user = userEvent.setup()
       let fuente = datos(67),
@@ -69,13 +69,10 @@ describe('Paginación y recarga de las tablas de Cosecha', () => {
           : Promise.resolve(pagina(offset))
       )
       const servicio = montar(tabla, cargar)
-      const total = await screen.findByText('Total: 67 filas')
+      await screen.findByRole('table')
+      expect(screen.queryByText(/^Total:/)).not.toBeInTheDocument()
       expect(filasVisibles()).toHaveLength(10)
       const nav = screen.getByRole('navigation', { name: 'Paginación de la tabla' })
-      expect(
-        total.compareDocumentPosition(screen.getByRole('table')) &
-          Node.DOCUMENT_POSITION_FOLLOWING
-      ).toBeTruthy()
       expect(
         screen.getByRole('table').compareDocumentPosition(nav) &
           Node.DOCUMENT_POSITION_FOLLOWING
@@ -91,7 +88,7 @@ describe('Paginación y recarga de las tablas de Cosecha', () => {
         tabla.seccion || tabla.asignados ? 'Persona 61' : '763-61'
       )
       expect(screen.getByRole('button', { name: 'Siguiente' })).toBeDisabled()
-      expect(screen.getByText('Total: 67 filas')).toBeInTheDocument()
+      expect(screen.queryByText(/^Total:/)).not.toBeInTheDocument()
       await user.type(screen.getByRole('searchbox'), '763{Enter}')
       await waitFor(() =>
         expect(screen.getByRole('button', { name: 'Página 1' })).toHaveAttribute(
@@ -108,7 +105,7 @@ describe('Paginación y recarga de las tablas de Cosecha', () => {
       expect(recargar).toBeDisabled()
       expect(screen.getByRole('searchbox')).toHaveValue('763')
       liberar()
-      await screen.findByText('Total: 3 filas')
+      await screen.findByRole('table')
       expect(filasVisibles()).toHaveLength(3)
       expect(screen.getByRole('button', { name: 'Página 1' })).toHaveAttribute(
         'aria-current',
@@ -134,11 +131,10 @@ describe('Paginación y recarga de las tablas de Cosecha', () => {
         total: fuente.length
       })
     )
-    await screen.findByText('Total: 67 filas')
+    await screen.findByRole('table')
     fuente = datos(3)
     await user.click(screen.getByRole('button', { name: 'Página 7' }))
-    await screen.findByText('Total: 3 filas')
-    expect(filasVisibles()).toHaveLength(3)
+    await waitFor(() => expect(filasVisibles()).toHaveLength(3))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Página 1' })).toHaveAttribute(
       'aria-current',
@@ -146,10 +142,10 @@ describe('Paginación y recarga de las tablas de Cosecha', () => {
     )
   })
 
-  it('un resultado vacío conserva el total cero y la navegación deshabilitada', async () => {
+  it('un resultado vacío no muestra contador y conserva la navegación deshabilitada', async () => {
     montar(tablas[0], async () => ({ filas: [], total: 0 }))
-    await screen.findByText('Total: 0 filas')
-    expect(screen.getByText('No hay lotes de tickets generados')).toBeInTheDocument()
+    await screen.findByText('No hay lotes de tickets generados')
+    expect(screen.queryByText(/^Total:/)).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Anterior' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Siguiente' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Actualizar tabla' })).toBeEnabled()
