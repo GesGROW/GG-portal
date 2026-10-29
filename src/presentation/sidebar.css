@@ -1,4 +1,4 @@
-/* Sidebar Figma 69:627 con opciones ampliadas para mejorar la lectura. */
+/* Navegación compartida del Portal. */
 .portal-layout {
   --portal-rail-width: 92px;
   --portal-navigation-panel-width: 320px;
@@ -208,7 +208,8 @@
   flex: 1;
   text-align: left;
 }
-.figma-navigation .sidebar-tickets-toggle:is([aria-expanded='true'], :hover, :active, .is-active) {
+.figma-navigation
+  .sidebar-tickets-toggle:is([aria-expanded='true'], :hover, :active, .is-active) {
   color: var(--sidebar-heading);
   background: var(--sidebar-selected);
 }
@@ -251,6 +252,58 @@
 .figma-navigation .sidebar-settings-links a:is(:hover, .active) {
   background: var(--sidebar-selected);
   text-decoration: none;
+}
+
+/* Rail verde con iconos claros y selección lima. */
+.portal-shell .suite-navigation.figma-navigation {
+  --sidebar-bg: #123e30;
+  --sidebar-border: rgb(255 255 255 / 14%);
+  --sidebar-selected: rgb(255 255 255 / 12%);
+  --sidebar-text: #f2f7eb;
+  --sidebar-heading: #fff;
+  --sidebar-icon-filter: brightness(0) invert(1);
+}
+.portal-shell .figma-navigation .navigation-rail {
+  border: 0;
+  background: linear-gradient(165deg, #649e4c 0%, #377648 28%, #0b352e 85%);
+  box-shadow: 0 12px 26px rgb(11 53 46 / 18%);
+}
+.portal-shell .figma-navigation .home-logo {
+  filter: brightness(0) invert(1);
+}
+.portal-shell .figma-navigation .rail-collection {
+  color: #f2f7eb;
+}
+.portal-shell .figma-navigation .rail-collection :is(.home-icon, .owner-icon) {
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+.portal-shell
+  .figma-navigation
+  .rail-entry
+  .rail-collection:is(.is-active, .is-selected, :hover, :focus-visible) {
+  background: #c1f13d;
+  color: #022f2a;
+  box-shadow: none;
+}
+.portal-shell
+  .figma-navigation
+  .rail-collection:is(.is-active, .is-selected, :hover, :focus-visible)
+  :is(.home-icon, .owner-icon) {
+  filter: none;
+  opacity: 1;
+}
+.portal-shell .figma-navigation .navigation-panel {
+  color: var(--sidebar-text);
+  background: var(--sidebar-bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.portal-shell .figma-navigation .sidebar-settings-links a {
+  color: var(--sidebar-text);
+}
+.portal-shell .figma-navigation .rail-pin {
+  color: var(--sidebar-text);
 }
 
 @media (max-width: 1023px) {
