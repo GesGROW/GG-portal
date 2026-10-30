@@ -110,6 +110,19 @@ export function crearPuertosSupabase(cliente) {
           if (error.context?.status === 401) throw new SesionExpirada()
           if (error.context?.status === 403)
             throw new AccesoDenegado('Autorización de administración revocada.')
+          if (error.context?.status === 429) {
+            let codigo
+            try {
+              codigo = (await error.context.clone().json()).code
+            } catch {
+              /* Un rechazo sin JSON tampoco debe ocultarse como un alta fallida. */
+            }
+            throw new Error(
+              codigo === 'EMAIL_RATE_LIMIT'
+                ? 'Se alcanzó el límite temporal de envío de correos. Espera antes de reintentar esta misma invitación.'
+                : 'El servicio ha recibido demasiadas solicitudes. Espera antes de reintentar esta misma invitación.'
+            )
+          }
           throw new Error(
             'No se pudo completar el alta. Reintente con la misma solicitud.'
           )

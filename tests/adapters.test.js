@@ -8,6 +8,31 @@ import {
 } from '../src/ports/errores.js'
 import { AccesoDenegado } from '@gesgrow/core/contexts/identity-access/index.js'
 
+test('invitaciones distingue cuota de correo sin divulgar el cuerpo del proveedor ni repetir el envío', async () => {
+  let llamadas = 0
+  const puerto = crearPuertosSupabase({
+    functions: {
+      async invoke() {
+        llamadas++
+        return {
+          error: {
+            context: new Response(
+              JSON.stringify({ code: 'EMAIL_RATE_LIMIT', error: 'detalle-privado' }),
+              { status: 429 }
+            )
+          }
+        }
+      }
+    }
+  }).administracion
+  await assert.rejects(puerto.invitarUsuario('A', { roles: [] }), (error) => {
+    assert.match(error.message, /límite temporal de envío de correos/)
+    assert.doesNotMatch(error.message, /detalle-privado/)
+    return true
+  })
+  assert.equal(llamadas, 1)
+})
+
 test('adapter usa sesión verificada y RPC autorizados, sin exponer JWT ni aceptar actor/permisos de UI', async () => {
   const llamadas = [],
     cliente = {
