@@ -3,6 +3,7 @@ import { SkeletonBlock as Block, SkeletonTable } from './Skeleton.jsx'
 import './campania-cosecha.css'
 import './cosecha-selector.css'
 import './app-cosecha.css'
+import './reportes-campania.css'
 
 export function AppCosechaSkeleton({ dispositivos = false }) {
   return dispositivos ? (
