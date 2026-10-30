@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCarga } from './GestionUi.jsx'
 import { OwnerIcon } from './OwnerAssets.jsx'
-import { Skeleton } from './Ui.jsx'
+import { ModulosOwnerSkeleton } from './OwnerSkeleton.jsx'
 import './owner-modules.css'
 
 const TIPO_MODULO = 'application/x-gesgrow-module'
@@ -18,7 +18,7 @@ export function ModulosOwner({ servicio, modulos, onActualizar }) {
     <section className="owner-modules" aria-labelledby="owner-modules-title">
       <h1 id="owner-modules-title">Módulos Adquiridos</h1>
       {consulta.cargando ? (
-        <Skeleton text="Cargando módulos…" variant="cards" />
+        <ModulosOwnerSkeleton />
       ) : consulta.error ? (
         <div role="alert">
           <p>{consulta.error.message}</p>
@@ -88,7 +88,7 @@ function CatalogoOwner({ datos, servicio, modulos, actualizar }) {
     }
   }
   return (
-    <>
+    <div className="owner-module-content content-ready">
       <div
         className={`owner-modules-acquired ${arrastrando ? 'is-dragging' : ''}`}
         role="region"
@@ -270,7 +270,7 @@ function CatalogoOwner({ datos, servicio, modulos, actualizar }) {
           )}
         </ActivacionModulo>
       )}
-    </>
+    </div>
   )
 }
 

@@ -19,6 +19,7 @@ import { SessionAccessError } from './SessionAccessError.jsx'
 import { OwnerHome } from './OwnerHome.jsx'
 import { HomeSkeleton } from './HomeSkeleton.jsx'
 import { CampaignPageSkeleton } from './CampaignSkeleton.jsx'
+import { ModulosOwnerSkeleton, UsuariosAccesosSkeleton } from './OwnerSkeleton.jsx'
 import { ModulosOwner } from './ModulosOwner.jsx'
 import { esOwnerSinOperacion } from '../application/accesoOwner.js'
 import loginPhoto from '../assets/login/seedling.png'
@@ -121,7 +122,11 @@ function ContenidoProtegido({ portal, estado, path }) {
               ? 'cards'
               : 'table'
   const carga =
-    path === '/' ? (
+    path === '/modulos' ? (
+      <ModulosOwnerSkeleton pagina />
+    ) : /^\/configuracion\/(usuarios|invitaciones)$/.test(path) ? (
+      <UsuariosAccesosSkeleton pagina />
+    ) : path === '/' ? (
       <HomeSkeleton page owner={estado.contexto?.permite('company.manage')} />
     ) : /^\/cosecha\/(generar|lotes|asignaciones|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
         path

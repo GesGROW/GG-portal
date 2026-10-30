@@ -1,0 +1,30 @@
+.loading-state.skeleton.owner-content-skeleton {
+  padding: 0;
+}
+.owner-modules .owner-modules-skeleton .owner-module-card {
+  background: var(--skeleton-surface);
+}
+.owner-modules .owner-modules-skeleton .owner-module-purchase {
+  background: #eff0e2;
+}
+.owner-modules-skeleton .owner-skeleton-icon {
+  width: calc(28 * var(--owner-scale));
+  height: calc(28 * var(--owner-scale));
+  flex: none;
+}
+.owner-modules-skeleton .owner-skeleton-module-label {
+  width: calc(100 * var(--owner-scale));
+  height: 1lh;
+}
+.owner-modules-skeleton .owner-module-purchase .skeleton-block {
+  height: 1lh;
+}
+.owner-users-skeleton .owner-users-table tbody .skeleton-block {
+  width: 75%;
+  height: 1lh;
+}
+.owner-users-skeleton .owner-skeleton-invite-copy {
+  width: auto;
+  height: auto;
+  color: transparent;
+}

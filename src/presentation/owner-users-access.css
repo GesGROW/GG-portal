@@ -38,6 +38,15 @@
   overflow: hidden;
   background: #eff0e2;
 }
+.owner-users-table-region {
+  /* Encabezado y dos filas: la invitación conserva su posición al cargar. */
+  min-height: calc(141 * var(--owner-scale) + 3px);
+}
+.owner-users-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .owner-users-status {
   display: inline-block;
   border-radius: 30px;

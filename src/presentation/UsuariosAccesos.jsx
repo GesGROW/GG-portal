@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { useCarga } from './GestionUi.jsx'
 import { OwnerIcon } from './OwnerAssets.jsx'
-import { Skeleton } from './Ui.jsx'
+import { UsuariosAccesosSkeleton, ColumnasUsuarios } from './OwnerSkeleton.jsx'
 import { NOMBRES_ROL } from './nombresAcceso.js'
 import './owner-users-access.css'
 import './portal-tables.css'
@@ -50,68 +50,49 @@ export function UsuariosAccesos({ servicio, invitando = false }) {
     <section className="owner-users-access" aria-labelledby="owner-users-title">
       <h1 id="owner-users-title">Usuarios y accesos</h1>
       {consulta.cargando && !datos ? (
-        <Skeleton text="Cargando usuarios…" variant="table" />
+        <UsuariosAccesosSkeleton />
       ) : consulta.error ? (
         <div role="alert">
           <p>{consulta.error.message}</p>
           <button onClick={consulta.refrescar}>Reintentar</button>
         </div>
       ) : (
-        <section aria-labelledby="owner-users-harvest-title">
+        <section className="content-ready" aria-labelledby="owner-users-harvest-title">
           <h2 id="owner-users-harvest-title" className="owner-users-module">
             <OwnerIcon name="avocado" />
             <span>Cosecha</span>
           </h2>
           <div className="owner-users-table-wrap">
-            <table
-              className="owner-users-table portal-data-table"
-              aria-label="Usuarios y accesos"
-            >
-              <colgroup>
-                {datos.usuarios.length ? (
-                  <>
-                    <col style={{ width: '33.5%' }} />
-                    <col style={{ width: '34.7%' }} />
-                    <col style={{ width: '15.1%' }} />
-                    <col style={{ width: '16.7%' }} />
-                  </>
-                ) : (
-                  <>
-                    <col style={{ width: '28.7%' }} />
-                    <col style={{ width: '50.5%' }} />
-                    <col style={{ width: '20.8%' }} />
-                  </>
-                )}
-              </colgroup>
-              <thead>
-                <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Correo</th>
-                  {datos.usuarios.length > 0 && <th scope="col">Rol</th>}
-                  <th scope="col">{datos.usuarios.length ? 'Estado' : 'Activo'}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {datos.usuarios.map((u) => (
-                  <tr key={u.id}>
-                    <td>{u.nombre}</td>
-                    <td>{u.email}</td>
-                    <td>{NOMBRES_ROL[u.rol] ?? u.rol}</td>
-                    <td>
-                      <span
-                        className={`owner-users-status owner-users-status-${u.estado.toLowerCase()}`}
-                      >
-                        {u.estado === 'ACEPTADA'
-                          ? 'Aceptada'
-                          : u.estado === 'PENDIENTE'
-                            ? 'Pendiente'
-                            : 'Inactivo'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="owner-users-table-region">
+              <table
+                className="owner-users-table portal-data-table"
+                aria-label="Usuarios y accesos"
+              >
+                <ColumnasUsuarios vacio={datos.usuarios.length === 0} />
+                <tbody>
+                  {datos.usuarios.map((u) => (
+                    <tr key={u.id}>
+                      <td title={u.nombre}>{u.nombre}</td>
+                      <td title={u.email}>{u.email}</td>
+                      <td title={NOMBRES_ROL[u.rol] ?? u.rol}>
+                        {NOMBRES_ROL[u.rol] ?? u.rol}
+                      </td>
+                      <td>
+                        <span
+                          className={`owner-users-status owner-users-status-${u.estado.toLowerCase()}`}
+                        >
+                          {u.estado === 'ACEPTADA'
+                            ? 'Aceptada'
+                            : u.estado === 'PENDIENTE'
+                              ? 'Pendiente'
+                              : 'Inactivo'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             {datos.habilitado && datos.rolSupervisorId ? (
               <Link
                 ref={invitar}
