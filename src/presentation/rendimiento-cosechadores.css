@@ -52,6 +52,19 @@
 .rendimiento-ranking-table th {
   white-space: nowrap;
 }
+.rendimiento-ranking-table .campaign-table-empty {
+  white-space: normal;
+}
+@media (max-width: 1023px) {
+  .rendimiento-ranking-table:has(.table-empty-row) col:first-child {
+    width: 15% !important;
+  }
+  .portal-layout.owner-layout .rendimiento-ranking-table:has(.table-empty-row) th {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding-inline: 6px;
+  }
+}
 .rendimiento-persona {
   display: flex;
   align-items: center;

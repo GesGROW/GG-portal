@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Select } from './Select.jsx'
 import { DataTable } from './DataTable.jsx'
+import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
 import { SkeletonBlock as Block, SkeletonTable } from './Skeleton.jsx'
 import {
   ordenarRendimiento,
@@ -75,7 +76,7 @@ export function RankingCampania({ filas }) {
       rowClassName={(p) =>
         [1, 2, 3].includes(p.posicion) ? `rendimiento-puesto-${p.posicion}` : undefined
       }
-      emptyState="Nadie ha cosechado aún"
+      emptyState={<CampaignTableEmpty>Nadie ha cosechado aún</CampaignTableEmpty>}
     />
   )
 }
