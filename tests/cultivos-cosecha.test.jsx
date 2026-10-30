@@ -462,6 +462,7 @@ describe('Descubrimiento y aprobación', () => {
     expect(
       await screen.findByRole('button', { name: 'Solicitud pendiente' })
     ).toBeDisabled()
+    expect(screen.queryByText('Solicitud enviada para Mango.')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Nombre del cultivo')).toHaveValue('Borrador')
   })
 
@@ -508,6 +509,8 @@ describe('Descubrimiento y aprobación', () => {
         screen.queryByRole('article', { name: 'Solicitud de Luis Pérez' })
       ).not.toBeInTheDocument()
     )
+    if (aceptar)
+      expect(screen.queryByText('Solicitud aprobada.')).not.toBeInTheDocument()
   })
 
   it('un error de aprobación conserva la solicitud para reintentar', async () => {

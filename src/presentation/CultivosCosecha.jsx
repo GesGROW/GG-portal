@@ -323,7 +323,7 @@ export function CultivosCosecha({ servicio, pendiente = false, onCreada }) {
     }
     onCreada?.(resultado)
   }
-  async function actuar(accion, confirmar, texto) {
+  async function actuar(accion, confirmar, texto = '') {
     if (deshabilitado || bloqueo.current) return
     bloqueo.current = true
     setGuardando(true)
@@ -722,8 +722,7 @@ export function CultivosCosecha({ servicio, pendiente = false, onCreada }) {
                               )
                             return r
                           },
-                          () => setEnviadas((prev) => [...prev, c.id]),
-                          `Solicitud enviada para ${c.nombre}.`
+                          () => setEnviadas((prev) => [...prev, c.id])
                         )
                       }
                     >
@@ -762,7 +761,7 @@ export function CultivosCosecha({ servicio, pendiente = false, onCreada }) {
                             actuar(
                               () => servicio.resolverUnion(s.id, aceptar),
                               () => setResueltas((prev) => [...prev, s.id]),
-                              aceptar ? 'Solicitud aprobada.' : 'Solicitud rechazada.'
+                              aceptar ? '' : 'Solicitud rechazada.'
                             )
                           }
                         >
