@@ -29,6 +29,11 @@ no registra un service worker. En Supabase deben configurarse ese origen y la ru
 /aceptar-invitacion como destinos de Auth, y PORTAL_ORIGIN de invitar-usuario.
 La CI ejecuta las pruebas y la compilación; no despliega ni altera Supabase.
 
+En Vercel, `vercel.json` incluye el rewrite de las rutas del navegador hacia
+`/index.html`. Esto permite abrir directamente `/aceptar-invitacion` desde el
+correo o recargar `/configuracion/usuarios`, manteniendo la URL y sus parámetros.
+La aceptación y la validación de la invitación siguen a cargo del Portal y Auth.
+
 ## Código compartido
 
 Este repositorio incluye en vendor/ la entrega exacta de @gesgrow/core 0.1.0.
