@@ -7,7 +7,7 @@
     "dev": "vite --port 5174 --strictPort",
     "build": "vite build",
     "preview": "vite preview --port 4174 --strictPort",
-    "test": "node --test tests/*.test.js && vitest run",
+    "test": "node --test tests/*.test.js scripts/impresion-tsc/tests/*.test.mjs && vitest run",
     "test:application": "node --test tests/*.test.js",
     "test:presentation": "vitest run"
   },
