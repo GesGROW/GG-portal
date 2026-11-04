@@ -35,7 +35,7 @@ test('cada lote empieza en una fila nueva y deja espacios blancos sin mezclar co
   )
   assert.deepEqual(
     documento.filas[0].map((t) => t.x),
-    [24, 280, 536]
+    [16, 280, 544]
   )
   assert.equal(documento.filas[2][1].codigo, 'C01061308')
   assert.equal(documento.filas[2][1].derecha, '010613|08')
@@ -46,7 +46,7 @@ test('cada lote empieza en una fila nueva y deja espacios blancos sin mezclar co
   assert.ok(barras.at(-1).x + barras.at(-1).ancho - barras[0].x > 176)
   assert.ok(barras[0].x - documento.filas[0][0].x < 32)
   assert.equal(documento.rollo.anchoMm, 100)
-  assert.equal(documento.rollo.margenDerechoMm, 3)
+  assert.equal(documento.rollo.margenDerechoMm, 2)
   assert.equal(
     prepararEtiquetas(documentoEtiquetas([1], 'ARA')).filas[0][0].izquierda,
     'TI-ARA'
@@ -94,7 +94,7 @@ test('bloques de 3 × 9 y lotes antiguos incompletos conservan cada ticket sin c
     for (const fila of d.filas) {
       assert.ok(fila.length >= 1 && fila.length <= 3)
       assert.equal(new Set(fila.map((t) => t.codigoLote)).size, 1)
-      assert.equal(fila[0].x, 24)
+      assert.equal(fila[0].x, 16)
     }
     if (cantidades[0] === 27) {
       assert.ok(d.filas.every((f) => f.length === 3))

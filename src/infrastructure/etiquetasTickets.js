@@ -8,9 +8,9 @@ const entero = (n, min, max) => Number.isSafeInteger(n) && n >= min && n <= max
 
 export function configurarRollo(opciones = {}) {
   const configuracion = {
-    separacionColumnasMm: opciones.separacionColumnasMm ?? 2,
+    separacionColumnasMm: opciones.separacionColumnasMm ?? 3,
     separacionFilasMm: opciones.separacionFilasMm ?? 2,
-    margenIzquierdoMm: opciones.margenIzquierdoMm ?? 3
+    margenIzquierdoMm: opciones.margenIzquierdoMm ?? 2
   }
   for (const [campo, numero] of Object.entries(configuracion)) {
     if (

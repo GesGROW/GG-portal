@@ -299,9 +299,9 @@ describe('Vista previa dentro del generador y confirmación explícita', () => {
       modo: 'pdf',
       imprimirAlAbrir: true,
       enPagina: true,
-      separacionColumnasMm: 2,
+      separacionColumnasMm: 3,
       separacionFilasMm: 2,
-      margenIzquierdoMm: 3
+      margenIzquierdoMm: 2
     })
     expect(servicio.abrirImpresion.mock.invocationCallOrder[0]).toBeLessThan(
       servicio.confirmarGeneracion.mock.invocationCallOrder[0]

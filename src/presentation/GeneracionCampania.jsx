@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 
 const geometria = Object.freeze({
-  separacionColumnasMm: 2,
+  separacionColumnasMm: 3,
   separacionFilasMm: 2,
-  margenIzquierdoMm: 3
+  margenIzquierdoMm: 2
 })
 
 export function GeneracionCampania({
