@@ -16,7 +16,7 @@ import calendar from '../assets/home/calendar.svg'
 import clock from '../assets/home/clock.svg'
 import weather from '../assets/home/weather.svg'
 export { default as harvestPhoto } from '../assets/home/harvest-photo.png'
-export { default as homeLogo } from '../assets/home/logo.png'
+export { default as homeLogo } from '../assets/home/logo.webp'
 export { default as homeLaurel } from '../assets/home/—Pngtree—green laurel wreath vector illustration_21057227 (1).png'
 
 const icons = {

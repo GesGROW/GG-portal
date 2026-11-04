@@ -6,7 +6,6 @@ import selectIcon from '../assets/users/select.svg'
 import './user-access-editor.css'
 
 import { NOMBRES_ROL, NOMBRES_MODULO } from './nombresAcceso.js'
-export { NOMBRES_ROL, NOMBRES_MODULO } from './nombresAcceso.js'
 const gruposPermisos = [
   ['Empresa y usuarios', ['company.manage']],
   ['Campañas', ['campaign.manage']],

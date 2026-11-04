@@ -35,7 +35,7 @@
   font: inherit;
 }
 .campaign-table-search input::placeholder {
-  color: #526d67;
+  color: var(--color-empty-fg);
   opacity: 1;
 }
 .campaign-table-state {

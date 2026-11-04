@@ -52,8 +52,8 @@
 }
 .portal-layout.owner-layout .portal-data-table thead th {
   border-top: 0;
-  background: #1b9e10;
-  color: white;
+  background: var(--color-table-header-bg);
+  color: var(--color-table-header-fg);
   font-weight: 500;
   font-style: normal;
 }

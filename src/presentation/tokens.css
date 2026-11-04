@@ -1,6 +1,13 @@
 /* GesGROW Foundations / Data Viz, Palette V2. All Portal colors live here.
    Breakpoint literals mirror these tokens; CSS variables cannot be media conditions. */
 :root {
+  /* Operational surfaces keep the same accessible pairs in Portal and PWA. */
+  --color-table-header-bg: #14800f;
+  --color-table-header-fg: #ffffff;
+  --color-empty-bg: #d9d9d9;
+  --color-empty-fg: #52635a;
+  --color-step-complete-bg: #1d9e0d;
+  --color-step-complete-fg: #001f1a;
   --green-950: #102a1d;
   --green-900: #173f2b;
   --green-800: #1f5a3a;

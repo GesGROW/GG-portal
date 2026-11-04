@@ -23,7 +23,7 @@ import { ModulosOwnerSkeleton, UsuariosAccesosSkeleton } from './OwnerSkeleton.j
 import { ModulosOwner } from './ModulosOwner.jsx'
 import { esOwnerSinOperacion } from '../application/accesoOwner.js'
 import loginPhoto from '../assets/login/seedling.png'
-import loginLogo from '../assets/login/logo.png'
+import loginLogo from '../assets/login/logo.webp'
 const Ranking = lazy(() =>
   import('./Ranking.jsx').then((m) => ({ default: m.Ranking }))
 )

@@ -75,7 +75,11 @@ export function DataTable({
               {tableColumns.map((column) => (
                 <col
                   key={column.key}
-                  style={column.width == null ? undefined : { width: column.width }}
+                  style={
+                    rows.length === 0 || column.width == null
+                      ? undefined
+                      : { width: column.width }
+                  }
                 />
               ))}
             </colgroup>

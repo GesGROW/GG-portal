@@ -7,7 +7,7 @@ import weather from '../assets/owner/weather.svg'
 import empty from '../assets/owner/modules-empty.svg'
 import avocado from '../assets/owner/avocado.svg'
 import plus from '../assets/owner/plus.svg'
-export { default as ownerLogo } from '../assets/owner/logo.png'
+export { default as ownerLogo } from '../assets/owner/logo.webp'
 
 const assets = {
   home,

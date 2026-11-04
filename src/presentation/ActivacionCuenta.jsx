@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router'
 import photo from '../assets/login/seedling.png'
-import logo from '../assets/login/logo.png'
+import logo from '../assets/login/logo.webp'
 import { NOMBRES_ROL, NOMBRES_MODULO } from './nombresAcceso.js'
 
 const enumerar = (valores) =>

@@ -21,7 +21,7 @@ export function HomeFeatureCard({ kind, title, loading, footer, children }) {
   )
 }
 
-export function HomeNumber({ value, loading = false }) {
+function HomeNumber({ value, loading = false }) {
   if (loading) return <SkeletonBlock className="home-number-placeholder" />
   const text = numero(value)
   return (

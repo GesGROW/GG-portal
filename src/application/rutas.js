@@ -1,6 +1,6 @@
 import { esOwnerSinOperacion } from './accesoOwner.js'
 
-export const RUTAS_PORTAL = Object.freeze(
+const RUTAS_PORTAL = Object.freeze(
   [
     {
       path: '/',

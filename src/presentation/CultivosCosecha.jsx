@@ -789,5 +789,3 @@ export function CultivosCosecha({ servicio, pendiente = false, onCreada }) {
     </div>
   )
 }
-
-export default CultivosCosecha
