@@ -4,6 +4,8 @@ export const FORMATO_TICKETS = 'TSC_30X20_3'
 const DOTS_MM = 8
 const BARRAS_Y = 20
 const BARRAS_ALTO = 72
+const TEXTO_PT = 6
+const tamanioCultivoPt = (ticket) => (ticket.izquierda.length > 6 ? 5 : TEXTO_PT)
 const entero = (n, min, max) => Number.isSafeInteger(n) && n >= min && n <= max
 
 export function configurarRollo(opciones = {}) {
@@ -179,8 +181,8 @@ export function generarHtmlEtiquetas({ rollo, filas, fecha }) {
       (c) =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
     )
-  const texto = (x, y, valor) =>
-    `<text x="${x}" y="${y}" font-family="Arial" font-size="1.905">${escapar(valor)}</text>`
+  const texto = (x, y, valor, puntos = TEXTO_PT) =>
+    `<text x="${x}" y="${y}" font-family="Arial" font-size="${(puntos * 25.4) / 72}" font-weight="700">${escapar(valor)}</text>`
   const paginas = filas
     .map((fila) => {
       const contenido = fila
@@ -194,7 +196,7 @@ export function generarHtmlEtiquetas({ rollo, filas, fecha }) {
           const x = ticket.x / DOTS_MM,
             izquierda = x + ticket.xBarras / DOTS_MM,
             derecha = x + 13.5
-          return `${barras}${texto(izquierda, 14.2, ticket.izquierda)}${texto(derecha, 14.2, ticket.derecha)}${texto(izquierda, 17.5, fecha)}${texto(derecha, 17.5, ticket.numeroLote)}`
+          return `${barras}${texto(izquierda, 14.2, ticket.izquierda, tamanioCultivoPt(ticket))}${texto(derecha, 14.2, ticket.derecha)}${texto(izquierda, 17.5, fecha)}${texto(derecha, 17.5, ticket.numeroLote)}`
         })
         .join('')
       return `<svg xmlns="http://www.w3.org/2000/svg" width="${rollo.anchoMm}mm" height="20mm" viewBox="0 0 ${rollo.anchoMm} 20">${contenido}</svg>`
@@ -220,8 +222,7 @@ export async function generarPdfEtiquetas(documento) {
   filas.forEach((fila, indice) => {
     if (indice) pdf.addPage([rollo.anchoMm, 20], 'landscape')
     pdf.setFillColor(0)
-    pdf.setFont('helvetica', 'normal')
-    pdf.setFontSize(5.4)
+    pdf.setFont('helvetica', 'bold')
     for (const ticket of fila) {
       for (const barra of segmentosBarras(ticket))
         pdf.rect(
@@ -232,7 +233,11 @@ export async function generarPdfEtiquetas(documento) {
           'F'
         )
       const x = ticket.x / DOTS_MM
+      // Las abreviaturas antiguas de cuatro o cinco letras siguen cabiendo
+      // antes del código, incluso usando negrita.
+      pdf.setFontSize(tamanioCultivoPt(ticket))
       pdf.text(ticket.izquierda, x + ticket.xBarras / DOTS_MM, 14.2)
+      pdf.setFontSize(TEXTO_PT)
       pdf.text(ticket.derecha, x + 13.5, 14.2)
       pdf.text(fecha, x + ticket.xBarras / DOTS_MM, 17.5)
       pdf.text(String(ticket.numeroLote), x + 13.5, 17.5)

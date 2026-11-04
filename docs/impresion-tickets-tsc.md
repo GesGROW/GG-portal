@@ -26,6 +26,7 @@ El navegador no informa de forma fiable si salió papel o si se canceló el diá
 - Abajo, izquierda: `TI-MAN` o `TI-ARA`, y fecha `YYYYMMDD`.
 - Las barras, el cultivo y la fecha comparten la guía izquierda a 2.5 mm del borde de cada etiqueta. El código empieza a 2.5 mm del borde superior y tiene 9 mm de alto, conservando espacio para las dos líneas inferiores.
 - Abajo, derecha: `010613|08`, y ordinal del lote dentro de la generación (por ejemplo `98`). Este ordinal es independiente del código de lote.
+- En PDF y en la impresión del navegador, el texto usa negrita de 6 puntos (antes 5.4 puntos en peso normal), para reforzar la lectura de los números. Las abreviaturas antiguas de cultivo de cuatro o cinco letras usan 5 puntos en negrita para no invadir el código. Se conservan las posiciones, las barras y el tamaño del papel; TSPL conserva su tipografía nativa.
 - La fecha se fija al generar, en `America/Lima`. El cultivo y su abreviatura se toman de la campaña y se conservan con el recibo original.
 
 Los números de ticket usan mínimo dos dígitos, sin truncarse: `01` a `99`, luego `100`, etc. El prefijo de lote siempre ocupa seis dígitos, por lo que el código sigue siendo inequívoco. La secuencia global cubre `000001..999999`, sin reiniciarse por empresa o campaña; al agotarse falla explícitamente. Los huecos tras transacciones fallidas son normales. Se reservan prefijos compatibles existentes y de importaciones posteriores para evitar reutilización.

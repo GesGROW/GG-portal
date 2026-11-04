@@ -199,5 +199,6 @@ test('impresión vectorial conserva todas las barras, textos y páginas físicas
   assert.ok(paginas[3][1].includes('010613|10'))
   assert.ok(!paginas[3][1].includes('010614|01'))
   assert.ok(paginas[4][1].includes('010614|01'))
-  assert.ok(html.includes('font-size="1.905"'))
+  assert.ok(html.includes('font-weight="700"'))
+  assert.ok(html.includes(`font-size="${(6 * 25.4) / 72}"`))
 })
