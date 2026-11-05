@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { nombreCosechadorVisible } from '@gesgrow/core/contexts/workforce/index.js'
 import { HomeIcon, homeLaurel } from './HomeAssets.jsx'
 import { SkeletonBlock } from './Skeleton.jsx'
 import { numero } from './formatoNumero.js'
@@ -66,7 +67,9 @@ export function HomeWinner({ ranking }) {
   const top = ranking[0]
   return top ? (
     <div className="home-winner content-ready">
-      <strong className="home-winner-name">{top.cosechador}</strong>
+      <strong className="home-winner-name">
+        {nombreCosechadorVisible(top.cosechador, top.cosechador_dni)}
+      </strong>
       <div className="home-winner-score">
         <img className="home-laurel" src={homeLaurel} alt="" />
         <dl>
