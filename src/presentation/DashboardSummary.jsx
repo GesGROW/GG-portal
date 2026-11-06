@@ -20,6 +20,7 @@ export function DashboardData({
   controls,
   embedded,
   puedeDetalles,
+  reportesCampania,
   revision,
   actualizar
 }) {
@@ -58,7 +59,7 @@ export function DashboardData({
       ? new Set(filas.map((f) => f.variedad_id ?? f.variedad).filter(Boolean)).size
       : null)
   const reportLink = (vista) =>
-    `/reportes/${vista}?campania=${encodeURIComponent(campania.id)}`
+    `${reportesCampania ? '/cosecha/' + (vista === 'diaria' ? 'produccion' : 'rendimiento') : '/reportes/' + vista}?campania=${encodeURIComponent(campania.id)}`
   const footer = (vista, label) => (
     <ReportLink className="home-link" to={reportLink(vista)} disponible={puedeDetalles}>
       {label}

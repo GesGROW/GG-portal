@@ -113,9 +113,10 @@ export function OwnerHome({ estado, servicio, clima }) {
               usuario={estado.usuario}
               embedded
               puedeDetalles={estado.contexto.permite('reports.view')}
+              reportesCampania={estado.contexto.permite('harvest.view') || estado.contexto.permite('harvest.manage')}
               sinCampanias={
                 vistaModulo
-                  ? (actualizar) => <SupervisorSetupEmpty actualizar={actualizar} />
+                  ? () => <SupervisorSetupEmpty />
                   : undefined
               }
             />

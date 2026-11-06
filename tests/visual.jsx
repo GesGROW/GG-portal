@@ -12,6 +12,7 @@ import { fakeTrabajadores } from './support/fakeTrabajadores.js'
 import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 import { impresionTickets } from '../src/infrastructure/impresionTickets.js'
 import { fakePda } from './support/fakePda.js'
+import { fakeBonos } from './support/fakeBonos.js'
 import '@fontsource-variable/inter'
 import '../src/presentation/styles.css'
 const params = new URLSearchParams(location.search)
@@ -160,6 +161,10 @@ if (params.has('owner-modules')) {
   comercial.datos.A.modulosPlan = params.has('acquired') ? ['HARVEST'] : []
   comercial.datos.A.modulosEfectivos = params.has('acquired') ? ['HARVEST'] : []
   comercial.datos.A.estado.modulos = []
+}
+if (params.has('bonos')) {
+  const bonos = fakeBonos(puertos)
+  if (params.has('bono-bloqueado')) bonos.bloquear()
 }
 createRoot(document.getElementById('root')).render(
   <MemoryRouter

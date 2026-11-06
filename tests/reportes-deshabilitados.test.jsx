@@ -36,12 +36,12 @@ describe('Accesos publicados a reportes', () => {
     const user = userEvent.setup()
     await screen.findByText('Ana A')
     for (const [name, route] of [
-      ['Ver producción diaria', 'diaria'],
-      ['Ver ranking completo', 'ranking']
+      ['Ver producción diaria', 'produccion'],
+      ['Ver ranking completo', 'rendimiento']
     ]) {
       const link = screen.getByRole('link', { name })
       expect(link).not.toHaveAttribute('aria-disabled')
-      expect(link).toHaveAttribute('href', '/reportes/' + route + '?campania=A-camp')
+      expect(link).toHaveAttribute('href', '/cosecha/' + route + '?campania=A-camp')
     }
     await user.hover(screen.getByRole('button', { name: 'Módulos', exact: true }))
     expect(

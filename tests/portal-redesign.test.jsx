@@ -33,7 +33,7 @@ describe('Widgets de Home', () => {
   it.each([1, 3])(
     'abre el reporte diario desde el home y conserva sus %s puntos',
     async (count) => {
-      mount('/', {}, (ports) => {
+      mount('/', { permisos: { A: ['company.manage', 'reports.view'] } }, (ports) => {
         const original = ports.reportesHarvest.consultar
         ports.reportesHarvest.consultar = async (...args) => {
           const result = await original(...args)
@@ -434,7 +434,7 @@ describe('Ranking y comparación con totales del read model', () => {
     await act(async () => release())
     await user.click(screen.getByRole('button', { name: 'Módulos' }))
     await user.click(screen.getByRole('link', { name: 'Cosecha', exact: true }))
-    await user.click(screen.getByRole('link', { name: 'Ranking de cosechadores' }))
+    await user.click(await screen.findByRole('link', { name: 'Ranking de cosechadores' }))
     await ready()
     expect(within(tray()).getByText('0 de 5')).toBeInTheDocument()
     expect(screen.queryByText('Ana A')).not.toBeInTheDocument()

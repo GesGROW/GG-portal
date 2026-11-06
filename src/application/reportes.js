@@ -33,6 +33,20 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
     }
   }
   return Object.freeze({
+    bonos: (f) => ejecutar(async (c) => {
+      const fecha = (v) => v == null || (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
+        Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v)
+      if (!f?.campaniaId || !fecha(f.desde) || !fecha(f.hasta) || (f.desde && f.hasta && f.desde > f.hasta))
+        throw new Error('Filtros de bonos inválidos.')
+      const r = await puerto.bonos(c.tenantId, { campaniaId: f.campaniaId,
+        desde: f.desde ?? null, hasta: f.hasta ?? null, trabajadorId: f.trabajadorId || null })
+      if (r?.tenantId !== c.tenantId || r?.campaniaId !== f.campaniaId || r?.tipo !== 'BONOS' ||
+          r?.datos?.ok !== true || !Array.isArray(r.datos.detalle) || !Array.isArray(r.datos.resumen))
+        throw new Error('Respuesta de bonos inválida.')
+      const snapshot = congelar(r)
+      snapshots.set(snapshot, c)
+      return snapshot
+    }),
     campanias: () => ejecutar((c) => servicio.campanias(c.tenantId)),
     campania: (f) =>
       ejecutar(async (c) => {
@@ -106,6 +120,10 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
   })
 }
 function tablaCsv({ tipo, datos: d }) {
+  if (tipo === 'BONOS') return {
+    columnas: ['Fecha', 'DNI', 'Cosechador', 'Jabas', 'Bono habilitado', 'Umbral', 'Monto por jaba (PEN)', 'Jabas adicionales', 'Bono generado (PEN)'],
+    filas: d.detalle.map((r) => [r.fecha, r.dni, r.nombre, r.jabas, r.habilitado ? 'Sí' : 'No', r.umbral, r.monto, r.adicionales, r.bono])
+  }
   if (tipo === 'RESUMEN' || tipo === 'DASHBOARD')
     return {
       columnas: [

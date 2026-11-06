@@ -1,5 +1,19 @@
 export function crearCosechaAdapter(consultar) {
   return Object.freeze({
+    bonoConfiguracion: (t, campania) => consultar('harvest_admin_bono_configuracion', {
+      p_tenant_id: t, p_campania_id: campania
+    }),
+    guardarBono: (t, campania, datos) => consultar('harvest_admin_bono_guardar', {
+      p_tenant_id: t, p_campania_id: campania, p_datos: datos
+    }),
+    configuracionCampania: (t, campania) =>
+      consultar('harvest_admin_configuracion_campania', {
+        p_tenant_id: t, p_campania_id: campania
+      }),
+    guardarConfiguracionCampania: (t, op, campania, datos) =>
+      consultar('harvest_admin_guardar_configuracion_campania', {
+        p_tenant_id: t, p_operacion_id: op, p_campania_id: campania, p_datos: datos
+      }),
     catalogoCultivos: (t) => consultar('harvest_cultivos_catalogo', { p_tenant_id: t }),
     crearCultivo: (t, op, datos) =>
       consultar('harvest_cultivos_crear', {

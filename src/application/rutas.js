@@ -104,7 +104,7 @@ export function evaluarRuta(path, contexto, modulos) {
       ruta: RUTAS_PORTAL.find((r) => r.path === '/cosecha')
     }
   }
-  if (path === '/cosecha/generar' || path === '/cosecha/configurar') {
+  if (['/cosecha/generar', '/cosecha/configurar', '/cosecha/ajustes'].includes(path)) {
     const base = evaluarRuta('/cosecha', contexto, modulos)
     return base.estado === 'permitida' && !contexto.permite('harvest.manage')
       ? {
@@ -113,7 +113,7 @@ export function evaluarRuta(path, contexto, modulos) {
         }
       : base
   }
-  if (['/cosecha/produccion', '/cosecha/rendimiento'].includes(path)) {
+  if (['/cosecha/produccion', '/cosecha/rendimiento', '/cosecha/bonos'].includes(path)) {
     const base = evaluarRuta('/cosecha', contexto, modulos)
     return base.estado === 'permitida' && !contexto.permite('reports.view')
       ? {

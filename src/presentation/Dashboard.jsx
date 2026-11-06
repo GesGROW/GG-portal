@@ -15,6 +15,7 @@ export function Dashboard({
   usuario,
   embedded = false,
   puedeDetalles = true,
+  reportesCampania = true,
   sinCampanias
 }) {
   const [params, setParams] = useSearchParams()
@@ -110,6 +111,7 @@ export function Dashboard({
                 controls={controls}
                 embedded={embedded}
                 puedeDetalles={puedeDetalles}
+                reportesCampania={reportesCampania}
                 revision={revision}
                 actualizar={actualizar}
               />

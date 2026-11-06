@@ -2,8 +2,7 @@ import { DetailHero, ManagementPageHeader, Skeleton, StatusBadge } from './Ui.js
 import { Link, NavLink, Navigate, useSearchParams, useNavigate } from 'react-router'
 import { Carga, useCarga } from './GestionUi.jsx'
 import { Trabajadores } from './Trabajadores.jsx'
-import { CultivosCosecha } from './CultivosCosecha.jsx'
-import { CosechaSelector } from './CosechaSelector.jsx'
+import { ConfigurarCampaniaActual } from './ConfigurarCampaniaActual.jsx'
 import { CampaniaCosecha } from './CampaniaCosecha.jsx'
 
 const titulos = {
@@ -240,9 +239,13 @@ export function Cosecha({
       />
     )
   }
+  if (tipo === 'ajustes') return <Navigate replace to={'/cosecha/configurar?' + new URLSearchParams({
+    ...(params.get('campania') ? { campania: params.get('campania') } : {}),
+    vista: 'configuracion', opcion: 'campania'
+  }).toString()} />
   if (tipo === 'configurar' && cultivos && contexto.permite('harvest.manage'))
     return (
-      <ConfiguradorCosecha
+      <ConfigurarCampaniaActual
         servicio={servicio}
         cultivos={cultivos}
         pendiente={pendiente}
@@ -285,13 +288,16 @@ export function Cosecha({
       'supervisores',
       'produccion',
       'rendimiento',
+      'bonos',
       'app',
-      'dispositivos'
+      'dispositivos',
+      'ajustes'
     ].includes(tipo)
   )
     return (
       <CampaniaCosecha
         servicio={servicio}
+        cultivos={cultivos}
         appCosecha={appCosecha}
         reportes={reportes}
         contexto={contexto}
@@ -325,24 +331,5 @@ export function Cosecha({
         <Detalle servicio={servicio} tipo={tipo} id={id} />
       </section>
     </>
-  )
-}
-
-function ConfiguradorCosecha({ servicio, cultivos, pendiente, onCreada }) {
-  const catalogo = useCarga(() => servicio.campanias(), [servicio])
-  return (
-    <div className="crop-setup-page">
-      <CosechaSelector
-        campanias={catalogo.datos ?? []}
-        pendiente={pendiente || catalogo.cargando || Boolean(catalogo.error)}
-      />
-      {catalogo.error && (
-        <p role="alert">
-          {catalogo.error.message}{' '}
-          <button onClick={catalogo.refrescar}>Reintentar campañas</button>
-        </p>
-      )}
-      <CultivosCosecha servicio={cultivos} pendiente={pendiente} onCreada={onCreada} />
-    </div>
   )
 }

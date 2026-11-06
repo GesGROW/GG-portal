@@ -14,6 +14,18 @@ function servicio() {
 }
 const campania = { id: 'A-camp', nombre: 'Campaña Arándano 2026', estado: 'ACTIVA' }
 describe('Reportes dentro de Cosecha', () => {
+  it('reemplaza una campaña de otra cuenta en la URL por la campaña autorizada actual', async () => {
+    const api = servicio()
+    render(<MemoryRouter initialEntries={['/cosecha/produccion?campania=empresa-anterior']}>
+      <CampaniaCosecha servicio={{ campanias: async () => [campania] }} reportes={api}
+        contexto={{ permite: (p) => ['harvest.view','reports.view'].includes(p) }} seccion="produccion" />
+    </MemoryRouter>)
+    expect(await screen.findByRole('article', { name: 'Total jabas' })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Campaña de cosecha' })).toHaveValue('A-camp')
+    expect(api.campania).toHaveBeenCalledWith(expect.objectContaining({ campaniaId: 'A-camp' }))
+    expect(screen.getByRole('link', { name: 'Rendimiento', exact: true })).toHaveAttribute('href', '/cosecha/rendimiento?campania=A-camp')
+    expect(screen.queryByText(/No hay una campaña disponible/)).not.toBeInTheDocument()
+  })
   it('producción presenta las métricas del servidor, filtra lotes y limpia una variedad incompatible', async () => {
     const api = servicio(),
       user = userEvent.setup()

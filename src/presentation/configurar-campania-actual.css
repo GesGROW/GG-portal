@@ -1,0 +1,19 @@
+/* El configurador reutiliza las pestañas y superficies del espacio de campaña. */
+.campaign-configuration-workspace > .cultivos-cosecha {
+  width: 100%;
+  margin-left: 0;
+}
+.campaign-configuration-workspace .campaign-body > .campaign-settings,
+.campaign-configuration-workspace .campaign-settings[aria-label='Bono por jabas adicionales'] {
+  margin-top: 0;
+}
+.campaign-configuration-workspace .campaign-body .campaign-settings {
+  max-width: none;
+}
+@media (max-width: 1023px) {
+  .crop-setup-page > .campaign-configuration-workspace {
+    width: 100%;
+    margin-left: 0;
+    max-width: none;
+  }
+}

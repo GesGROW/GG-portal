@@ -1,5 +1,6 @@
 import { crearEntitlements } from '@gesgrow/core/contexts/platform/index.js'
 import { SolicitudObsoleta } from '../ports/administracion.js'
+import { crearConfiguracionCampania } from './configuracionCampania.js'
 
 export const COLORES_CULTIVO = Object.freeze([
   '#F92D2D',
@@ -104,6 +105,8 @@ export function crearCultivosCosechaPortal({ puerto, scopePara, entitlements }) 
       const parametros = args.map((a) => (typeof a === 'function' ? a(c) : a))
       const r = await puerto[metodo](c.tenantId, ...parametros)
       if (!scope.vigente(c)) throw new SolicitudObsoleta()
+      if (['configuracionCampania', 'guardarConfiguracionCampania', 'bonoConfiguracion', 'guardarBono'].includes(metodo) && r?.tenantId !== c.tenantId)
+        throw new Error('La configuración no corresponde a la empresa autorizada.')
       return r
     } catch (e) {
       if (scope.vigente(c)) await scope.onError(e)
@@ -125,6 +128,22 @@ export function crearCultivosCosechaPortal({ puerto, scopePara, entitlements }) 
     )
   }
   return Object.freeze({
+    bonoConfiguracion: async (id) => {
+      const r = await ejecutar('bonoConfiguracion', id)
+      if (r?.campaniaId !== id) throw new Error('El bono no corresponde a la campaña solicitada.')
+      return r
+    },
+    guardarBono: async (id, d) => {
+      if (!id || typeof d?.habilitado !== 'boolean' || !Number.isSafeInteger(d.umbral) ||
+          d.umbral < 0 || d.umbral > 1000000 || !Number.isFinite(d.monto) || d.monto <= 0 ||
+          d.monto > 1000000 || Math.abs(d.monto * 100 - Math.round(d.monto * 100)) > 1e-6)
+        throw new Error('Ingresa un umbral entero y un monto positivo con hasta dos decimales.')
+      const r = await ejecutar('guardarBono', id, { habilitado: d.habilitado, umbral: d.umbral,
+        monto: d.monto, revision: d.revision, hoy: d.hoy })
+      if (r?.campaniaId !== id) throw new Error('El bono no corresponde a la campaña solicitada.')
+      return r
+    },
+    ...crearConfiguracionCampania({ ejecutar, operacion }),
     catalogoCultivos: () => ejecutar('catalogoCultivos'),
     crearCultivo: (d) => operacion('crearCultivo', cultivo(d)),
     crearCampania: (id, d) => operacion('crearCampania', campania(d), id),

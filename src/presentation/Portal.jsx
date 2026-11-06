@@ -111,7 +111,7 @@ function ContenidoProtegido({ portal, estado, path }) {
   const vistaCarga =
     path === '/'
       ? 'home'
-      : /\/(produccion|rendimiento)(?:\/|$)/.test(path) || path.startsWith('/reportes')
+      : /\/(produccion|rendimiento|bonos)(?:\/|$)/.test(path) || path.startsWith('/reportes')
         ? 'report'
         : /\/cosecha(?:\/generar)?$/.test(path)
           ? 'generation'
@@ -128,7 +128,7 @@ function ContenidoProtegido({ portal, estado, path }) {
       <UsuariosAccesosSkeleton pagina />
     ) : path === '/' ? (
       <HomeSkeleton page owner={estado.contexto?.permite('company.manage')} />
-    ) : /^\/cosecha\/(generar|lotes|asignaciones|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
+    ) : /^\/cosecha\/(generar|lotes|asignaciones|cosechadores|jaberos|supervisores|produccion|rendimiento|bonos|app|dispositivos)$/.test(
         path
       ) ? (
       <CampaignPageSkeleton seccion={path.split('/')[2]} />
@@ -298,7 +298,7 @@ function Layout({ portal, estado }) {
   const path = location.pathname.replace(/\/$/, '') || '/'
   const cosechaFigma =
     path === '/cosecha' ||
-    /^\/cosecha\/(trabajadores|registros|tickets|generar|lotes|asignaciones|configurar|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
+    /^\/cosecha\/(trabajadores|registros|tickets|generar|lotes|asignaciones|configurar|ajustes|cosechadores|jaberos|supervisores|produccion|rendimiento|bonos|app|dispositivos)$/.test(
       path
     )
   const usuariosFigma = /^\/configuracion\/(usuarios(?:\/[^/]+)?|invitaciones)$/.test(
@@ -307,7 +307,7 @@ function Layout({ portal, estado }) {
   const suscripcionPortal = path === '/configuracion/suscripcion'
   const campaniaFigma =
     (portal.cultivosCosecha || /\/cosecha\/(app|dispositivos)$/.test(path)) &&
-    /^\/cosecha\/(generar|lotes|asignaciones|tickets|cosechadores|jaberos|supervisores|produccion|rendimiento|app|dispositivos)$/.test(
+    /^\/cosecha\/(generar|lotes|asignaciones|tickets|ajustes|cosechadores|jaberos|supervisores|produccion|rendimiento|bonos|app|dispositivos)$/.test(
       path
     )
   const modulosOwner = path === '/modulos'

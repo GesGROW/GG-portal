@@ -2,7 +2,7 @@ import modulo from '../assets/supervisor/module.svg'
 import flecha from '../assets/supervisor/arrow.svg'
 import cosecha from '../assets/supervisor/harvest.svg'
 
-export function SupervisorSetupEmpty({ actualizar }) {
+export function SupervisorSetupEmpty() {
   return (
     <div className="supervisor-setup-empty">
       <div className="supervisor-setup-message" role="status">
@@ -18,9 +18,6 @@ export function SupervisorSetupEmpty({ actualizar }) {
           comenzar con la cosecha
         </p>
       </div>
-      <button type="button" className="supervisor-setup-refresh" onClick={actualizar}>
-        Actualizar campañas
-      </button>
     </div>
   )
 }

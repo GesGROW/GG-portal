@@ -30,7 +30,7 @@ describe('Integración de cultivos con Cosecha', () => {
     await screen.findByLabelText('Nombre del cultivo')
     expect(screen.getByRole('combobox', { name: 'Campaña de cosecha' })).toHaveValue('')
     expect(
-      screen.getByRole('option', { name: 'Agregar campaña / cultivo' })
+      screen.getByRole('option', { name: 'Configurar campaña actual' })
     ).toBeInTheDocument()
     await waitFor(() =>
       expect(portal.estadoActual().ruta.path).toBe('/cosecha/configurar')

@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { nombreCosechadorVisible } from '@gesgrow/core/contexts/workforce/index.js'
+import { nombreCosechadorVisible } from '../application/trabajadores.js'
 import { HomeIcon, homeLaurel } from './HomeAssets.jsx'
 import { SkeletonBlock } from './Skeleton.jsx'
 import { numero } from './formatoNumero.js'

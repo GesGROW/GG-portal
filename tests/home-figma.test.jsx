@@ -6,6 +6,8 @@ import { Portal } from '../src/presentation/Portal.jsx'
 import { crearPortal } from '../src/application/crearPortal.js'
 import { fakePorts } from './support/fakePorts.js'
 import { fakeReportes } from './support/fakeReportes.js'
+import { fakeHarvestAdmin } from './support/fakeHarvestAdmin.js'
+import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 
 function mount(configure = () => {}, path = '/') {
   const ports = fakePorts({ autenticado: true })
@@ -74,7 +76,7 @@ describe('Home desde Figma con datos de la campaña', () => {
     )
     expect(screen.getByRole('link', { name: 'Ver ranking completo' })).toHaveAttribute(
       'href',
-      '/reportes/ranking?campania=A-camp'
+      '/cosecha/rendimiento?campania=A-camp'
     )
     expect(
       screen.getByRole('link', { name: 'Ver ranking completo' })
@@ -130,16 +132,22 @@ describe('Home desde Figma con datos de la campaña', () => {
   })
 
   it('conserva la campaña elegida al abrir el ranking', async () => {
-    mount()
+    mount((ports) => {
+      fakeHarvestAdmin(ports); fakeCultivosCosecha(ports, { propio: true })
+      ports.harvestAdmin.campanias = async () => [
+        { id: 'A-camp', nombre: 'Actual', estado: 'ACTIVA', cutover: null },
+        { id: 'A-cerrada', nombre: 'Anterior', estado: 'CERRADA', cutover: null }
+      ]
+    })
     await screen.findByText('Ana A')
     const user = userEvent.setup()
     await user.selectOptions(screen.getByLabelText('Campaña'), 'A-cerrada')
     await screen.findByText('43')
     const ranking = screen.getByRole('link', { name: 'Ver ranking completo' })
-    expect(ranking).toHaveAttribute('href', '/reportes/ranking?campania=A-cerrada')
+    expect(ranking).toHaveAttribute('href', '/cosecha/rendimiento?campania=A-cerrada')
     await user.click(ranking)
-    await screen.findByRole('heading', { name: 'Ranking de cosechadores', exact: true })
-    expect(await screen.findByLabelText('Campaña')).toHaveValue('A-cerrada')
+    await screen.findByRole('heading', { name: 'Rendimiento', exact: true })
+    expect(await screen.findByLabelText('Campaña de cosecha')).toHaveValue('A-cerrada')
   })
 
   it('una campaña ajena no llega a consultar producción, ranking ni lotes', async () => {

@@ -6,7 +6,7 @@ Implementado a partir de los dos PNG aportados por el usuario: estado inicial y 
 
 Los usuarios del módulo sin `company.manage` utilizan la variante de Home sin selector de módulos. Con HARVEST habilitado y `reports.view` consultan el resumen de Cosecha. El owner conserva su selector y la administración de la organización. Los permisos siguen verificándose en Application y servidor; el cambio de presentación no concede contratación ni gestión de cuentas.
 
-Sin campañas autorizadas, el resumen muestra «Agrega un cultivo para comenzar con la cosecha», con los tres iconos proporcionados por el usuario. Una lista vacía de campañas es la señal disponible en el contrato actual: no se deduce un inventario privado de cultivos a partir del catálogo global. Una campaña con producción cero conserva sus tarjetas y ceros; los errores de consulta no se presentan como un inicio sin datos. El alta de cultivos/campañas pertenece a la sección del módulo, fuera de esta entrega de Home.
+Sin campañas autorizadas, el resumen muestra «Agrega un cultivo para comenzar con la cosecha», con los tres iconos proporcionados por el usuario. El estado inicial no muestra un botón de actualización. Una lista vacía de campañas es la señal disponible en el contrato actual: no se deduce un inventario privado de cultivos a partir del catálogo global. Una campaña con producción cero conserva sus tarjetas y ceros; los errores de consulta no se presentan como un inicio sin datos. El alta de cultivos/campañas pertenece a la sección del módulo, fuera de esta entrega de Home.
 
 Con campañas se reutilizan producción, primer puesto, lista de campañas y las cinco métricas. La campaña seleccionada permanece en la URL; cambiarla actualiza las tres consultas y mantiene el foco. Una campaña ajena no dispara consultas de métricas. Los enlaces de producción diaria y ranking respetan la disponibilidad global de reportes existente.
 
@@ -30,7 +30,7 @@ En escritorio de 1920 px, el estado inicial ocupa x=288, y=619, 1403 × 376. Con
 
 ## Validación
 
-Pruebas de Home sin campañas, datos reales, producción cero, actualización tras aparecer una campaña, cambio de campaña y foco, campaña ajena, fallo de red, ausencia de contratación o permiso, revocación y respuestas tardías al cambiar de empresa. También se ejecutaron las regresiones de Home del owner y reportes.
+Pruebas de Home sin campañas, datos reales, producción cero, cambio de campaña y foco, campaña ajena, fallo de red, ausencia de contratación o permiso, revocación y respuestas tardías al cambiar de empresa. También se ejecutaron las regresiones de Home del owner y reportes.
 
 Ambos estados se revisaron en navegador en 1920, 1440, 1024, 768, 390 y 320 px, sin desbordamiento horizontal. Se verificaron recursos locales completos y geometría de los iconos. No se necesitan nuevas migraciones ni endpoints.
 

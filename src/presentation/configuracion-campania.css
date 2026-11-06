@@ -1,0 +1,72 @@
+.campaign-settings {
+  --settings-ink: #022f2a;
+  color: var(--settings-ink);
+  color-scheme: light;
+  font: inherit;
+  max-width: 1080px;
+}
+.campaign-settings-heading { display: flex; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.campaign-settings[aria-label='Bono por jabas adicionales'] { margin-top: 40px; }
+.campaign-settings-heading h2 { margin: 0 0 8px; font-size: 28px; font-weight: 600; line-height: 1.2; }
+.campaign-settings fieldset { min-width: 0; margin: 0 0 28px; padding: 24px 0 0; border: 0; }
+.campaign-settings fieldset:disabled {
+  background: transparent;
+  color: var(--settings-ink);
+  opacity: 1;
+}
+.campaign-settings input:disabled {
+  background: #e3e6d8;
+  color: #46534b;
+  opacity: 1;
+  -webkit-text-fill-color: #46534b;
+}
+.campaign-settings-history { margin-top: 32px; }
+.campaign-settings legend { padding: 0 16px 0 0; color: inherit; font-size: 21px; font-weight: 600; }
+.campaign-settings label { display: grid; gap: 8px; color: inherit; font-size: 16px; font-weight: 500; }
+.campaign-settings :is(input, button) { font: inherit; }
+.campaign-settings input:not([type='checkbox']) { width: 100%; min-width: 0; height: 48px; padding: 10px 14px; border: 1px solid #87998d; border-radius: 12px; background: #fff; color: var(--settings-ink); box-shadow: none; }
+.campaign-settings input[readonly] { background: #e3e6d8; color: #46534b; }
+.campaign-settings input[type='checkbox'] { width: 19px; height: 19px; margin: 0; accent-color: #14800f; flex: none; }
+.campaign-settings :is(button, input):focus-visible { outline: 2px solid var(--settings-ink); outline-offset: 3px; }
+.campaign-settings ::selection { background: #aad92d; color: var(--settings-ink); }
+.campaign-settings-basics { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
+.campaign-settings-help { margin: 8px 0 16px; color: #52635a; font-size: 15px; line-height: 1.5; max-width: 72ch; }
+.campaign-settings-varieties { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.campaign-settings-variety small { display: block; margin-top: 8px; color: #52635a; font-size: 13px; }
+.campaign-settings button { min-height: 44px; border-radius: 24px; box-shadow: none; letter-spacing: normal; text-transform: none; cursor: pointer; }
+.campaign-settings-add { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 20px; border: 1px solid #87998d; background: transparent; color: var(--settings-ink); margin-top: 20px; }
+.campaign-settings-add > span { font-size: 24px; line-height: 1; }
+.campaign-settings-lots { display: grid; gap: 0; }
+.campaign-settings-lot { padding: 20px 0; border: 0; }
+.campaign-settings-lot:first-child { padding-top: 0; }
+.campaign-settings-lot-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; }
+.campaign-settings .campaign-settings-check { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; cursor: pointer; }
+.campaign-settings-choices { display: flex; flex-wrap: wrap; column-gap: 28px; row-gap: 0; margin-top: 12px; }
+.campaign-settings-choices label { overflow-wrap: anywhere; }
+.campaign-settings-text { padding: 6px 0; border: 0; background: transparent; color: var(--settings-ink); text-decoration: underline; text-underline-offset: 4px; }
+.campaign-settings-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+.campaign-settings-actions > span { flex: 1 1 200px; color: #52635a; font-size: 14px; }
+.campaign-settings-save, .campaign-settings-discard { padding: 12px 24px; border: 0; font-weight: 600 !important; }
+.campaign-settings-save { background: #aad92d; color: var(--settings-ink); }
+.campaign-settings-discard { background: #e0e3d3; color: var(--settings-ink); }
+.campaign-settings button:hover:not(:disabled) { background: #d3ddbc; color: var(--settings-ink); }
+.campaign-settings .campaign-settings-save:hover:not(:disabled) { background: #b6e53c; }
+.campaign-settings button:active:not(:disabled) { background: #c1d0a6; }
+.portal-layout.owner-layout .campaign-settings button:disabled,
+.campaign-settings button:disabled {
+  background: #e3e6d8;
+  color: #87958c;
+  border-color: transparent;
+  opacity: 1;
+  cursor: default;
+}
+.campaign-settings-error { color: #a51919; margin: 16px 0; }
+.campaign-settings-error p { color: inherit; }
+@media (max-width: 1199px) { .campaign-settings-basics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .campaign-settings-name { grid-column: 1 / -1; } }
+@media (max-width: 640px) {
+  .campaign-settings-heading h2 { font-size: 24px; }
+  .campaign-settings-basics, .campaign-settings-varieties { grid-template-columns: minmax(0, 1fr); }
+  .campaign-settings-lot-heading { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .campaign-settings-actions { flex-direction: column; align-items: stretch; }
+  .campaign-settings-actions > span { flex: initial; }
+}

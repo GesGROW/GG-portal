@@ -6,6 +6,8 @@ import { Portal } from '../src/presentation/Portal.jsx'
 import { crearPortal } from '../src/application/crearPortal.js'
 import { fakePorts } from './support/fakePorts.js'
 import { fakeReportes } from './support/fakeReportes.js'
+import { fakeHarvestAdmin } from './support/fakeHarvestAdmin.js'
+import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 
 const supervisor = ['harvest.view', 'harvest.manage', 'harvest.operate', 'reports.view']
 function montar({ opciones = {}, lista, cero = false, path = '/' } = {}) {
@@ -29,6 +31,20 @@ function montar({ opciones = {}, lista, cero = false, path = '/' } = {}) {
 }
 const mensaje = /Agrega un cultivo para.*comenzar con la cosecha/
 describe('Home de Supervisor de Cosecha', () => {
+  for (const [enlace, destino, titulo] of [
+    ['Ver producción diaria', 'produccion', 'Producción'],
+    ['Ver ranking completo', 'rendimiento', 'Rendimiento']
+  ]) it(`${enlace} abre el reporte actual de la campaña`, async () => {
+    const ports = fakePorts({ autenticado: true, permisos: { A: supervisor } })
+    fakeReportes(ports); fakeHarvestAdmin(ports); fakeCultivosCosecha(ports, { propio: true })
+    const portal = crearPortal(ports), user = userEvent.setup()
+    render(<MemoryRouter><Portal portal={portal} /></MemoryRouter>)
+    const link = await screen.findByRole('link', { name: enlace })
+    expect(link).toHaveAttribute('href', `/cosecha/${destino}?campania=A-camp`)
+    await user.click(link)
+    expect(await screen.findByRole('heading', { name: titulo, exact: true })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Campaña de cosecha' })).toHaveValue('A-camp')
+  })
   it('sin campañas muestra el inicio de Cosecha y no consulta métricas ni permite comprar módulos', async () => {
     const { reportes } = montar({ lista: async () => [] })
     expect(await screen.findByText(mensaje)).toBeVisible()
@@ -70,17 +86,6 @@ describe('Home de Supervisor de Cosecha', () => {
     expect(screen.getByText('Jaberos').nextElementSibling).toHaveTextContent('0')
     expect(screen.queryByText(mensaje)).not.toBeInTheDocument()
     expect(screen.getByRole('listbox', { name: 'Campaña' })).toBeInTheDocument()
-  })
-  it('actualizar el estado inicial descubre una nueva campaña y carga sus reportes', async () => {
-    const { ports, user } = montar({ lista: async () => [] })
-    await screen.findByText(mensaje)
-    ports.reportesHarvest.campanias = async () => [
-      { id: 'A-camp', nombre: 'Nueva campaña', estado: 'ACTIVA' }
-    ]
-    await user.click(screen.getByRole('button', { name: 'Actualizar campañas' }))
-    await screen.findByText('Ana A')
-    expect(screen.queryByText(mensaje)).not.toBeInTheDocument()
-    expect(screen.getByRole('option', { name: 'Nueva campaña' })).toBeInTheDocument()
   })
   it('cambiar de campaña actualiza producción, ranking y lotes conservando el foco', async () => {
     const { user, reportes } = montar()

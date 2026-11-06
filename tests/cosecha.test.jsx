@@ -79,7 +79,7 @@ describe('Cosecha administrativa del Portal', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Menú de usuario' }))
     await user.selectOptions(screen.getByLabelText('Empresa activa'), 'B')
-    await screen.findByRole('heading', { name: 'Bienvenido a GesGROW' })
+    await waitFor(() => expect(screen.queryByText('TK-A-LIBRE')).not.toBeInTheDocument())
     await user.click(screen.getByRole('button', { name: 'Módulos' }))
     await user.click(screen.getByRole('link', { name: 'Cosecha', exact: true }))
     await screen.findByRole('heading', { name: 'Lotes de tickets generados' })

@@ -2,6 +2,8 @@ import { crearGestionPersonal } from '@gesgrow/core/contexts/workforce/index.js'
 import { crearEntitlements } from '@gesgrow/core/contexts/platform/index.js'
 import { SolicitudObsoleta } from '../ports/administracion.js'
 
+export { nombreCosechadorVisible } from '@gesgrow/core/contexts/workforce/index.js'
+
 export function crearTrabajadoresPortal({ puerto, scope, entitlements }) {
   if (!puerto) return null
   const gestion = crearGestionPersonal({ workforce: puerto })

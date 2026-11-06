@@ -90,7 +90,7 @@ export function AppCosechaSkeleton({ dispositivos = false }) {
 export function CampaignPageSkeleton({ seccion }) {
   const workers = ['cosechadores', 'jaberos', 'supervisores'].includes(seccion)
   const app = ['app', 'dispositivos'].includes(seccion)
-  const report = ['produccion', 'rendimiento'].includes(seccion)
+  const report = ['produccion', 'rendimiento', 'bonos'].includes(seccion)
   return (
     <div
       className="harvest-campaign-page loading-state skeleton campaign-content-skeleton"

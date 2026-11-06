@@ -1,0 +1,51 @@
+/* Layout only: colors, controls, typography and tables inherit the campaign design. */
+.campaign-bonos-summary { min-width: 720px; }
+.campaign-bonos-detail { min-width: 1080px; }
+.campaign-bonos-detail .rendimiento-persona,
+.campaign-bonos-summary .rendimiento-persona {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.campaign-bonos-detail :is(th, td) { font-variant-numeric: tabular-nums; }
+.campaign-bonos-detail .rendimiento-persona-nombre { max-width: 100%; }
+.campaign-bonos-detail :is(th, td):first-child { white-space: nowrap; }
+.campaign-bonus-report .campaign-report-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  margin-inline: 0;
+}
+.campaign-bonus-report .campaign-report-metrics article { height: auto; min-height: 128px; }
+.campaign-bonus-report .campaign-report-metrics strong { font-size: clamp(28px, 3vw, 44px); }
+
+.bonos-dia { margin-bottom: 32px; color: #022f2a; }
+.bonos-dia .rendimiento-section-heading h4 { margin: 0; font-size: 20px; font-weight: 500; }
+.bonos-dia-selector { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 16px; }
+.bonos-dia-selector input {
+  min-height: 46px; padding: 10px 18px; border: 0; border-radius: 30px;
+  background: #d9d9d9; color: #022f2a; font: inherit; color-scheme: light;
+}
+.bonos-dia-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 20px; font-size: 14px; }
+.bonos-dia-legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.bonos-dia-legend i { display: inline-block; width: 18px; height: 14px; }
+.bonos-dia-base {
+  background: repeating-linear-gradient(135deg, #e5efdf 0 4px, #137d15 4px 5px, #e5efdf 5px 7px);
+}
+.bonos-dia-extra { background: #c59a32; }
+.bonos-dia-legend .bonos-dia-umbral { height: 0; width: 24px; border-top: 2px dashed #022f2a; }
+.bonos-dia-scroll { overflow-x: auto; min-width: 0; scrollbar-color: #829896 #eff0e2; }
+.bonos-dia-scroll svg { display: block; max-width: none; font-family: inherit; }
+.bonos-dia-scroll text { fill: #526e67; font-size: 12px; }
+.bonos-dia-scroll .bonos-dia-value { fill: #022f2a; font-weight: 600; font-size: 14px; }
+.bonos-dia-bar { cursor: pointer; outline: none; }
+.bonos-dia-target { fill: transparent; stroke: transparent; }
+.bonos-dia-bar:focus-visible .bonos-dia-target { stroke: #022f2a; stroke-width: 2; }
+.bonos-dia-threshold { pointer-events: none; }
+.bonos-dia-threshold line { stroke: #022f2a; stroke-width: 2; stroke-dasharray: 7 5; }
+.bonos-dia-threshold text { fill: #022f2a; font-weight: 600; paint-order: stroke; stroke: white; stroke-width: 4px; }
+.bonos-dia-selection { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 0; font-size: 14px; color: #022f2a; }
+.bonos-dia-selector input:focus-visible,
+.bonos-dia-scroll:focus-visible { outline: 2px solid #022f2a; outline-offset: 3px; }
+@media (max-width: 640px) {
+  .bonos-dia-selector { width: 100%; justify-content: space-between; }
+  .bonos-dia-chart { padding: 12px; }
+}

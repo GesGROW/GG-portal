@@ -7,6 +7,7 @@ export function CosechaSelector({
   campanias = [],
   seleccion = '',
   pendiente = false,
+  configurando = false,
   destino = '/cosecha/generar'
 }) {
   const navigate = useNavigate()
@@ -17,12 +18,12 @@ export function CosechaSelector({
         <span className="sr-only">Campaña de cosecha</span>
         <Select
           aria-label="Campaña de cosecha"
-          value={seleccion}
+          value={configurando ? '' : seleccion}
           disabled={pendiente}
           onChange={(e) =>
             navigate(
               e.target.value === ''
-                ? '/cosecha/configurar'
+                ? '/cosecha/configurar' + (seleccion ? '?campania=' + encodeURIComponent(seleccion) : '')
                 : `${destino}?campania=${encodeURIComponent(e.target.value)}`
             )
           }
@@ -33,7 +34,7 @@ export function CosechaSelector({
               {c.estado === 'ACTIVA' ? ' (actual)' : ''}
             </option>
           ))}
-          <option value="">Agregar campaña / cultivo</option>
+          <option value="">Configurar campaña actual</option>
         </Select>
         <OwnerIcon name="chevron" />
       </label>

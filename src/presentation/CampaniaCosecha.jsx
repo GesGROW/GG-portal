@@ -5,6 +5,7 @@ import { Link, Navigate, useSearchParams } from 'react-router'
 import { useCarga, Carga } from './GestionUi.jsx'
 import { CosechaSelector } from './CosechaSelector.jsx'
 import { ReportesCampania, ReportIcon } from './ReportesCampania.jsx'
+import { BonosCampania } from './BonosCampania.jsx'
 import { TicketsCosecha } from './TicketsCosecha.jsx'
 import { LotesCampania } from './LotesCampania.jsx'
 import {
@@ -26,6 +27,7 @@ const AppCosecha = lazy(() =>
 
 function CampaignIcon({ name }) {
   const paths = {
+    settings: 'm9 3-1 3-3 1-2 3 2 2v3l3 2 1 4h6l1-4 3-2v-3l2-2-2-3-3-1-1-3Z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
     tickets:
       'M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z M13 5v2 M13 17v2 M13 11v2',
     workers:
@@ -65,6 +67,7 @@ function CampaignIcon({ name }) {
 
 export function CampaniaCosecha({
   servicio,
+  cultivos,
   appCosecha,
   reportes,
   contexto,
@@ -81,7 +84,7 @@ export function CampaniaCosecha({
     [servicio, consultaCampanias]
   )
   const campania =
-    params.get('campania') ||
+    catalogo.datos?.find((c) => c.id === params.get('campania'))?.id ||
     (catalogo.datos?.find((c) => c.estado === 'ACTIVA') ?? catalogo.datos?.[0])?.id ||
     ''
   useEffect(() => {
@@ -91,7 +94,7 @@ export function CampaniaCosecha({
       catalogo.cargando ||
       catalogo.error ||
       !campania ||
-      params.get('campania')
+      params.get('campania') === campania
     )
       return
     const siguientes = new URLSearchParams(params)
@@ -101,7 +104,7 @@ export function CampaniaCosecha({
   const query = campania ? `?campania=${encodeURIComponent(campania)}` : ''
   const generar = contexto.permite('harvest.manage')
   const trabajadores = SECCIONES_TRABAJADORES.find((t) => t.id === seccion)
-  const esReporte = ['produccion', 'rendimiento'].includes(seccion)
+  const esReporte = ['produccion', 'rendimiento', 'bonos'].includes(seccion)
   const subtabs = esApp
     ? [
         { id: 'app', label: 'Instalar y vincular la app con el PDA', icon: 'qr' },
@@ -112,7 +115,8 @@ export function CampaniaCosecha({
     : esReporte
       ? [
           { id: 'produccion', label: 'Producción', icon: 'production' },
-          { id: 'rendimiento', label: 'Rendimiento', icon: 'ranking' }
+          { id: 'rendimiento', label: 'Rendimiento', icon: 'ranking' },
+          { id: 'bonos', label: 'Bonos', icon: 'bonus' }
         ]
       : trabajadores
         ? SECCIONES_TRABAJADORES
@@ -297,6 +301,7 @@ export function CampaniaCosecha({
                       cultivo.
                     </p>
                   )
+                if (seccion === 'bonos') return <BonosCampania key={elegida.id} servicio={reportes} campania={elegida} />
                 if (esReporte)
                   return (
                     <ReportesCampania
