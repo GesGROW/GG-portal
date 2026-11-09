@@ -2,7 +2,6 @@ import { crearReportesHarvest } from '@gesgrow/core/contexts/harvest/index.js'
 import { crearEntitlements } from '@gesgrow/core/contexts/platform/index.js'
 import { SolicitudObsoleta } from '../ports/administracion.js'
 import { serializarCsv } from '../ports/exportacion.js'
-import { tablaTareo } from './tareo.js'
 
 const congelar = (o) => {
   if (o && typeof o === 'object') {
@@ -34,26 +33,6 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
     }
   }
   return Object.freeze({
-    descargarTareo: f => ejecutar(async c => {
-      const fecha = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
-        Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v
-      if (!f?.campaniaId || !fecha(f.desde) || !fecha(f.hasta) || f.desde > f.hasta)
-        throw new Error('Selecciona un período válido para descargar el tareo.')
-      const r = await puerto.tareoRango(c.tenantId, { campaniaId: f.campaniaId,
-        desde: f.desde, hasta: f.hasta, trabajadorId: f.trabajadorId || null })
-      if (r?.tenantId !== c.tenantId || r?.campaniaId !== f.campaniaId || r?.tipo !== 'TAREO' ||
-          r?.datos?.desde !== f.desde || r?.datos?.hasta !== f.hasta || !Array.isArray(r?.datos?.filas))
-        throw new Error('Respuesta de tareo inválida.')
-      if ((await servicio.validar(c.tenantId, f.campaniaId)) !== true)
-        throw new Error('Exportación no autorizada.')
-      const tabla = tablaTareo(r.datos)
-      if (!exportacion) throw new Error('Exportación no disponible.')
-      if (!exportacion.serializarTareo) throw new Error('Exportación de tareo no disponible.')
-      const contenido = await exportacion.serializarTareo(tabla)
-      vigente(c)
-      return exportacion.guardar({ nombre: `tareo-${f.desde}-${f.hasta}.xlsx`,
-        mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', contenido })
-    }),
     ...(puerto.inicio ? { inicio: f => ejecutar(async c => {
       if (!f?.campaniaId || !['DASHBOARD','RANKING'].includes(f.tipo)) throw new Error('Reporte de inicio inválido.')
       if (f.recipiente && !['GENERAL','JABA','JARRA'].includes(f.recipiente)) throw new Error('Recipiente inválido.')

@@ -13,7 +13,6 @@ import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 import { impresionTickets } from '../src/infrastructure/impresionTickets.js'
 import { fakePda } from './support/fakePda.js'
 import { fakeBonos } from './support/fakeBonos.js'
-import { exportacionCsv } from '../src/infrastructure/exportacionCsv.js'
 import '@fontsource-variable/inter'
 import '../src/presentation/styles.css'
 const params = new URLSearchParams(location.search)
@@ -166,12 +165,6 @@ if (params.has('owner-modules')) {
 if (params.has('bonos')) {
   const bonos = fakeBonos(puertos, { mixto: params.has('recipientes') })
   if (params.has('bono-bloqueado')) bonos.bloquear()
-}
-if (params.has('tareo')) {
-  const filas = [{ trabajadorId: 'p1', codigoTrabajador: '000123', nombre: 'Pérez Ana', periodo: '202611-45',
-    loteId: 'l1', lote: 'Lote 02', variedadId: 'v1', variedad: 'Ventura', actividad: null, labor: '101333', consumidor: 'TR011003' }]
-  puertos.exportacion = exportacionCsv
-  puertos.reportesHarvest.tareoRango = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, hasta: f.hasta, filas } })
 }
 if (params.has('home-recipientes')) {
   puertos.reportesHarvest.inicio = async (t, f) => {

@@ -77,7 +77,6 @@ describe('Trabajadores dentro de una campaña', () => {
       expect(within(panel).getByLabelText('DNI')).toHaveAttribute('readonly')
       await user.clear(within(panel).getByLabelText('Nombres'))
       await user.type(within(panel).getByLabelText('Nombres'), 'Ana')
-      await user.type(within(panel).getByLabelText('Código de trabajador'), '000007')
       await user.selectOptions(
         within(panel).getByLabelText('Estado en esta campaña'),
         'true'
@@ -94,7 +93,6 @@ describe('Trabajadores dentro de una campaña', () => {
           dni: persona.dni,
           nombres: 'Ana',
           apellidos: 'De la Cruz Rojas',
-          codigoExterno: '000007',
           activo: true
         }
       )

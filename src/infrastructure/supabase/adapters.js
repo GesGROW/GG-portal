@@ -48,7 +48,6 @@ export function crearPuertosSupabase(cliente) {
           'harvest_admin_tickets_lote',
           'harvest_admin_trabajador_campania',
           'harvest_admin_editar_trabajador_campania',
-          'harvest_admin_editar_trabajador_con_codigo',
           'harvest_admin_previsualizar',
           'harvest_admin_confirmar_impresion',
           'harvest_admin_reservar_impresion',

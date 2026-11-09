@@ -105,7 +105,7 @@ export function crearCultivosCosechaPortal({ puerto, scopePara, entitlements }) 
       const parametros = args.map((a) => (typeof a === 'function' ? a(c) : a))
       const r = await puerto[metodo](c.tenantId, ...parametros)
       if (!scope.vigente(c)) throw new SolicitudObsoleta()
-      if (['configuracionCampania', 'guardarConfiguracionCampania', 'bonoConfiguracion', 'guardarBono', 'consumidoresCampania', 'guardarConsumidoresCampania'].includes(metodo) && r?.tenantId !== c.tenantId)
+      if (['configuracionCampania', 'guardarConfiguracionCampania', 'bonoConfiguracion', 'guardarBono'].includes(metodo) && r?.tenantId !== c.tenantId)
         throw new Error('La configuración no corresponde a la empresa autorizada.')
       return r
     } catch (e) {
@@ -128,18 +128,6 @@ export function crearCultivosCosechaPortal({ puerto, scopePara, entitlements }) 
     )
   }
   return Object.freeze({
-    ...(puerto.consumidoresCampania ? {
-      consumidoresCampania: async id => {
-        const r = await ejecutar('consumidoresCampania', id)
-        if (r?.campaniaId !== id || !Array.isArray(r.catalogo) || !Array.isArray(r.filas)) throw new Error('Correspondencias de otra campaña.')
-        return r
-      },
-      guardarConsumidoresCampania: async (id, d) => {
-        const r = await ejecutar('guardarConsumidoresCampania', id, d)
-        if (r?.campaniaId !== id) throw new Error('Correspondencias de otra campaña.')
-        return r
-      }
-    } : {}),
     bonoConfiguracion: async (id) => {
       const r = await ejecutar('bonoConfiguracion', id)
       if (r?.campaniaId !== id) throw new Error('El bono no corresponde a la campaña solicitada.')
