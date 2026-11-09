@@ -64,13 +64,3 @@
   .bonos-dia-chart { padding: 12px; }
 }
 .tareo-exportacion { margin-block: 16px 28px; }
-.tareo-editor { margin-top: 24px; }
-.tareo-editor p { max-width: 75ch; }
-.tareo-campos, .tareo-acciones { display: flex; flex-wrap: wrap; gap: 16px; margin-block: 16px; }
-.tareo-campos label, .tareo-padron { display: grid; gap: 8px; }
-.tareo-padron { margin-block: 20px; }
-.tareo-editor input { min-height: 44px; padding: 8px 12px; border: 1px solid #829896; border-radius: 6px; background: #fff; color: #022f2a; font: inherit; }
-.tareo-editor td input { width: 150px; }
-.tareo-editor input:focus-visible { outline: 2px solid #022f2a; outline-offset: 2px; }
-.tareo-editor button:disabled { opacity: .55; cursor: not-allowed; }
-@media (max-width: 600px) { .tareo-campos > label { width: 100%; } .tareo-padron input { max-width: 100%; } }

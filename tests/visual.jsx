@@ -168,15 +168,10 @@ if (params.has('bonos')) {
   if (params.has('bono-bloqueado')) bonos.bloquear()
 }
 if (params.has('tareo')) {
-  let filas = [{ trabajadorId: 'p1', codigoTrabajador: '000123', dni: '12345678', nombre: 'Pérez Ana',
-    loteId: 'l1', lote: 'Lote 02', variedadId: 'v1', variedad: 'Ventura', actividad: '004', labor: '004041', consumidor: 'TR011003' }]
+  const filas = [{ trabajadorId: 'p1', codigoTrabajador: '000123', nombre: 'Pérez Ana', periodo: '202611-45',
+    loteId: 'l1', lote: 'Lote 02', variedadId: 'v1', variedad: 'Ventura', actividad: null, labor: '101333', consumidor: 'TR011003' }]
   puertos.exportacion = exportacionCsv
-  puertos.reportesHarvest.tareo = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, filas } })
-  puertos.reportesHarvest.guardarTareo = async (_, c, d) => {
-    filas = filas.map(r => ({ ...r, codigoTrabajador: d.trabajadores.find(t => t.id === r.trabajadorId)?.codigo ?? r.codigoTrabajador,
-      ...d.imputaciones.find(i => i.loteId === r.loteId && i.variedadId === r.variedadId) }))
-    return { ok: true }
-  }
+  puertos.reportesHarvest.tareoRango = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, hasta: f.hasta, filas } })
 }
 if (params.has('home-recipientes')) {
   puertos.reportesHarvest.inicio = async (t, f) => {

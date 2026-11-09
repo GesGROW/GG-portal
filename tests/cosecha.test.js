@@ -127,7 +127,7 @@ test('ficha de campaña usa solo HARVEST; edición limita datos y exige harvest.
     'A-camp',
     'COSECHADOR',
     'r1',
-    { dni: '12345678', nombres: 'Ana', apellidos: 'Rojas', activo: true }
+    { dni: '12345678', nombres: 'Ana', apellidos: 'Rojas', codigoExterno: '', activo: true }
   ])
   await assert.rejects(
     app.cosecha.editarTrabajadorCampania('A-camp', 'COSECHADOR', 'r1', {
@@ -182,7 +182,7 @@ test('la ficha descarta una respuesta después de cambiar de empresa y el adapte
   })
   assert.deepEqual(calls, [
     [
-      'harvest_admin_editar_trabajador_campania',
+      'harvest_admin_editar_trabajador_con_codigo',
       {
         p_tenant_id: 'A',
         p_campania_id: 'c1',
@@ -191,7 +191,8 @@ test('la ficha descarta una respuesta después de cambiar de empresa y el adapte
         p_dni: '12345678',
         p_nombres: 'Ana',
         p_apellidos: 'Rojas',
-        p_activo: false
+        p_activo: false,
+        p_codigo_externo: ''
       }
     ]
   ])

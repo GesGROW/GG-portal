@@ -12,7 +12,6 @@ export function crearTrabajadoresPortal({ puerto, scope, entitlements }) {
     Object.fromEntries(
       Object.entries({
         ...gestion,
-        guardarCodigo: (t, id, codigo) => puerto.guardarCodigo(t, id, codigo),
         listarCosecha: (t, filtros) => puerto.listarCosecha(t, filtros)
       }).map(([nombre, accion]) => [
         nombre,

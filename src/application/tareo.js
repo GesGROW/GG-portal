@@ -20,19 +20,20 @@ export function semanaTareo(fecha) {
 }
 
 export function tablaTareo(datos, periodo) {
-  if (!/^\d{6}-\d{2}$/.test(periodo) || +periodo.slice(4, 6) < 1 || +periodo.slice(4, 6) > 12 ||
-      +periodo.slice(7) < 1 || +periodo.slice(7) > 53) throw new Error('Ingresa un período válido: AAAAMM-SS.')
   if (!datos.filas.length) throw new Error('No hay producción en la semana seleccionada.')
   const filas = []
   const claves = new Set()
   for (const r of datos.filas) {
-    if (![r.codigoTrabajador, r.actividad, r.labor, r.consumidor].every(v => typeof v === 'string' && v.trim()))
-      throw new Error('Completa los códigos de trabajador, actividad, labor y consumidor antes de exportar.')
-    const clave = JSON.stringify([r.codigoTrabajador, r.actividad, r.labor, r.consumidor])
+    const p = periodo ?? r.periodo
+    if (typeof p !== 'string' || !/^\d{6}-\d{2}$/.test(p) || +p.slice(4, 6) < 1 || +p.slice(4, 6) > 12 ||
+        +p.slice(7) < 1 || +p.slice(7) > 53) throw new Error('El período interno del tareo es inválido.')
+    if (![r.codigoTrabajador, r.labor, r.consumidor].every(v => typeof v === 'string' && v.trim()))
+      throw new Error(`Falta una correspondencia interna de tareo para ${r.nombre}, ${r.lote ?? ''} ${r.variedad ?? ''}.`)
+    const clave = JSON.stringify([r.codigoTrabajador, p, r.actividad, r.labor, r.consumidor])
     if (claves.has(clave)) continue
     claves.add(clave)
-    filas.push([String(filas.length + 1).padStart(4, '0'), r.codigoTrabajador, r.nombre, periodo,
-      r.actividad, r.labor, r.consumidor, '', 'N', 0, 0, 0, 0, 0, 0, 0])
+    filas.push([String(filas.length + 1).padStart(4, '0'), r.codigoTrabajador, r.nombre, p,
+      r.actividad ?? '', r.labor, r.consumidor, '', 'N', 0, 0, 0, 0, 0, 0, 0])
   }
   return [columnasTareo, ...filas]
 }

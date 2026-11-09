@@ -1,25 +1,37 @@
-# Exportación de tareo de Quijas
+# Tareo de Quijas: correspondencias internas y descarga
 
-Desde Cosecha → Bonos → Exportar tareo de Quijas se consulta una semana de jueves a miércoles, independiente del período del reporte de bonos. Se respeta el filtro de cosechador. La selección de fechas y la consulta se delimitan en America/Lima.
+En Cosecha → Bonos, **Descargar tareo Excel** genera el archivo con un clic, utilizando la campaña, las fechas y el trabajador seleccionados en el reporte. No hay carga de padrón ni formulario de códigos al descargar.
 
-El archivo es XLSX, hoja TAREO, con 16 columnas en el orden del ejemplo de Quijas. Los días 01–07 contienen cero numérico; asistencia N; orden de producción vacía. No incluye importes de bonos ni calcula horas. La descarga conserva los códigos como texto, incluidos ceros iniciales, y no genera fórmulas a partir de datos de entrada.
+El XLSX contiene la hoja TAREO y las 16 columnas del formato de Quijas. Días 01–07: cero numérico; asistencia: N; orden de producción: vacía. No calcula horas ni incluye importes de bonos. Los códigos se escriben como texto, con ceros iniciales y sin interpretar fórmulas.
 
-## Fuente y correspondencias
+## Datos internos
 
-La vista previa contiene una fila por trabajador, lote y variedad con producción reportable en esa semana. No representa asistencia ni incluye automáticamente todo el padrón. La descarga agrupa combinaciones iguales de trabajador, actividad, labor y consumidor, incluso cuando provienen de distintos lotes internos.
+El padrón se carga una vez en `harvest_bonos_privado.padron_trabajadores`, por empresa, DNI y código externo. Sus datos personales no se incluyen en migraciones, fuentes ni fixtures. Se vincularon por DNI exacto 37 trabajadores existentes de Quijas; los 123 códigos quedan disponibles para futuras altas. El trigger completa el código al crear un trabajador que figure en el padrón. No se crean cuentas ni trabajadores automáticamente por cargar el padrón.
 
-El código externo del trabajador se administra también desde el editor de Trabajadores, después del alta. Se puede cargar un padrón XLSX con columnas CODIGO y DNI desde la exportación. La lectura ocurre en el navegador; se completan únicamente coincidencias exactas de DNI con los trabajadores mostrados. No se crean trabajadores, no se cambian nombres y no se cargan fechas de nacimiento. Los códigos se revisan antes de guardarse. Se rechazan identificadores incompletos y duplicados; no se adivinan ceros faltantes de un identificador numérico.
+El código se consulta y edita junto con nombres y apellidos en la ficha de **Cosechadores/Jaberos** de la campaña. Los cambios son atómicos bajo el permiso de gestión de Cosecha; no requieren el módulo WORKFORCE y no renuevan la jornada de un jabero.
 
-Actividad, labor y consumidor se configuran explícitamente por campaña, lote y variedad. Se conservan en un esquema privado para reutilizarlos; no se infieren de roles, del código del lote ni de la producción. Esta primera versión ofrece una imputación de cosecha por combinación, no un registro de varias labores y horas por persona.
+La labor procede de una correspondencia por empresa y función: COSECHADOR → 101333; JABERO → 160003. El código de actividad todavía no está confirmado y se deja vacío donde no esté configurado. No se deduce recortando el código de labor.
 
-## Período
+El consumidor procede de la combinación de lote y variedad de la cosecha, con catálogo externo guardado en `harvest_bonos_privado.consumidores` y relaciones en `consumidores_lote`. Para Quijas:
 
-Formato AAAAMM-SS. La sugerencia usa el año y mes del jueves inicial y su semana ISO; por ejemplo 2026-11-05 a 2026-11-11 propone 202611-45. Es editable porque la numeración oficial de Quijas y el mes/año de semanas que cruzan límites todavía requieren confirmación. La sugerencia no constituye un contrato de calendario externo.
+| Ubicación | Consumidor |
+| --- | --- |
+| Lote 02 / Ventura | TR011003 |
+| Lote 02 / Biloxi | TR011004 |
+| Lote 02 / Sekoya | TR011005, sector A provisional indicado por el usuario |
+| Lote Jerry | TR0110006, Jerry Farms |
+| Lote 07 | TR0110010 |
 
-## Permisos y despliegue
+Estas relaciones ya están cargadas. Si se necesita corregir una, se hace en **Configurar → Configuración general de la campaña → Consumidores del tareo**, con selección del catálogo existente y control de revisión. No se vuelve a ingresar al descargar.
 
-La consulta y descarga revalidan reports.view y acceso a campaña/cultivo mediante los controles existentes. Modificar códigos de trabajadores exige workforce.manage y el módulo WORKFORCE. Guardar imputaciones exige gestión del cultivo. Las tablas privadas no tienen acceso directo de clientes; las RPC públicas usan security invoker y delegan en funciones privadas con validaciones de empresa y permisos.
+## Producción, jaberos y períodos
 
-Aplicar la migración `backend/supabase/migrations/20261109203912_harvest_tareo_exportacion.sql` antes de desplegar el portal. No contiene datos personales ni códigos del padrón real. Los nuevos códigos y correspondencias comienzan sin completar; la exportación se habilita cuando todos los registros seleccionados tienen sus códigos.
+La fuente es la producción reportable. Para cada cosecha se incluye el cosechador y el jabero identificado por la sesión correspondiente. Se conservan los participantes históricos aunque sus asignaciones actuales cambien. El archivo agrupa por trabajador, semana, actividad, labor y consumidor, evitando duplicados por lecturas o sesiones. No representa asistencia ni incluye indiscriminadamente a todo el padrón.
 
-Los bonos existentes y sus reglas históricas permanecen independientes de esta exportación.
+Las fechas se delimitan en America/Lima y se respeta exactamente el rango filtrado, aunque abarque varias semanas. Cada semana va de jueves a miércoles. El período AAAAMM-SS se obtiene del jueves inicial: año/mes calendario y semana ISO de ese jueves. Por ejemplo, del 5 al 11 de noviembre de 2026 corresponde a 202611-45. El criterio de semanas que cruzan mes/año queda documentado para ajustarlo si Quijas confirma otra convención.
+
+La consulta y descarga verifican reports.view, empresa y acceso al cultivo/campaña. Los catálogos y el padrón son privados; no tienen acceso directo para clientes. Las reglas y cálculos existentes de bonos permanecen independientes.
+
+## Migraciones
+
+Se requieren las migraciones de exportación `20261109203912`, datos internos `20261109212036` y configuración de consumidores `20261109212353`. Las dos últimas se aplicaron en Supabase durante esta corrección; los archivos locales conservan las versiones registradas remotamente. La carga inicial del padrón y catálogos es una operación de datos separada del esquema.

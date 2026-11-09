@@ -1,8 +1,4 @@
 export const exportacionCsv = Object.freeze({
-  async leerPadron(archivo) {
-    const { leerPadron } = await import('./leerPadron.js')
-    return leerPadron(archivo)
-  },
   async serializarTareo(tabla) {
     const { crearTareoXlsx } = await import('./tareoXlsx.js')
     return crearTareoXlsx(tabla)

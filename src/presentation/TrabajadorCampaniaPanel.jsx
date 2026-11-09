@@ -29,7 +29,7 @@ function FichaTrabajadorSkeleton({ rol, puedeEditar }) {
       <div className="campaign-worker-form" aria-hidden="true" inert>
         <h3>Datos del trabajador</h3>
         <fieldset>
-          {['DNI', 'Nombres', 'Apellidos', 'Estado en esta campaña'].map((label) => (
+          {['DNI', 'Nombres', 'Apellidos', 'Código de trabajador', 'Estado en esta campaña'].map((label) => (
             <label key={label}>
               {label}
               <SkeletonBlock className="campaign-worker-control-placeholder" />
@@ -56,6 +56,7 @@ function FichaTrabajador({
     dni: persona.dni ?? '',
     nombres: persona.nombres ?? '',
     apellidos: persona.apellidos ?? '',
+    codigoExterno: persona.codigoExterno ?? '',
     activo: persona.activo
   })
   const [ocupado, setOcupado] = useState(false),
@@ -89,6 +90,7 @@ function FichaTrabajador({
         dni: r.dni,
         nombres: r.nombres,
         apellidos: r.apellidos,
+        codigoExterno: r.codigoExterno ?? '',
         activo: r.activo
       })
       setMensaje('Datos guardados.')
@@ -136,6 +138,11 @@ function FichaTrabajador({
             value={datos.apellidos}
             onChange={(e) => setDatos({ ...datos, apellidos: e.target.value })}
           />
+        </label>
+        <label>
+          Código de trabajador
+          <input type="text" maxLength={40} value={datos.codigoExterno}
+            onChange={e => setDatos({ ...datos, codigoExterno: e.target.value })} />
         </label>
         <label>
           Estado en esta campaña

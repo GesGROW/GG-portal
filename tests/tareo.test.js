@@ -30,22 +30,24 @@ test('xlsx real conserva códigos, 16 columnas, asistencia N y siete ceros numé
   assert.match(sheet, /Pérez &amp; Díaz Ana/)
   assert.equal((sheet.match(/<v>0<\/v>/g) ?? []).length, 7)
   assert.doesNotMatch(sheet, /<f>|bono/i)
-  assert.throws(() => tablaTareo({ filas: [{ ...fila, consumidor: '' }] }, '202611-45'), /Completa/)
+  assert.throws(() => tablaTareo({ filas: [{ ...fila, consumidor: '' }] }, '202611-45'), /correspondencia interna/)
+  assert.equal(tablaTareo({ filas: [{ ...fila, actividad: null }] }, '202611-45')[1][4], '')
+  assert.equal(tablaTareo({ filas: [{ ...fila, periodo: '202611-45' }, { ...fila, periodo: '202611-46' }] }).length, 3)
   assert.throws(() => tablaTareo({ filas: [] }, '202611-45'), /No hay/)
   assert.throws(() => tablaTareo({ filas: [fila] }, '202613-45'), /período/)
 })
 test('exporta sólo snapshots de tareo propios y vuelve a comprobar autorización', async () => {
   const ports = fakePorts({ autenticado: true })
   fakeHarvestAdmin(ports); fakeCultivosCosecha(ports, { propio: true }); fakeReportes(ports)
-  ports.reportesHarvest.tareo = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, filas: [fila] } })
+  ports.reportesHarvest.tareoRango = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, hasta: f.hasta, filas: [{ ...fila, periodo: '202611-45' }] } })
   let archivo
   ports.exportacion.serializarTareo = async tabla => tabla
   ports.exportacion.guardar = async d => { archivo = d }
   const app = crearPortal(ports); await app.restaurar()
-  const r = await app.reportes.tareo({ campaniaId: 'A-camp', fecha: '2026-11-06' })
-  await app.reportes.exportarTareo(r, '202611-45')
+  await app.reportes.descargarTareo({ campaniaId: 'A-camp', desde: '2026-11-05', hasta: '2026-11-06' })
   assert.equal(archivo.contenido[1][1], '000123')
-  await assert.rejects(app.reportes.exportarTareo(structuredClone(r), '202611-45'))
+  ports.reportesHarvest.tareoRango = async () => ({ tenantId: 'B' })
+  await assert.rejects(app.reportes.descargarTareo({ campaniaId: 'A-camp', desde: '2026-11-05', hasta: '2026-11-06' }), /inválida/)
   ports.permisos.A = []
-  await assert.rejects(app.reportes.exportarTareo(r, '202611-45'))
+  await assert.rejects(app.reportes.descargarTareo({ campaniaId: 'A-camp', desde: '2026-11-05', hasta: '2026-11-06' }))
 })

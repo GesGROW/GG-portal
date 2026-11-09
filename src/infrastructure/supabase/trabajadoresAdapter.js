@@ -12,9 +12,6 @@ export function crearTrabajadoresAdapter(rpc) {
     p_rol: r
   })
   return Object.freeze({
-    guardarCodigo: (t, id, codigo) => rpc('workforce_admin_codigo_externo', {
-      p_tenant_id: t, p_id: id, p_codigo: codigo
-    }),
     listarCosecha: (t, filtros) =>
       rpc('workforce_cosecha_listar', { p_tenant_id: t, p_filtros: filtros }),
     listar: (t, { busqueda = '', activo = null, offset = 0 } = {}) =>

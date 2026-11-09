@@ -47,7 +47,7 @@ export function BonosCampania({ servicio, campania }) {
     </div>
     <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking />}>
       {(r) => <>
-        {servicio.tareo && <TareoExportacion servicio={servicio} campaniaId={campania.id} trabajadorId={trabajadorId} hoy={r.datos.hoy} />}
+        {servicio.descargarTareo && <TareoExportacion key={`${campania.id}:${trabajadorId}:${r.datos.desde}:${r.datos.hasta}`} servicio={servicio} campaniaId={campania.id} trabajadorId={trabajadorId} desde={r.datos.desde} hasta={r.datos.hasta} />}
         <div className="campaign-report-metrics" aria-label="Indicadores de bonos">
           <article><h3>Bono total generado</h3><strong>{soles(r.datos.totalBono)}</strong></article>
           <article><h3>Jabas adicionales</h3><strong>{r.datos.totalAdicionales}</strong></article>

@@ -325,7 +325,6 @@ function EditorTrabajador({
 }) {
   const dialog = useRef(null)
   const [persona, setPersona] = useState(trabajador)
-  const [codigoExterno, setCodigoExterno] = useState(trabajador.codigoExterno ?? '')
   const [datos, setDatos] = useState({
     dni: trabajador.dni ?? '',
     nombres: trabajador.nombres ?? '',
@@ -426,20 +425,6 @@ function EditorTrabajador({
         </button>
       </header>
       <Aviso error={mutacion.error} mensaje={mensaje} />
-      {persona.id && servicio.guardarCodigo && <form className="worker-personal" onSubmit={e => {
-        e.preventDefault()
-        void ejecutar(async () => {
-          const actualizada = await servicio.guardarCodigo(persona.id, codigoExterno.trim())
-          setPersona(p => ({ ...p, ...actualizada }))
-        }, 'Código externo guardado.')
-      }}>
-        <h3>Código para tareo</h3>
-        <fieldset disabled={mutacion.ocupado}>
-          <label>Código externo del trabajador<input type="text" maxLength={40} value={codigoExterno}
-            onChange={e => setCodigoExterno(e.target.value)} /></label>
-          <button type="submit" className="workers-primary">Guardar código</button>
-        </fieldset>
-      </form>}
       <form onSubmit={guardar} className="worker-personal">
         <h3>Datos personales</h3>
         <fieldset disabled={mutacion.ocupado}>

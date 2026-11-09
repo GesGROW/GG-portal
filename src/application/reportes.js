@@ -2,7 +2,7 @@ import { crearReportesHarvest } from '@gesgrow/core/contexts/harvest/index.js'
 import { crearEntitlements } from '@gesgrow/core/contexts/platform/index.js'
 import { SolicitudObsoleta } from '../ports/administracion.js'
 import { serializarCsv } from '../ports/exportacion.js'
-import { semanaTareo, tablaTareo } from './tareo.js'
+import { tablaTareo } from './tareo.js'
 
 const congelar = (o) => {
   if (o && typeof o === 'object') {
@@ -34,34 +34,24 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
     }
   }
   return Object.freeze({
-    leerPadron: archivo => ejecutar(async () => {
-      if (!exportacion?.leerPadron) throw new Error('Importación de padrón no disponible.')
-      return exportacion.leerPadron(archivo)
-    }),
-    tareo: f => ejecutar(async c => {
-      const semana = semanaTareo(f.fecha)
-      const r = await puerto.tareo(c.tenantId, { campaniaId: f.campaniaId,
-        desde: semana.desde, trabajadorId: f.trabajadorId || null })
+    descargarTareo: f => ejecutar(async c => {
+      const fecha = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
+        Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v
+      if (!f?.campaniaId || !fecha(f.desde) || !fecha(f.hasta) || f.desde > f.hasta)
+        throw new Error('Selecciona un período válido para descargar el tareo.')
+      const r = await puerto.tareoRango(c.tenantId, { campaniaId: f.campaniaId,
+        desde: f.desde, hasta: f.hasta, trabajadorId: f.trabajadorId || null })
       if (r?.tenantId !== c.tenantId || r?.campaniaId !== f.campaniaId || r?.tipo !== 'TAREO' ||
-          r?.datos?.desde !== semana.desde || !Array.isArray(r?.datos?.filas))
+          r?.datos?.desde !== f.desde || r?.datos?.hasta !== f.hasta || !Array.isArray(r?.datos?.filas))
         throw new Error('Respuesta de tareo inválida.')
-      const snapshot = congelar(r)
-      snapshots.set(snapshot, c)
-      return snapshot
-    }),
-    guardarTareo: (campaniaId, datos) => ejecutar(c => puerto.guardarTareo(c.tenantId, campaniaId, datos)),
-    exportarTareo: (snapshot, periodo) => ejecutar(async c => {
-      const anterior = snapshots.get(snapshot)
-      if (!anterior || !scope.vigente(anterior) || anterior.tenantId !== c.tenantId || snapshot.tipo !== 'TAREO')
-        throw new SolicitudObsoleta()
-      if ((await servicio.validar(c.tenantId, snapshot.campaniaId)) !== true)
+      if ((await servicio.validar(c.tenantId, f.campaniaId)) !== true)
         throw new Error('Exportación no autorizada.')
-      const tabla = tablaTareo(snapshot.datos, periodo)
+      const tabla = tablaTareo(r.datos)
       if (!exportacion) throw new Error('Exportación no disponible.')
       if (!exportacion.serializarTareo) throw new Error('Exportación de tareo no disponible.')
       const contenido = await exportacion.serializarTareo(tabla)
       vigente(c)
-      return exportacion.guardar({ nombre: `tareo-${periodo}-${snapshot.datos.desde}.xlsx`,
+      return exportacion.guardar({ nombre: `tareo-${f.desde}-${f.hasta}.xlsx`,
         mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', contenido })
     }),
     ...(puerto.inicio ? { inicio: f => ejecutar(async c => {

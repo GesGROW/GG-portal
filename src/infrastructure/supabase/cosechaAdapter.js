@@ -1,5 +1,7 @@
 export function crearCosechaAdapter(consultar) {
   return Object.freeze({
+    consumidoresCampania: (t, c) => consultar('harvest_admin_tareo_consumidores', { p_tenant_id: t, p_campania_id: c }),
+    guardarConsumidoresCampania: (t, c, d) => consultar('harvest_admin_tareo_consumidores', { p_tenant_id: t, p_campania_id: c, p_datos: d }),
     bonoConfiguracion: (t, campania) => consultar('harvest_admin_bono_configuracion', {
       p_tenant_id: t, p_campania_id: campania
     }),
@@ -75,7 +77,7 @@ export function crearCosechaAdapter(consultar) {
         p_participacion_id: participacionId
       }),
     editarTrabajadorCampania: (t, campaniaId, rol, participacionId, d) =>
-      consultar('harvest_admin_editar_trabajador_campania', {
+      consultar('harvest_admin_editar_trabajador_con_codigo', {
         p_tenant_id: t,
         p_campania_id: campaniaId,
         p_rol: rol,
@@ -83,7 +85,8 @@ export function crearCosechaAdapter(consultar) {
         p_dni: d.dni,
         p_nombres: d.nombres,
         p_apellidos: d.apellidos,
-        p_activo: d.activo
+        p_activo: d.activo,
+        p_codigo_externo: d.codigoExterno ?? ''
       }),
     generar: (t, d) =>
       consultar('harvest_admin_generar', {
