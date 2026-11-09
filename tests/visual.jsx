@@ -13,6 +13,7 @@ import { fakeCultivosCosecha } from './support/fakeCultivosCosecha.js'
 import { impresionTickets } from '../src/infrastructure/impresionTickets.js'
 import { fakePda } from './support/fakePda.js'
 import { fakeBonos } from './support/fakeBonos.js'
+import { exportacionCsv } from '../src/infrastructure/exportacionCsv.js'
 import '@fontsource-variable/inter'
 import '../src/presentation/styles.css'
 const params = new URLSearchParams(location.search)
@@ -165,6 +166,17 @@ if (params.has('owner-modules')) {
 if (params.has('bonos')) {
   const bonos = fakeBonos(puertos, { mixto: params.has('recipientes') })
   if (params.has('bono-bloqueado')) bonos.bloquear()
+}
+if (params.has('tareo')) {
+  let filas = [{ trabajadorId: 'p1', codigoTrabajador: '000123', dni: '12345678', nombre: 'Pérez Ana',
+    loteId: 'l1', lote: 'Lote 02', variedadId: 'v1', variedad: 'Ventura', actividad: '004', labor: '004041', consumidor: 'TR011003' }]
+  puertos.exportacion = exportacionCsv
+  puertos.reportesHarvest.tareo = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, filas } })
+  puertos.reportesHarvest.guardarTareo = async (_, c, d) => {
+    filas = filas.map(r => ({ ...r, codigoTrabajador: d.trabajadores.find(t => t.id === r.trabajadorId)?.codigo ?? r.codigoTrabajador,
+      ...d.imputaciones.find(i => i.loteId === r.loteId && i.variedadId === r.variedadId) }))
+    return { ok: true }
+  }
 }
 if (params.has('home-recipientes')) {
   puertos.reportesHarvest.inicio = async (t, f) => {

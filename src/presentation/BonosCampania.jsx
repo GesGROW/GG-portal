@@ -6,6 +6,7 @@ import { Select } from './Select.jsx'
 import { DataTable } from './DataTable.jsx'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
 import { GraficoBonosDia } from './GraficoBonosDia.jsx'
+import { TareoExportacion } from './TareoExportacion.jsx'
 import './reportes-campania.css'
 import './bonos-campania.css'
 
@@ -46,6 +47,7 @@ export function BonosCampania({ servicio, campania }) {
     </div>
     <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking />}>
       {(r) => <>
+        {servicio.tareo && <TareoExportacion servicio={servicio} campaniaId={campania.id} trabajadorId={trabajadorId} hoy={r.datos.hoy} />}
         <div className="campaign-report-metrics" aria-label="Indicadores de bonos">
           <article><h3>Bono total generado</h3><strong>{soles(r.datos.totalBono)}</strong></article>
           <article><h3>Jabas adicionales</h3><strong>{r.datos.totalAdicionales}</strong></article>

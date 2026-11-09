@@ -10,6 +10,13 @@ export function crearReportesAdapter(consultar) {
     }
   }
   return Object.freeze({
+    tareo: (t, f) => ejecutar('harvest_reportes_tareo', {
+      p_tenant_id: t, p_campania_id: f.campaniaId, p_desde: f.desde,
+      p_trabajador_id: f.trabajadorId || null
+    }),
+    guardarTareo: (t, c, d) => ejecutar('harvest_admin_tareo_guardar', {
+      p_tenant_id: t, p_campania_id: c, p_datos: d
+    }),
     inicio: (t, f) => ejecutar('harvest_reportes_inicio', {
       p_tenant_id: t, p_campania_id: f.campaniaId, p_tipo: f.tipo, p_recipiente: f.recipiente ?? 'GENERAL'
     }),

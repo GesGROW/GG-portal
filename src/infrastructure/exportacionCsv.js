@@ -1,4 +1,12 @@
 export const exportacionCsv = Object.freeze({
+  async leerPadron(archivo) {
+    const { leerPadron } = await import('./leerPadron.js')
+    return leerPadron(archivo)
+  },
+  async serializarTareo(tabla) {
+    const { crearTareoXlsx } = await import('./tareoXlsx.js')
+    return crearTareoXlsx(tabla)
+  },
   guardar({ nombre, mime, contenido }) {
     const url = URL.createObjectURL(new Blob([contenido], { type: mime }))
     const a = document.createElement('a')
