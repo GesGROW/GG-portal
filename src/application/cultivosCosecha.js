@@ -138,8 +138,11 @@ export function crearCultivosCosechaPortal({ puerto, scopePara, entitlements }) 
           d.umbral < 0 || d.umbral > 1000000 || !Number.isFinite(d.monto) || d.monto <= 0 ||
           d.monto > 1000000 || Math.abs(d.monto * 100 - Math.round(d.monto * 100)) > 1e-6)
         throw new Error('Ingresa un umbral entero y un monto positivo con hasta dos decimales.')
+      const jarras = { jarrasHabilitado: d.jarrasHabilitado ?? false, jarrasUmbral: d.jarrasUmbral ?? 30, jarrasMonto: d.jarrasMonto ?? 2 }
+      if (typeof jarras.jarrasHabilitado !== 'boolean' || !Number.isSafeInteger(jarras.jarrasUmbral) || jarras.jarrasUmbral < 0 || jarras.jarrasUmbral > 1000000 || !Number.isFinite(jarras.jarrasMonto) || jarras.jarrasMonto <= 0 || jarras.jarrasMonto > 1000000 || Math.abs(jarras.jarrasMonto * 100 - Math.round(jarras.jarrasMonto * 100)) > 1e-6)
+        throw new Error('Ingresa un umbral entero y un monto positivo con hasta dos decimales para jarras.')
       const r = await ejecutar('guardarBono', id, { habilitado: d.habilitado, umbral: d.umbral,
-        monto: d.monto, revision: d.revision, hoy: d.hoy })
+        monto: d.monto, ...(d.jarrasHabilitado !== undefined ? jarras : {}), revision: d.revision, hoy: d.hoy })
       if (r?.campaniaId !== id) throw new Error('El bono no corresponde a la campaña solicitada.')
       return r
     },

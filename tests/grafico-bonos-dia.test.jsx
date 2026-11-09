@@ -11,6 +11,16 @@ const datos = {
   ]
 }
 describe('Gráfico diario de bonos',()=>{
+  it('alterna a jarras con su propio conteo, umbral y bono',async()=>{
+    const user=userEvent.setup()
+    const mixtos={...datos,detalle:datos.detalle.map(r=>({...r,jarras:45,jarrasHabilitado:true,jarrasUmbral:40,jarrasMonto:1.5,adicionalesJarras:5,bonoJarras:7.5,bonoJabas:r.bono,bono:r.bono+7.5}))}
+    render(<GraficoBonosDia datos={mixtos} />)
+    await user.selectOptions(screen.getByRole('combobox',{name:'Recipiente del gráfico de bonos'}),'JARRA')
+    expect(screen.queryByRole('option',{name:'General',exact:true})).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Umbral diario: 40 jarras')).toBeInTheDocument()
+    expect(screen.getByRole('button',{name:/Ana Rojas.*45 jarras, 5 adicionales/})).toHaveAccessibleName(/7.50/)
+    expect(screen.queryByLabelText('Umbral diario: 30 jabas')).not.toBeInTheDocument()
+  })
   it('muestra solo el día seleccionado y colorea únicamente las jabas adicionales',()=>{
     render(<GraficoBonosDia datos={datos} />)
     const ana=screen.getByRole('button',{name:/Ana Rojas.*32 jabas, 2 adicionales/})

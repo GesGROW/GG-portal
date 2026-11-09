@@ -188,6 +188,14 @@
   background: #fff;
   min-width: 0;
 }
+.campaign-report-metrics--with-weight {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-inline: 0;
+}
+.campaign-report-metrics--with-weight article {
+  height: auto;
+  min-height: calc(155 * var(--owner-scale));
+}
 .campaign-report-metrics h3 {
   margin: 0 0 calc(14 * var(--owner-scale));
   font-size: calc(16 * var(--owner-scale));
@@ -467,6 +475,9 @@
   display: flex;
 }
 @media (max-width: 1199px) {
+  .campaign-report-metrics--with-weight {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .campaign-report-toolbar {
     flex-wrap: wrap;
   }

@@ -18,6 +18,26 @@ async function preparar() {
   return {ports,app,bonos,user:userEvent.setup()}
 }
 describe('bonos de campaña',()=>{
+  it('muestra 0 kg en bonos sin lecturas',async()=>{
+    const {app}=await preparar()
+    const r=await app.reportes.bonos({campaniaId:'A-camp'})
+    const servicio={bonos:async()=>({...r,datos:{...r.datos,detalle:[],resumen:[],totalKgEstimados:null,totalBono:0,totalAdicionales:0}})}
+    render(<MemoryRouter><BonosCampania servicio={servicio} campania={{id:'A-camp'}} /></MemoryRouter>)
+    const titulo=await screen.findByRole('heading',{name:'Kg estimados',exact:true})
+    expect(within(titulo.closest('article')).getByText('0')).toBeInTheDocument()
+  })
+  it('configura el bono de jarras sin habilitar el de jabas',async()=>{
+    const {app,ports,user}=await preparar()
+    render(<BonoConfiguracion servicio={app.cultivosCosecha} campania={{id:'A-camp',estado:'ACTIVA'}} />)
+    await user.click(await screen.findByRole('checkbox',{name:'Habilitar bono de jarras'}))
+    const umbral=screen.getByLabelText('Umbral diario de jarras')
+    await user.clear(umbral); await user.type(umbral,'40')
+    const monto=screen.getByLabelText('Monto por jarra adicional (S/)')
+    await user.clear(monto); await user.type(monto,'1.5')
+    await user.click(screen.getByRole('button',{name:'Guardar bono'}))
+    await screen.findByRole('table',{name:'Historial del bono'})
+    expect(ports.calls.find(c=>c[0]==='guardarBono')[3]).toMatchObject({habilitado:false,jarrasHabilitado:true,jarrasUmbral:40,jarrasMonto:1.5})
+  })
   it('pagina las dos tablas de diez en diez con controles independientes',async()=>{
     const {app,user}=await preparar()
     const original=await app.reportes.bonos({campaniaId:'A-camp'})

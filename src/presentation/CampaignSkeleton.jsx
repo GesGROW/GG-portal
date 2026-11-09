@@ -200,7 +200,7 @@ export function CampaignGenerationSkeleton() {
   )
 }
 
-export function CampaignReportSkeleton({ ranking = false }) {
+export function CampaignReportSkeleton({ ranking = false, peso = false }) {
   const labels = ranking
     ? [
         'Cosechadores con registros',
@@ -217,8 +217,8 @@ export function CampaignReportSkeleton({ ranking = false }) {
     >
       <span className="sr-only">Cargando reporte…</span>
       <div aria-hidden="true">
-        <div className="campaign-report-metrics">
-          {labels.map((label) => (
+        <div className={`campaign-report-metrics${peso ? ' campaign-report-metrics--with-weight' : ''}`}>
+          {(peso ? [...labels, 'Kg estimados'] : labels).map((label) => (
             <article key={label}>
               <h3>{label}</h3>
               <strong>

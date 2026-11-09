@@ -64,11 +64,11 @@ const columnas = [
   }
 ]
 
-export function RankingCampania({ filas }) {
+export function RankingCampania({ filas, unidad = 'jabas' }) {
   return (
     <DataTable
       label="Ranking de cosechadores"
-      columns={columnas}
+      columns={columnas.map(c => c.key === 'jabas' ? { ...c, header: `Total ${unidad}` } : c)}
       data={filas}
       tableClassName="rendimiento-ranking-table"
       pageSize={10}
@@ -135,7 +135,7 @@ export function RendimientoSkeleton() {
   )
 }
 
-export function RendimientoCosechadores({ datos }) {
+export function RendimientoCosechadores({ datos, unidad = 'jabas' }) {
   const [orden, setOrden] = useState('MAYOR')
   const [modo, setModo] = useState('5')
   const [elegidos, setElegidos] = useState([])
@@ -182,7 +182,7 @@ export function RendimientoCosechadores({ datos }) {
             </Select>
           </label>
         </div>
-        <RankingCampania filas={filas} />
+        <RankingCampania filas={filas} unidad={unidad} />
       </section>
       <section
         className="rendimiento-evolucion"
@@ -275,6 +275,7 @@ export function RendimientoCosechadores({ datos }) {
           ))}
         </div>
         <GraficoRendimiento
+          unidad={unidad}
           fechas={datos.evolucion.map((d) => d.fecha)}
           series={visibles}
         />
@@ -283,7 +284,7 @@ export function RendimientoCosechadores({ datos }) {
   )
 }
 
-export function GraficoRendimiento({ fechas, series }) {
+export function GraficoRendimiento({ fechas, series, unidad = 'jabas' }) {
   const [dia, setDia] = useState(0)
   const [disponible, setDisponible] = useState(640)
   const contenedor = useRef(null)
@@ -325,7 +326,7 @@ export function GraficoRendimiento({ fechas, series }) {
         className="rendimiento-chart-scroll"
         tabIndex={0}
         role="region"
-        aria-label="Gráfico de jabas por día"
+        aria-label={`Gráfico de ${unidad} por día`}
       >
         <svg
           viewBox={`0 0 ${ancho} 330`}
@@ -349,7 +350,7 @@ export function GraficoRendimiento({ fechas, series }) {
             )
           }}
         >
-          <title id={`${id}-titulo`}>Evolución diaria de jabas por cosechador</title>
+          <title id={`${id}-titulo`}>Evolución diaria de {unidad} por cosechador</title>
           <desc id={`${id}-descripcion`}>
             Cada línea representa un cosechador. Los días sin registros quedan vacíos y
             no se conectan. Usa el selector de día para consultar los valores.
@@ -406,7 +407,7 @@ export function GraficoRendimiento({ fechas, series }) {
                     data-fecha={fechas[i]}
                   >
                     <title>
-                      {s.nombre}: {numero(v)} jabas · {fecha(fechas[i])}
+                      {s.nombre}: {numero(v)} {unidad} · {fecha(fechas[i])}
                     </title>
                   </circle>
                 )
@@ -461,7 +462,7 @@ export function GraficoRendimiento({ fechas, series }) {
               <dd>
                 {s.valores[actual] == null
                   ? 'Sin registro'
-                  : `${numero(s.valores[actual])} jabas`}
+                  : `${numero(s.valores[actual])} ${unidad}`}
               </dd>
             </div>
           ))}

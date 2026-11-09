@@ -163,7 +163,7 @@ if (params.has('owner-modules')) {
   comercial.datos.A.estado.modulos = []
 }
 if (params.has('bonos')) {
-  const bonos = fakeBonos(puertos)
+  const bonos = fakeBonos(puertos, { mixto: params.has('recipientes') })
   if (params.has('bono-bloqueado')) bonos.bloquear()
 }
 createRoot(document.getElementById('root')).render(

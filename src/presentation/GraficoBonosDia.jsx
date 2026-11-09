@@ -6,23 +6,37 @@ const fechaVisible = (d) => d.split('-').reverse().join('/')
 
 export function GraficoBonosDia({ datos }) {
   const [elegida, setElegida] = useState('')
+  const [recipiente, setRecipiente] = useState('JABA')
+  const jarras = recipiente === 'JARRA'
+  const etiqueta = jarras ? 'Jarras' : 'Jabas'
   const dia = elegida >= datos.desde && elegida <= datos.hasta ? elegida : datos.hasta
-  const filas = datos.detalle.filter(r => r.fecha === dia).sort((a, b) =>
+  const filas = datos.detalle.filter(r => r.fecha === dia).map(r => ({ ...r,
+    jabas: jarras ? (r.jarras ?? 0) : r.jabas,
+    habilitado: jarras ? r.jarrasHabilitado : r.habilitado,
+    umbral: jarras ? r.jarrasUmbral : r.umbral,
+    adicionales: jarras ? (r.adicionalesJarras ?? 0) : r.adicionales,
+    bono: jarras ? (r.bonoJarras ?? 0) : (r.bonoJabas ?? r.bono)
+  })).sort((a, b) =>
     b.jabas - a.jabas || a.nombre.localeCompare(b.nombre, 'es') || a.trabajadorId.localeCompare(b.trabajadorId))
-  return <section className="bonos-dia" aria-label="Jabas por cosechador del día">
+  return <section className="bonos-dia" aria-label={`${etiqueta} por cosechador del día`}>
     <div className="rendimiento-section-heading">
-      <h4>Jabas por cosechador</h4>
+      <h4>{etiqueta} por cosechador</h4>
+      <label className="bonos-dia-selector">Recipiente
+        <select aria-label="Recipiente del gráfico de bonos" value={recipiente} onChange={e => setRecipiente(e.target.value)}>
+          <option value="JABA">Jabas</option><option value="JARRA">Jarras</option>
+        </select>
+      </label>
       <label className="bonos-dia-selector">Día
         <input type="date" aria-label="Día del gráfico de bonos" min={datos.desde} max={datos.hasta}
           value={dia} onChange={e => setElegida(e.target.value)} />
       </label>
     </div>
-    {filas.length ? <BarrasBonos key={dia} filas={filas} dia={dia} />
+    {filas.length ? <BarrasBonos key={`${dia}:${recipiente}`} filas={filas} dia={dia} etiqueta={etiqueta} />
       : <CampaignTableEmpty>No hay registros de cosecha el {fechaVisible(dia)}.</CampaignTableEmpty>}
   </section>
 }
 
-function BarrasBonos({ filas, dia }) {
+function BarrasBonos({ filas, dia, etiqueta }) {
   const contenedor = useRef(null)
   const [disponible, setDisponible] = useState(680)
   useEffect(() => {
@@ -48,19 +62,19 @@ function BarrasBonos({ filas, dia }) {
   const barra = Math.min(60, espacio * 0.52)
   return <>
     <div className="bonos-dia-legend" aria-label="Leyenda del gráfico">
-      <span><i className="bonos-dia-base" aria-hidden="true" />{regla ? 'Jabas hasta el umbral' : 'Jabas recolectadas'}</span>
-      {regla && <><span><i className="bonos-dia-extra" aria-hidden="true" />Jabas con bono</span>
-        <span><i className="bonos-dia-umbral" aria-hidden="true" />Umbral: {umbral} jabas</span></>}
+      <span><i className="bonos-dia-base" aria-hidden="true" />{regla ? `${etiqueta} hasta el umbral` : `${etiqueta} recolectadas`}</span>
+      {regla && <><span><i className="bonos-dia-extra" aria-hidden="true" />{etiqueta} con bono</span>
+        <span><i className="bonos-dia-umbral" aria-hidden="true" />Umbral: {umbral} {etiqueta.toLowerCase()}</span></>}
       {!regla && <span>Bono no habilitado ese día</span>}
     </div>
     <div className="rendimiento-chart bonos-dia-chart">
-      <div ref={contenedor} className="bonos-dia-scroll" role="region" aria-label={`Gráfico de jabas del ${fechaVisible(dia)}`} tabIndex={0}>
-        <svg width={ancho} height="362" viewBox={`0 0 ${ancho} 362`} aria-label="Jabas diarias por cosechador">
+      <div ref={contenedor} className="bonos-dia-scroll" role="region" aria-label={`Gráfico de ${etiqueta.toLowerCase()} del ${fechaVisible(dia)}`} tabIndex={0}>
+        <svg width={ancho} height="362" viewBox={`0 0 ${ancho} 362`} aria-label={`${etiqueta} diarias por cosechador`}>
           <defs><pattern id={`bonos-rayado-${id}`} patternUnits="userSpaceOnUse" width="7" height="7">
             <rect width="7" height="7" fill="#e5efdf" />
             <path d="M-2 2 2-2 M0 7 7 0 M5 9 9 5" fill="none" stroke="#137d15" strokeWidth="1.3" />
           </pattern></defs>
-          <text x="8" y="18" className="bonos-dia-axis-label">Jabas</text>
+          <text x="8" y="18" className="bonos-dia-axis-label">{etiqueta}</text>
           {Array.from({ length: 7 }, (_, i) => i * paso).map(v => <g key={v} aria-hidden="true">
             <line x1={izquierda} x2={derecha} y1={y(v)} y2={y(v)} className="rendimiento-gridline" />
             <text x={izquierda - 10} y={y(v) + 4} textAnchor="end">{v}</text>
@@ -70,7 +84,7 @@ function BarrasBonos({ filas, dia }) {
             const adicionales = r.habilitado ? r.adicionales : 0
             const normales = r.jabas - adicionales
             const nombre = r.nombre.length > 15 ? r.nombre.slice(0, 14) + '…' : r.nombre
-            const descripcion = `${r.nombre}, DNI ${r.dni}. ${r.jabas} jabas, ${adicionales} adicionales. Bono ${soles(r.bono)}.`
+            const descripcion = `${r.nombre}, DNI ${r.dni}. ${r.jabas} ${etiqueta.toLowerCase()}, ${adicionales} adicionales. Bono ${soles(r.bono)}.`
             return <g key={r.trabajadorId} role="button" tabIndex={0} aria-label={descripcion}
               aria-pressed={actual.trabajadorId === r.trabajadorId} className="bonos-dia-bar"
               onMouseEnter={() => setSeleccion(r.trabajadorId)} onFocus={() => setSeleccion(r.trabajadorId)}
@@ -87,7 +101,7 @@ function BarrasBonos({ filas, dia }) {
               <text x={centro} y="320" textAnchor="middle">DNI {r.dni}</text>
             </g>
           })}
-          {regla && <g aria-label={`Umbral diario: ${umbral} jabas`} className="bonos-dia-threshold">
+          {regla && <g aria-label={`Umbral diario: ${umbral} ${etiqueta.toLowerCase()}`} className="bonos-dia-threshold">
             <line x1={izquierda} x2={derecha} y1={y(umbral)} y2={y(umbral)} />
             <text x={derecha} y={y(umbral) - 8} textAnchor="end">Umbral: {umbral}</text>
           </g>}
@@ -95,7 +109,7 @@ function BarrasBonos({ filas, dia }) {
         </svg>
       </div>
       <p className="bonos-dia-selection" aria-live="polite" aria-atomic="true">
-        <strong>{actual.nombre}</strong><span>DNI {actual.dni}</span><span>{actual.jabas} jabas</span>
+        <strong>{actual.nombre}</strong><span>DNI {actual.dni}</span><span>{actual.jabas} {etiqueta.toLowerCase()}</span>
         <span>{actual.adicionales} adicionales</span><strong>Bono: {soles(actual.bono)}</strong>
       </p>
     </div>

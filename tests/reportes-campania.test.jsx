@@ -14,6 +14,23 @@ function servicio() {
 }
 const campania = { id: 'A-camp', nombre: 'Campaña Arándano 2026', estado: 'ACTIVA' }
 describe('Reportes dentro de Cosecha', () => {
+  it.each([false,true])('muestra 0 kg sin lecturas (rendimiento=%s)', async rendimiento => {
+    const base=servicio()
+    const api={campania:async f=>{const r=await base.campania(f);return {...r,datos:{...r.datos,metricas:{...r.datos.metricas,totalJabas:0,kgEstimados:null}}}}}
+    render(<ReportesCampania servicio={api} campania={campania} rendimiento={rendimiento} />)
+    expect(within(await screen.findByRole('article',{name:'Kg estimados'})).getByText('0')).toBeInTheDocument()
+  })
+  it.each([false, true])('muestra el peso como quinta tarjeta y permite consultar paquetes generales (rendimiento=%s)', async (rendimiento) => {
+    const api = servicio(), user = userEvent.setup()
+    render(<ReportesCampania servicio={api} campania={campania} rendimiento={rendimiento} />)
+    const peso = await screen.findByRole('article', { name: 'Kg estimados' })
+    expect(within(peso).getByText('N/A')).toBeInTheDocument()
+    expect(within(screen.getByLabelText('Indicadores del reporte')).getAllByRole('article')).toHaveLength(5)
+    await user.selectOptions(screen.getByLabelText('Recipiente del reporte'), 'GENERAL')
+    expect(await screen.findByRole('article', { name: 'Total paquetes' })).toBeInTheDocument()
+    expect(api.campania).toHaveBeenLastCalledWith(expect.objectContaining({ recipiente: 'GENERAL' }))
+    expect(screen.queryByText(/Kg estimados: Sin peso/)).not.toBeInTheDocument()
+  })
   it('reemplaza una campaña de otra cuenta en la URL por la campaña autorizada actual', async () => {
     const api = servicio()
     render(<MemoryRouter initialEntries={['/cosecha/produccion?campania=empresa-anterior']}>

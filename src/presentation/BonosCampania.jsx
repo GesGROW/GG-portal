@@ -10,7 +10,17 @@ import './reportes-campania.css'
 import './bonos-campania.css'
 
 const soles = (n) => new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(n)
-const persona = { key: 'nombre', header: 'Cosechador', width: '28%', render: (r) => <span className="rendimiento-persona">
+const kilos = (r) => r.kgEstimados == null ? 'N/A' : `${new Intl.NumberFormat('es-PE', { maximumFractionDigits: 1 }).format(r.kgEstimados)}${r.lecturasSinPeso ? ' (parcial)' : ''}`
+const columnasRecipientes = [
+  { key: 'jabas', header: 'Jabas' }, { key: 'jarras', header: 'Jarras', render: r => r.jarras ?? 0 },
+  { key: 'kgEstimados', header: 'Kg estimados', render: kilos },
+  { key: 'adicionales', header: 'Jabas adicionales' },
+  { key: 'adicionalesJarras', header: 'Jarras adicionales', render: r => r.adicionalesJarras ?? 0 },
+  { key: 'bonoJabas', header: 'Bono de jabas', render: r => soles(r.bonoJabas ?? r.bono) },
+  { key: 'bonoJarras', header: 'Bono de jarras', render: r => soles(r.bonoJarras ?? 0) },
+  { key: 'bono', header: 'Bono total', render: r => soles(r.bono) }
+]
+const persona = { key: 'nombre', header: 'Cosechador', width: '300px', render: (r) => <span className="rendimiento-persona">
   <span className="rendimiento-persona-nombre" title={r.nombre}>{r.nombre}</span><small>DNI {r.dni}</small></span> }
 export function BonosCampania({ servicio, campania }) {
   const [periodo, setPeriodo] = useState({ desde: null, hasta: null }),
@@ -39,23 +49,22 @@ export function BonosCampania({ servicio, campania }) {
         <div className="campaign-report-metrics" aria-label="Indicadores de bonos">
           <article><h3>Bono total generado</h3><strong>{soles(r.datos.totalBono)}</strong></article>
           <article><h3>Jabas adicionales</h3><strong>{r.datos.totalAdicionales}</strong></article>
+          <article><h3>Jarras adicionales</h3><strong>{r.datos.totalAdicionalesJarras ?? 0}</strong></article>
+          <article><h3>Kg estimados{r.datos.totalKgEstimados != null && r.datos.lecturasSinPeso > 0 ? ' (parcial)' : ''}</h3><strong>{r.datos.totalKgEstimados == null ? (r.datos.detalle.length === 0 ? '0' : 'N/A') : new Intl.NumberFormat('es-PE', { maximumFractionDigits: 1 }).format(r.datos.totalKgEstimados)}</strong></article>
         </div>
         <section className="rendimiento-ranking" aria-label="Totales por cosechador">
           <div className="rendimiento-section-heading"><h3>Totales por cosechador</h3></div>
           <DataTable label="Totales de bonos por cosechador" pageSize={10} tableClassName="campaign-bonos-summary" data={r.datos.resumen} rowKey="trabajadorId"
             emptyState={<CampaignTableEmpty>No hay registros de cosecha en este período.</CampaignTableEmpty>}
-            columns={[persona, { key: 'jabas', header: 'Jabas' }, { key: 'adicionales', header: 'Jabas adicionales' },
-              { key: 'bono', header: 'Bono generado', render: (p) => soles(p.bono) }]} />
+            columns={[persona, ...columnasRecipientes]} />
         </section>
         <section className="rendimiento-ranking" aria-label="Detalle diario de bonos">
           <div className="rendimiento-section-heading"><h3>Detalle diario</h3></div>
           <GraficoBonosDia datos={r.datos} />
           <DataTable label="Detalle diario de bonos" pageSize={10} tableClassName="campaign-bonos-detail" data={r.datos.detalle} rowKey={(p) => `${p.trabajadorId}:${p.fecha}`}
             emptyState={<CampaignTableEmpty>No hay registros de cosecha en este período.</CampaignTableEmpty>}
-            columns={[{ key: 'fecha', header: 'Fecha', width: '13%', render: (p) => p.fecha.split('-').reverse().join('/') }, persona,
-              { key: 'jabas', header: 'Jabas', width: '8%' }, { key: 'umbral', header: 'Umbral', width: '9%', render: (p) => p.habilitado ? p.umbral : 'Sin bono' },
-              { key: 'monto', header: 'Por jaba', render: (p) => p.habilitado ? soles(p.monto) : 'Sin bono' },
-              { key: 'adicionales', header: 'Jabas adicionales' }, { key: 'bono', header: 'Bono generado', render: (p) => soles(p.bono) }]} />
+            columns={[{ key: 'fecha', header: 'Fecha', render: p => p.fecha.split('-').reverse().join('/') }, persona,
+              ...columnasRecipientes]} />
         </section>
       </>}
     </Carga>

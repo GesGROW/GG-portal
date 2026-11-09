@@ -56,7 +56,8 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
           loteId = null,
           variedadId = null,
           desde = null,
-          hasta = null
+          hasta = null,
+          recipiente
         } = f
         const fecha = (v) =>
           v === null ||
@@ -67,6 +68,7 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
         if (
           !campaniaId ||
           !['PRODUCCION', 'RENDIMIENTO'].includes(tipo) ||
+          (recipiente !== undefined && !['GENERAL','JABA','JARRA'].includes(recipiente)) ||
           !fecha(desde) ||
           !fecha(hasta) ||
           (desde && hasta && desde > hasta)
@@ -78,7 +80,8 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
           loteId: loteId || null,
           variedadId: variedadId || null,
           desde,
-          hasta
+          hasta,
+          ...(recipiente ? { recipiente } : {})
         })
         if (
           r?.tenantId !== c.tenantId ||
@@ -121,8 +124,8 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
 }
 function tablaCsv({ tipo, datos: d }) {
   if (tipo === 'BONOS') return {
-    columnas: ['Fecha', 'DNI', 'Cosechador', 'Jabas', 'Bono habilitado', 'Umbral', 'Monto por jaba (PEN)', 'Jabas adicionales', 'Bono generado (PEN)'],
-    filas: d.detalle.map((r) => [r.fecha, r.dni, r.nombre, r.jabas, r.habilitado ? 'Sí' : 'No', r.umbral, r.monto, r.adicionales, r.bono])
+    columnas: ['Fecha', 'DNI', 'Cosechador', 'Jabas', 'Jarras', 'Kg estimados', 'Lecturas sin peso', 'Bono habilitado', 'Umbral', 'Monto por jaba (PEN)', 'Jabas adicionales', 'Bono de jarras habilitado', 'Umbral de jarras', 'Monto por jarra (PEN)', 'Jarras adicionales', 'Bono de jabas (PEN)', 'Bono de jarras (PEN)', 'Bono generado (PEN)'],
+    filas: d.detalle.map((r) => [r.fecha, r.dni, r.nombre, r.jabas, r.jarras ?? 0, r.kgEstimados, r.lecturasSinPeso ?? 0, r.habilitado ? 'Sí' : 'No', r.umbral, r.monto, r.adicionales, r.jarrasHabilitado ? 'Sí' : 'No', r.jarrasUmbral, r.jarrasMonto, r.adicionalesJarras ?? 0, r.bonoJabas ?? r.bono, r.bonoJarras ?? 0, r.bono])
   }
   if (tipo === 'RESUMEN' || tipo === 'DASHBOARD')
     return {

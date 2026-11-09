@@ -9,6 +9,7 @@
 .campaign-settings[aria-label='Bono por jabas adicionales'] { margin-top: 40px; }
 .campaign-settings-heading h2 { margin: 0 0 8px; font-size: 28px; font-weight: 600; line-height: 1.2; }
 .campaign-settings fieldset { min-width: 0; margin: 0 0 28px; padding: 24px 0 0; border: 0; }
+.portal-layout.owner-layout .campaign-settings .campaign-settings-history .portal-data-table { min-width: 1100px; }
 .campaign-settings fieldset:disabled {
   background: transparent;
   color: var(--settings-ink);

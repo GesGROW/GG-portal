@@ -13,12 +13,13 @@ export function BonoConfiguracion({ servicio, campania }) {
       servicio={servicio} campania={campania} recargar={consulta.refrescar} onGuardado={() => setMensaje('Configuración del bono guardada.')} />}
   </Carga></>
 }
-function Editor({ datos, servicio, campania, recargar, onGuardado }) {
+function Editor({ datos: recibidos, servicio, campania, recargar, onGuardado }) {
+  const datos = { jarrasHabilitado: false, jarrasUmbral: 30, jarrasMonto: 2, ...recibidos }
   const [d, setD] = useState(datos), [ocupado, setOcupado] = useState(false),
     [error, setError] = useState('')
   const guardando = useRef(false)
   const bloqueado = datos.bloqueado || campania.estado !== 'ACTIVA'
-  const cambiado = d.habilitado !== datos.habilitado || d.umbral !== datos.umbral || d.monto !== datos.monto
+  const cambiado = d.habilitado !== datos.habilitado || d.umbral !== datos.umbral || d.monto !== datos.monto || d.jarrasHabilitado !== datos.jarrasHabilitado || d.jarrasUmbral !== datos.jarrasUmbral || d.jarrasMonto !== datos.jarrasMonto
   useEffect(() => {
     if (!cambiado) return
     const salir = (e) => { e.preventDefault(); e.returnValue = '' }
@@ -48,6 +49,17 @@ function Editor({ datos, servicio, campania, recargar, onGuardado }) {
             onChange={(e) => setD({ ...d, monto: e.target.value === '' ? '' : Number(e.target.value) })} /></label>
         </div>
       </fieldset>
+      <fieldset disabled={ocupado || bloqueado}>
+        <legend>Bono por jarras adicionales</legend>
+        <label className="campaign-settings-check"><input type="checkbox" checked={d.jarrasHabilitado}
+          onChange={(e) => setD({ ...d, jarrasHabilitado: e.target.checked })} />Habilitar bono de jarras</label>
+        <div className="campaign-settings-varieties">
+          <label>Umbral diario de jarras<input type="number" required min="0" max="1000000" step="1" value={d.jarrasUmbral}
+            onChange={(e) => setD({ ...d, jarrasUmbral: e.target.value === '' ? '' : Number(e.target.value) })} /></label>
+          <label>Monto por jarra adicional (S/)<input type="number" required min="0.01" max="1000000" step="0.01" value={d.jarrasMonto}
+            onChange={(e) => setD({ ...d, jarrasMonto: e.target.value === '' ? '' : Number(e.target.value) })} /></label>
+        </div>
+      </fieldset>
       {bloqueado && <p className="campaign-settings-help" role="status">{datos.bloqueado
         ? 'El bono está bloqueado porque ya se inició una sesión de lectura. Podrás modificarlo otro día, antes de la primera sesión y sin sesiones activas.'
         : 'La campaña está cerrada. Se conserva el historial del bono.'}</p>}
@@ -64,6 +76,9 @@ function Editor({ datos, servicio, campania, recargar, onGuardado }) {
         { key: 'creadoEn', header: 'Modificado', render: (r) => new Date(r.creadoEn).toLocaleString('es-PE', { timeZone: 'America/Lima' }) },
         { key: 'habilitado', header: 'Bono', render: (r) => r.habilitado ? 'Habilitado' : 'Deshabilitado' },
         { key: 'umbral', header: 'Umbral' }, { key: 'monto', header: 'Por jaba', render: (r) => soles(r.monto) },
+        { key: 'jarrasHabilitado', header: 'Bono de jarras', render: (r) => r.jarrasHabilitado ? 'Habilitado' : 'Deshabilitado' },
+        { key: 'jarrasUmbral', header: 'Umbral de jarras', render: (r) => r.jarrasUmbral ?? 30 },
+        { key: 'jarrasMonto', header: 'Por jarra', render: (r) => soles(r.jarrasMonto ?? 2) },
         { key: 'usuario', header: 'Usuario' }
       ]} />
     </section>

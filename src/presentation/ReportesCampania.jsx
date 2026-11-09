@@ -57,6 +57,8 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
   const [loteId, setLote] = useState(''),
     [variedadId, setVariedad] = useState('')
   const [periodo, setPeriodo] = useState({ desde: null, hasta: null })
+  const [recipiente, setRecipiente] = useState('JABA')
+  const unidad = recipiente === 'GENERAL' ? 'paquetes' : recipiente === 'JARRA' ? 'jarras' : 'jabas'
   const [anterior, setAnterior] = useState(null)
   const tipo = rendimiento ? 'RENDIMIENTO' : 'PRODUCCION'
   const consulta = useCarga(() => {
@@ -66,9 +68,10 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
       tipo,
       loteId,
       variedadId,
+      recipiente,
       ...periodo
     })
-  }, [servicio, campania.id, tipo, loteId, variedadId, periodo.desde, periodo.hasta])
+  }, [servicio, campania.id, tipo, loteId, variedadId, recipiente, periodo.desde, periodo.hasta])
   useEffect(() => {
     if (consulta.datos) setAnterior(consulta.datos.datos)
   }, [consulta.datos])
@@ -86,6 +89,11 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
     >
       <div className="campaign-report-toolbar">
         <h2>{titulo}</h2>
+        <label className="campaign-report-select"><span className="sr-only">Recipiente del reporte</span>
+          <Select aria-label="Recipiente del reporte" value={recipiente} onChange={e => setRecipiente(e.target.value)}>
+            <option value="GENERAL">General</option><option value="JABA">Jabas</option><option value="JARRA">Jarras</option>
+          </Select><ReportIcon name="chevron" />
+        </label>
         <label className="campaign-report-select">
           <span className="sr-only">Lote del reporte</span>
           <Select
@@ -130,7 +138,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
           cambiar={setPeriodo}
         />
       </div>
-      <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking={rendimiento} />}>
+      <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking={rendimiento} peso />}>
         {(respuesta) => {
           const d = respuesta.datos,
             m = d.metricas
@@ -139,18 +147,18 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
                 ['Cosechadores con registros', m.cosechadoresActivos],
                 ['Promedio por cosechador', m.promedioCosechador],
                 ['Mayor rendimiento', m.mayorRendimiento],
-                ['Total cosechado', m.totalJabas]
+                [recipiente === 'GENERAL' ? 'Total paquetes' : 'Total cosechado', m.totalJabas]
               ]
             : [
-                ['Total jabas', m.totalJabas],
-                ['Jabas hoy', m.jabasHoy],
+                [`Total ${unidad}`, m.totalJabas],
+                [`${recipiente === 'GENERAL' ? 'Paquetes' : recipiente === 'JARRA' ? 'Jarras' : 'Jabas'} hoy`, m.jabasHoy],
                 ['Promedio diario', m.promedioDiario],
                 ['Días de producción', m.diasProduccion]
               ]
           return (
             <>
               <div
-                className="campaign-report-metrics"
+                className="campaign-report-metrics campaign-report-metrics--with-weight"
                 aria-label="Indicadores del reporte"
               >
                 {tarjetas.map(([label, valor]) => (
@@ -159,9 +167,13 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
                     <strong>{numero(valor)}</strong>
                   </article>
                 ))}
+                <article aria-label="Kg estimados">
+                  <h3>Kg estimados{m.kgEstimados != null && m.lecturasSinPeso > 0 ? ' (parcial)' : ''}</h3>
+                  <strong>{m.kgEstimados == null ? (m.totalJabas === 0 ? '0' : 'N/A') : numero(m.kgEstimados)}</strong>
+                </article>
               </div>
               {rendimiento ? (
-                <RendimientoCosechadores datos={d} />
+                <RendimientoCosechadores key={recipiente} datos={d} unidad={unidad} />
               ) : (
                 <section
                   className="campaign-report-section"
@@ -169,7 +181,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
                   aria-label="Evolución de producción"
                 >
                   <h3>Evolución</h3>
-                  <EvolucionCampania dias={d.evolucion} hoy={d.hoy} />
+                  <EvolucionCampania dias={d.evolucion} hoy={d.hoy} unidad={unidad} />
                 </section>
               )}
             </>
@@ -282,7 +294,7 @@ export function PeriodoFiltro({ datos, rendimiento, cambiar, etiqueta = 'Períod
   )
 }
 
-export function EvolucionCampania({ dias, hoy }) {
+export function EvolucionCampania({ dias, hoy, unidad = 'jabas' }) {
   const sinProduccion = !dias.some((d) => d.jabas > 0)
   const maximo = Math.max(
     sinProduccion ? 40 : 20,
@@ -321,8 +333,8 @@ export function EvolucionCampania({ dias, hoy }) {
                 type="button"
                 className={d.fecha === hoy ? 'is-today' : ''}
                 style={{ height: `${(d.jabas / maximo) * 100}%` }}
-                aria-label={`${fecha(d.fecha)}: ${numero(d.jabas)} jabas`}
-                title={`${fecha(d.fecha)}: ${numero(d.jabas)} jabas`}
+                aria-label={`${fecha(d.fecha)}: ${numero(d.jabas)} ${unidad}`}
+                title={`${fecha(d.fecha)}: ${numero(d.jabas)} ${unidad}`}
               />
               <time dateTime={d.fecha}>{fecha(d.fecha)}</time>
             </li>
