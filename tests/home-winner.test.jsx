@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import { HomeWinner } from '../src/presentation/HomeSummaryParts.jsx'
 
 describe('Identidad del top cosechador', () => {
-  it.each([undefined, null, '', '  \t\n '])('muestra DNI sin nombre (%s)', (nombre) => {
+  it.each([undefined, null, '', '  \t\n ', 'Sin nombre registrado', 'sin nombre'])('muestra DNI sin nombre (%s)', (nombre) => {
     render(<HomeWinner ranking={[{
       cosechador: nombre, cosechador_dni: '01234567', total_jabas: 12
     }]} />)

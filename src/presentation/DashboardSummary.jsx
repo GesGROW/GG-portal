@@ -120,22 +120,24 @@ export function DashboardData({
         <div className="home-feature-cards">
           <HomeFeatureCard
             kind="production"
+            cambiar={cambiarRecipiente}
             title={embedded ? 'Producción' : 'Producción de campaña'}
             loading={consulta.cargando}
             footer={footer('diaria', 'Ver producción diaria')}
           >
             <EstadoConsulta consulta={consulta} skeleton={<HomeProductionValues />}>
-              {(r) => <HomeProductionValues datos={r.datos} cambiar={cambiarRecipiente} />}
+              {(r) => <HomeProductionValues datos={r.datos} />}
             </EstadoConsulta>
           </HomeFeatureCard>
           <HomeFeatureCard
             kind="ranking"
+            cambiar={cambiarRecipiente}
             title="Top cosechador"
             loading={ranking.cargando}
             footer={footer('ranking', 'Ver ranking completo')}
           >
             <EstadoConsulta consulta={ranking} skeleton={<HomeRankingPlaceholder />}>
-              {(r) => <HomeWinner ranking={r.datos.ranking} unidad={r.datos.unidad} cambiar={cambiarRecipiente} />}
+              {(r) => <HomeWinner ranking={r.datos.ranking} unidad={r.datos.unidad} />}
             </EstadoConsulta>
           </HomeFeatureCard>
         </div>

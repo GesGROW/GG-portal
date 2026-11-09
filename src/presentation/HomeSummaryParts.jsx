@@ -4,7 +4,7 @@ import { HomeIcon, homeLaurel } from './HomeAssets.jsx'
 import { SkeletonBlock } from './Skeleton.jsx'
 import { numero } from './formatoNumero.js'
 
-export function HomeFeatureCard({ kind, title, loading, footer, children }) {
+export function HomeFeatureCard({ kind, title, loading, footer, children, cambiar }) {
   const id = useId()
   return (
     <section
@@ -12,6 +12,8 @@ export function HomeFeatureCard({ kind, title, loading, footer, children }) {
       aria-labelledby={id}
       aria-busy={Boolean(loading)}
     >
+      {cambiar && <button type="button" className="home-card-toggle" onClick={cambiar}
+        aria-label={`Cambiar recipiente de ${title}`} title="Cambiar entre General, Jabas y Jarras" />}
       <header>
         <h3 id={id}>{title}</h3>
         <HomeIcon name={kind === 'production' ? 'production' : 'ranking'} />
@@ -35,12 +37,12 @@ function HomeNumber({ value, loading = false }) {
   )
 }
 
-export function HomeProductionValues({ datos, cambiar }) {
+export function HomeProductionValues({ datos }) {
   const unidad = datos?.unidad === 'PAQUETES' ? 'paquetes' : datos?.unidad === 'JARRAS' ? 'jarras' : 'jabas'
   return (
     <div className="home-production-values" aria-busy={!datos}>
       <dl>
-        <dt>{cambiar ? <button type="button" className="home-container-toggle" onClick={cambiar} title="Cambiar entre General, Jabas y Jarras">Total {unidad}</button> : `Total ${unidad}`}</dt>
+        <dt>Total {unidad}</dt>
         <dd>
           <HomeNumber value={datos?.resumen.total_jabas} loading={!datos} />
         </dd>
@@ -64,18 +66,20 @@ export function HomeRankingPlaceholder() {
   )
 }
 
-export function HomeWinner({ ranking, unidad, cambiar }) {
+export function HomeWinner({ ranking, unidad }) {
   const etiqueta = unidad === 'PAQUETES' ? 'Paquetes' : unidad === 'JARRAS' ? 'Jarras' : 'Jabas'
   const top = ranking[0]
+  const nombre = top?.cosechador?.trim()
+  const sinNombre = !nombre || ['sin nombre registrado', 'sin nombre'].includes(nombre.toLocaleLowerCase('es'))
   return top ? (
     <div className="home-winner content-ready">
       <strong className="home-winner-name">
-        {nombreCosechadorVisible(top.cosechador, top.cosechador_dni)}
+        {nombreCosechadorVisible(sinNombre ? '' : top.cosechador, top.cosechador_dni)}
       </strong>
       <div className="home-winner-score">
         <img className="home-laurel" src={homeLaurel} alt="" />
         <dl>
-          <dt>{cambiar ? <button type="button" className="home-container-toggle" onClick={cambiar} title="Cambiar entre General, Jabas y Jarras">{etiqueta}</button> : etiqueta}</dt>
+          <dt>{etiqueta}</dt>
           <dd>
             <HomeNumber value={top.total_jabas} />
           </dd>
@@ -84,7 +88,7 @@ export function HomeWinner({ ranking, unidad, cambiar }) {
     </div>
   ) : (
     <p className="home-ranking-empty content-ready" role="status">
-      {unidad ? 'No hay registros para el recipiente seleccionado.' : 'Nadie ha cosechado aún'}
+      Nadie ha cosechado aún
     </p>
   )
 }
