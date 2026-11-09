@@ -1,4 +1,5 @@
 import { useCarga } from './GestionUi.jsx'
+import { useState } from 'react'
 import { EstadoConsulta, fecha } from './Reportes.jsx'
 import { ReportLink } from './ReportLink.jsx'
 import { HomeIcon } from './HomeAssets.jsx'
@@ -24,20 +25,23 @@ export function DashboardData({
   revision,
   actualizar
 }) {
+  const [recipiente, setRecipiente] = useState('GENERAL')
+  const cambiarRecipiente = () => setRecipiente(r => ({GENERAL:'JABA',JABA:'JARRA',JARRA:'GENERAL'})[r])
   const consulta = useCarga(
-    () => servicio.consultar({ campaniaId: campania.id, tipo: 'DASHBOARD' }),
-    [servicio, campania.id, revision]
+    () => (servicio.inicio ?? servicio.consultar)({ campaniaId: campania.id, tipo: 'DASHBOARD', recipiente }),
+    [servicio, campania.id, revision, recipiente]
   )
   const ranking = useCarga(
     () =>
-      servicio.consultar({
+      (servicio.inicio ?? servicio.consultar)({
         campaniaId: campania.id,
         tipo: 'RANKING',
+        recipiente,
         periodo: 'CAMPANIA',
         busqueda: '',
         orden: 'mas-jabas'
       }),
-    [servicio, campania.id, revision]
+    [servicio, campania.id, revision, recipiente]
   )
   const lotes = useCarga(
     () =>
@@ -121,7 +125,7 @@ export function DashboardData({
             footer={footer('diaria', 'Ver producción diaria')}
           >
             <EstadoConsulta consulta={consulta} skeleton={<HomeProductionValues />}>
-              {(r) => <HomeProductionValues datos={r.datos} />}
+              {(r) => <HomeProductionValues datos={r.datos} cambiar={cambiarRecipiente} />}
             </EstadoConsulta>
           </HomeFeatureCard>
           <HomeFeatureCard
@@ -131,7 +135,7 @@ export function DashboardData({
             footer={footer('ranking', 'Ver ranking completo')}
           >
             <EstadoConsulta consulta={ranking} skeleton={<HomeRankingPlaceholder />}>
-              {(r) => <HomeWinner ranking={r.datos.ranking} />}
+              {(r) => <HomeWinner ranking={r.datos.ranking} unidad={r.datos.unidad} cambiar={cambiarRecipiente} />}
             </EstadoConsulta>
           </HomeFeatureCard>
         </div>

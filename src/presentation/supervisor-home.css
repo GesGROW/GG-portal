@@ -89,3 +89,7 @@
     display: none;
   }
 }
+
+.portal-layout .home-container-toggle,
+.portal-layout .home-container-toggle:is(:hover, :active) { appearance: none; display: inline; width: auto; min-height: 0; height: auto; border: 0; padding: 4px 0; margin: -4px 0; background: transparent; color: inherit; font: inherit; line-height: inherit; cursor: pointer; box-shadow: none; transform: none; }
+.home-container-toggle:focus-visible { outline: 2px solid #022f2a; outline-offset: 4px; border-radius: 4px; }

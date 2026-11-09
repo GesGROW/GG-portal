@@ -35,17 +35,18 @@ function HomeNumber({ value, loading = false }) {
   )
 }
 
-export function HomeProductionValues({ datos }) {
+export function HomeProductionValues({ datos, cambiar }) {
+  const unidad = datos?.unidad === 'PAQUETES' ? 'paquetes' : datos?.unidad === 'JARRAS' ? 'jarras' : 'jabas'
   return (
     <div className="home-production-values" aria-busy={!datos}>
       <dl>
-        <dt>Total jabas</dt>
+        <dt>{cambiar ? <button type="button" className="home-container-toggle" onClick={cambiar} title="Cambiar entre General, Jabas y Jarras">Total {unidad}</button> : `Total ${unidad}`}</dt>
         <dd>
           <HomeNumber value={datos?.resumen.total_jabas} loading={!datos} />
         </dd>
       </dl>
       <div className="home-today">
-        <span>Jabas hoy</span>
+        <span>{unidad[0].toUpperCase()+unidad.slice(1)} hoy</span>
         <strong>
           <HomeNumber value={datos?.hoy.total_jabas} loading={!datos} />
         </strong>
@@ -63,7 +64,8 @@ export function HomeRankingPlaceholder() {
   )
 }
 
-export function HomeWinner({ ranking }) {
+export function HomeWinner({ ranking, unidad, cambiar }) {
+  const etiqueta = unidad === 'PAQUETES' ? 'Paquetes' : unidad === 'JARRAS' ? 'Jarras' : 'Jabas'
   const top = ranking[0]
   return top ? (
     <div className="home-winner content-ready">
@@ -73,7 +75,7 @@ export function HomeWinner({ ranking }) {
       <div className="home-winner-score">
         <img className="home-laurel" src={homeLaurel} alt="" />
         <dl>
-          <dt>Jabas</dt>
+          <dt>{cambiar ? <button type="button" className="home-container-toggle" onClick={cambiar} title="Cambiar entre General, Jabas y Jarras">{etiqueta}</button> : etiqueta}</dt>
           <dd>
             <HomeNumber value={top.total_jabas} />
           </dd>
@@ -82,7 +84,7 @@ export function HomeWinner({ ranking }) {
     </div>
   ) : (
     <p className="home-ranking-empty content-ready" role="status">
-      Nadie ha cosechado aún
+      {unidad ? 'No hay registros para el recipiente seleccionado.' : 'Nadie ha cosechado aún'}
     </p>
   )
 }

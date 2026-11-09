@@ -37,7 +37,7 @@ describe('Reportes dentro de Cosecha', () => {
       <CampaniaCosecha servicio={{ campanias: async () => [campania] }} reportes={api}
         contexto={{ permite: (p) => ['harvest.view','reports.view'].includes(p) }} seccion="produccion" />
     </MemoryRouter>)
-    expect(await screen.findByRole('article', { name: 'Total jabas' })).toBeInTheDocument()
+    expect(await screen.findByRole('article', { name: 'Total paquetes' })).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'Campaña de cosecha' })).toHaveValue('A-camp')
     expect(api.campania).toHaveBeenCalledWith(expect.objectContaining({ campaniaId: 'A-camp' }))
     expect(screen.getByRole('link', { name: 'Rendimiento', exact: true })).toHaveAttribute('href', '/cosecha/rendimiento?campania=A-camp')
@@ -47,10 +47,10 @@ describe('Reportes dentro de Cosecha', () => {
     const api = servicio(),
       user = userEvent.setup()
     render(<ReportesCampania servicio={api} campania={campania} />)
-    const total = await screen.findByRole('article', { name: 'Total jabas' })
+    const total = await screen.findByRole('article', { name: 'Total paquetes' })
     expect(within(total).getByText('342')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Evolución' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '22/10/2026: 203 jabas' })).toHaveClass(
+    expect(screen.getByRole('button', { name: '22/10/2026: 203 paquetes' })).toHaveClass(
       'is-today'
     )
     await user.selectOptions(screen.getByLabelText('Variedad del reporte'), 'v1')
@@ -137,7 +137,7 @@ describe('Reportes dentro de Cosecha', () => {
         />
       </MemoryRouter>
     )
-    await screen.findByRole('article', { name: 'Total jabas' })
+    await screen.findByRole('article', { name: 'Total paquetes' })
     expect(screen.getByRole('link', { name: 'Reportes', exact: true })).toHaveAttribute(
       'aria-current',
       'page'
@@ -165,14 +165,14 @@ describe('Reportes dentro de Cosecha', () => {
     render(<ReportesCampania servicio={api} campania={campania} rendimiento />)
     await screen.findByRole('alert')
     await user.click(screen.getByRole('button', { name: 'Reintentar' }))
-    await screen.findByRole('article', { name: 'Total cosechado' })
+    await screen.findByRole('article', { name: 'Total paquetes' })
     await user.click(screen.getByText('15/10/2026 - Hoy'))
     await user.clear(screen.getByLabelText('Desde'))
     await user.type(screen.getByLabelText('Desde'), '2026-10-10')
     await user.clear(screen.getByLabelText('Hasta'))
     await user.type(screen.getByLabelText('Hasta'), '2026-10-11')
     await user.click(screen.getByRole('button', { name: 'Aplicar', exact: true }))
-    await screen.findByText('Nadie ha cosechado aún')
+    await screen.findByText('No hay registros para el recipiente y período seleccionados.')
     expect(screen.queryByRole('list', { name: 'Primeros tres cosechadores' })).not.toBeInTheDocument()
     expect(screen.queryByText('No hay producción registrada para estos filtros.')).not.toBeInTheDocument()
   })

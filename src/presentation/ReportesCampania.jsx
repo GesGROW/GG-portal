@@ -57,7 +57,7 @@ export function ReportesCampania({ servicio, campania, rendimiento = false }) {
   const [loteId, setLote] = useState(''),
     [variedadId, setVariedad] = useState('')
   const [periodo, setPeriodo] = useState({ desde: null, hasta: null })
-  const [recipiente, setRecipiente] = useState('JABA')
+  const [recipiente, setRecipiente] = useState('GENERAL')
   const unidad = recipiente === 'GENERAL' ? 'paquetes' : recipiente === 'JARRA' ? 'jarras' : 'jabas'
   const [anterior, setAnterior] = useState(null)
   const tipo = rendimiento ? 'RENDIMIENTO' : 'PRODUCCION'

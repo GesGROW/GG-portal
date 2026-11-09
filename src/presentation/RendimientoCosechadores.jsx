@@ -76,7 +76,7 @@ export function RankingCampania({ filas, unidad = 'jabas' }) {
       rowClassName={(p) =>
         [1, 2, 3].includes(p.posicion) ? `rendimiento-puesto-${p.posicion}` : undefined
       }
-      emptyState={<CampaignTableEmpty>Nadie ha cosechado aún</CampaignTableEmpty>}
+      emptyState={<CampaignTableEmpty>No hay registros para el recipiente y período seleccionados.</CampaignTableEmpty>}
     />
   )
 }

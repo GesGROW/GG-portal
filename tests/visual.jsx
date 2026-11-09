@@ -166,6 +166,16 @@ if (params.has('bonos')) {
   const bonos = fakeBonos(puertos, { mixto: params.has('recipientes') })
   if (params.has('bono-bloqueado')) bonos.bloquear()
 }
+if (params.has('home-recipientes')) {
+  puertos.reportesHarvest.inicio = async (t, f) => {
+    const r = await puertos.reportesHarvest.consultar(t, { ...f, periodo: 'CAMPANIA' })
+    const total = { GENERAL: 358, JABA: 0, JARRA: 358 }[f.recipiente]
+    r.datos.unidad = { GENERAL: 'PAQUETES', JABA: 'JABAS', JARRA: 'JARRAS' }[f.recipiente]
+    if (f.tipo === 'DASHBOARD') { r.datos.resumen.total_jabas = total; r.datos.hoy.total_jabas = 0 }
+    else r.datos.ranking = total ? [{ cosechador: 'Ana Rojas', cosechador_dni: '12345678', total_jabas: 12 }] : []
+    return r
+  }
+}
 createRoot(document.getElementById('root')).render(
   <MemoryRouter
     initialEntries={[

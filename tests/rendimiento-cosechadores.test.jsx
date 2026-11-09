@@ -187,7 +187,7 @@ describe('Evolución por cosechador', () => {
         datos={{ ...datos, ranking: [], evolucionCosechadores: [] }}
       />
     )
-    expect(screen.getByText('Nadie ha cosechado aún')).toBeInTheDocument()
+    expect(screen.getByText('No hay registros para el recipiente y período seleccionados.')).toBeInTheDocument()
     expect(container.querySelectorAll('circle')).toHaveLength(0)
     expect(screen.getByRole('slider')).toBeDisabled()
   })

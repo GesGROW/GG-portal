@@ -33,6 +33,14 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
     }
   }
   return Object.freeze({
+    ...(puerto.inicio ? { inicio: f => ejecutar(async c => {
+      if (!f?.campaniaId || !['DASHBOARD','RANKING'].includes(f.tipo)) throw new Error('Reporte de inicio inválido.')
+      if (f.recipiente && !['GENERAL','JABA','JARRA'].includes(f.recipiente)) throw new Error('Recipiente inválido.')
+      const r = await puerto.inicio(c.tenantId, { campaniaId: f.campaniaId, tipo: f.tipo, recipiente: f.recipiente ?? 'GENERAL' })
+      if (r?.tenantId !== c.tenantId || r?.campaniaId !== f.campaniaId || r?.tipo !== f.tipo || r?.datos?.ok !== true)
+        throw new Error('Respuesta de inicio inválida.')
+      return congelar(r)
+    }) } : {}),
     bonos: (f) => ejecutar(async (c) => {
       const fecha = (v) => v == null || (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
         Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v)

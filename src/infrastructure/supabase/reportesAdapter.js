@@ -10,6 +10,9 @@ export function crearReportesAdapter(consultar) {
     }
   }
   return Object.freeze({
+    inicio: (t, f) => ejecutar('harvest_reportes_inicio', {
+      p_tenant_id: t, p_campania_id: f.campaniaId, p_tipo: f.tipo, p_recipiente: f.recipiente ?? 'GENERAL'
+    }),
     bonos: (t, f) => ejecutar('harvest_reportes_bonos', {
       p_tenant_id: t, p_campania_id: f.campaniaId, p_desde: f.desde ?? null,
       p_hasta: f.hasta ?? null, p_trabajador_id: f.trabajadorId || null
