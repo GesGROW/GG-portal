@@ -63,4 +63,19 @@
   .bonos-dia-selector { width: 100%; justify-content: space-between; }
   .bonos-dia-chart { padding: 12px; }
 }
-.tareo-exportacion { margin-block: 16px 28px; }
+.campaign-bonus-report .campaign-report-toolbar { flex-wrap: wrap; }
+.tareo-exportacion { margin-inline-start: auto; position: relative; }
+.portal-layout.owner-layout .tareo-exportacion .bonos-descargar {
+  min-height: 46px; padding: 0 24px; border: 0; border-radius: 30px;
+  background: #d9d9d9; color: #022f2a; font: inherit; font-weight: 500;
+  white-space: nowrap;
+}
+.portal-layout.owner-layout .tareo-exportacion .bonos-descargar:hover { background: #c9d0c7; }
+.tareo-exportacion .bonos-descargar:focus-visible { outline: 2px solid #022f2a; outline-offset: 3px; }
+.tareo-exportacion .bonos-descargar:disabled { opacity: .6; cursor: wait; }
+.tareo-exportacion [role="alert"] { position: absolute; right: 0; z-index: 2; min-width: 240px; padding: 12px; background: white; color: #8b2626; }
+.bonos-exportacion-periodo { margin: 16px 0 24px; color: #526e67; font-size: 14px; }
+@media (max-width: 640px) {
+  .tareo-exportacion { flex-basis: 100%; }
+  .tareo-exportacion .bonos-descargar { width: 100%; }
+}

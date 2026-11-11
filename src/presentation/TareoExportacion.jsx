@@ -12,8 +12,8 @@ export function TareoExportacion({ servicio, campaniaId, trabajadorId, desde, ha
     finally { bloqueo.current = false; setOcupado(false) }
   }
   return <div className="tareo-exportacion">
-    <button type="button" className="secondary" disabled={ocupado} onClick={descargar}>
-      {ocupado ? 'Descargando…' : 'Descargar bonos Excel'}
+    <button type="button" className="bonos-descargar" disabled={ocupado} onClick={descargar}>
+      {ocupado ? 'Descargando…' : 'Descargar reporte'}
     </button>
     {error && <p role="alert">{error}</p>}
   </div>

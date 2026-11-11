@@ -1,10 +1,10 @@
 # Excel de bonos semanales
 
-Cosecha → Bonos → Descargar bonos Excel genera un XLSX de 17 columnas con un clic. Utiliza los filtros actuales del reporte. Cada fila corresponde a un trabajador y una semana de jueves a miércoles. Las siete columnas diarias contienen el bono de jabas más el bono de jarras; la última contiene Total semanal (S/). Los importes son números con dos decimales.
+Cosecha → Bonos → Descargar reporte genera un XLSX de 17 columnas con un clic. Utiliza los filtros actuales del reporte. Cada fila corresponde a un trabajador y una semana de jueves a miércoles. Las siete columnas diarias contienen el bono de jabas más el bono de jarras; la última contiene Total semanal (S/). Los importes son números con dos decimales.
 
 La consulta reutiliza harvest_reportes_bonos y sus reglas históricas, permisos y fecha America/Lima. No modifica el cálculo ni recalcula umbrales por lote. Los bonos se incluyen una sola vez por persona y día. El archivo verifica las sumas en céntimos contra los totales del backend antes de descargar.
 
-Si el filtro comprende varias semanas, se generan varias filas por trabajador. Si corta una semana, solo se incluyen los días filtrados; los restantes muestran cero. El período AAAAMM-SS utiliza año/mes y semana ISO del jueves inicial. Un día sin bono muestra 0,00.
+Si el filtro comprende varias semanas, se generan varias filas por trabajador. La descarga amplía los filtros a semanas completas: desde el jueves inicial hasta el miércoles final. Consulta bonos solo hasta hoy en Lima; los días futuros o sin producción muestran cero. La interfaz muestra el intervalo completo que se descargará. El período AAAAMM-SS utiliza año/mes y semana ISO del jueves inicial. Un día sin bono muestra 0,00.
 
 Los códigos, el catálogo de consumidores y las correspondencias internas de la integración anterior se recuperan del respaldo privado. No se pide cargar archivos al descargar. El código se edita junto al nombre del cosechador/jabero, y los consumidores se mantienen en Configuración de campaña. Jerry Farms conserva TR0110006; Lote 02/Sekoya conserva la asignación provisional A, TR011005.
 

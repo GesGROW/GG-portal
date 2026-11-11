@@ -6,6 +6,7 @@ import { Select } from './Select.jsx'
 import { DataTable } from './DataTable.jsx'
 import { CampaignTableEmpty } from './CampaignTableEmpty.jsx'
 import { GraficoBonosDia } from './GraficoBonosDia.jsx'
+import { semanaTareo } from '../application/tareo.js'
 import { TareoExportacion } from './TareoExportacion.jsx'
 import './reportes-campania.css'
 import './bonos-campania.css'
@@ -34,6 +35,9 @@ export function BonosCampania({ servicio, campania }) {
     if (consulta.datos && !trabajadorId) setCatalogo(consulta.datos.datos.resumen)
   }, [consulta.datos, trabajadorId])
   const datos = consulta.datos?.datos
+  const formatoFecha = f => f.split('-').reverse().join('/')
+  const periodoDescarga = datos?.desde && datos?.hasta
+    ? `${formatoFecha(semanaTareo(datos.desde).desde)} al ${formatoFecha(semanaTareo(datos.hasta).hasta)}` : null
   return <section className="campaign-report campaign-bonus-report" aria-label="Reporte de bonos">
     <div className="campaign-report-toolbar">
       <h2>Bonos</h2>
@@ -44,10 +48,12 @@ export function BonosCampania({ servicio, campania }) {
         </Select><ReportIcon name="chevron" />
       </label>
       <PeriodoFiltro key={`${datos?.desde}:${datos?.hasta}`} datos={datos} cambiar={setPeriodo} />
+        {datos && !consulta.cargando && servicio.descargarTareo && <TareoExportacion key={`${campania.id}:${trabajadorId}:${datos.desde}:${datos.hasta}`} servicio={servicio} campaniaId={campania.id} trabajadorId={trabajadorId} desde={datos.desde} hasta={datos.hasta} />}
     </div>
+    <p className="bonos-exportacion-periodo">{periodoDescarga && <>Descarga: {periodoDescarga}. </>}El reporte incluye semanas completas de jueves a miércoles. Los días sin datos aparecen en 0.</p>
     <Carga consulta={consulta} skeleton={<CampaignReportSkeleton ranking />}>
       {(r) => <>
-        {servicio.descargarTareo && <TareoExportacion key={`${campania.id}:${trabajadorId}:${r.datos.desde}:${r.datos.hasta}`} servicio={servicio} campaniaId={campania.id} trabajadorId={trabajadorId} desde={r.datos.desde} hasta={r.datos.hasta} />}
+
         <div className="campaign-report-metrics" aria-label="Indicadores de bonos">
           <article><h3>Bono total generado</h3><strong>{soles(r.datos.totalBono)}</strong></article>
           <article><h3>Jabas adicionales</h3><strong>{r.datos.totalAdicionales}</strong></article>

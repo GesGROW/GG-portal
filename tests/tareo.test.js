@@ -41,11 +41,18 @@ test('exporta sólo snapshots de tareo propios y vuelve a comprobar autorizació
   const ports = fakePorts({ autenticado: true })
   fakeHarvestAdmin(ports); fakeCultivosCosecha(ports, { propio: true }); fakeReportes(ports)
   ports.reportesHarvest.tareoRango = async (t, f) => ({ tenantId: t, campaniaId: f.campaniaId, tipo: 'TAREO', datos: { desde: f.desde, hasta: f.hasta, totalBono:14, filas: [{ ...fila, periodo: '202611-45', semanaInicio:'2026-11-05', dias:[{fecha:'2026-11-06',bono:14}], totalSemanal:14 }] } })
+  const original = ports.reportesHarvest.tareoRango
+  let consulta
+  ports.reportesHarvest.tareoRango = async (t, f) => { consulta = f; return original(t, f) }
   let archivo
   ports.exportacion.serializarTareo = async tabla => tabla
   ports.exportacion.guardar = async d => { archivo = d }
   const app = crearPortal(ports); await app.restaurar()
   await app.reportes.descargarTareo({ campaniaId: 'A-camp', desde: '2026-11-05', hasta: '2026-11-06' })
+  assert.equal(consulta.desde, '2026-11-05')
+  assert.equal(consulta.hasta, '2026-11-11')
+  assert.equal(archivo.nombre, 'bonos-semanales-2026-11-05-2026-11-11.xlsx')
+  assert.deepEqual(archivo.contenido[1].slice(9), [0,14,0,0,0,0,0,14])
   assert.equal(archivo.contenido[1][1], '000123')
   ports.reportesHarvest.tareoRango = async () => ({ tenantId: 'B' })
   await assert.rejects(app.reportes.descargarTareo({ campaniaId: 'A-camp', desde: '2026-11-05', hasta: '2026-11-06' }), /inválida/)

@@ -2,7 +2,7 @@ import { crearReportesHarvest } from '@gesgrow/core/contexts/harvest/index.js'
 import { crearEntitlements } from '@gesgrow/core/contexts/platform/index.js'
 import { SolicitudObsoleta } from '../ports/administracion.js'
 import { serializarCsv } from '../ports/exportacion.js'
-import { tablaTareo } from './tareo.js'
+import { tablaTareo, semanaTareo } from './tareo.js'
 
 const congelar = (o) => {
   if (o && typeof o === 'object') {
@@ -39,10 +39,14 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
         Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v
       if (!f?.campaniaId || !fecha(f.desde) || !fecha(f.hasta) || f.desde > f.hasta)
         throw new Error('Selecciona un período válido para descargar el tareo.')
+      const desde = semanaTareo(f.desde).desde, fin = semanaTareo(f.hasta).hasta
+      const hoy = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+      const hasta = fin < hoy ? fin : hoy
+      if (desde > hasta) throw new Error('La semana seleccionada todavía no tiene datos para descargar.')
       const r = await puerto.tareoRango(c.tenantId, { campaniaId: f.campaniaId,
-        desde: f.desde, hasta: f.hasta, trabajadorId: f.trabajadorId || null })
+        desde, hasta, trabajadorId: f.trabajadorId || null })
       if (r?.tenantId !== c.tenantId || r?.campaniaId !== f.campaniaId || r?.tipo !== 'TAREO' ||
-          r?.datos?.desde !== f.desde || r?.datos?.hasta !== f.hasta || !Array.isArray(r?.datos?.filas))
+          r?.datos?.desde !== desde || r?.datos?.hasta !== hasta || !Array.isArray(r?.datos?.filas))
         throw new Error('Respuesta de tareo inválida.')
       if ((await servicio.validar(c.tenantId, f.campaniaId)) !== true)
         throw new Error('Exportación no autorizada.')
@@ -51,7 +55,7 @@ export function crearReportesPortal({ puerto, scope, entitlements, exportacion }
       if (!exportacion.serializarTareo) throw new Error('Exportación de tareo no disponible.')
       const contenido = await exportacion.serializarTareo(tabla)
       vigente(c)
-      return exportacion.guardar({ nombre: `bonos-semanales-${f.desde}-${f.hasta}.xlsx`,
+      return exportacion.guardar({ nombre: `bonos-semanales-${desde}-${fin}.xlsx`,
         mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', contenido })
     }),
     ...(puerto.inicio ? { inicio: f => ejecutar(async c => {
