@@ -1,6 +1,6 @@
 export const columnasTareo = ['Item', 'Cod.Trabajador', 'Apellidos y Nombres', 'Periodo',
   'Cod.Actividad', 'Cod.Labor', 'Cod.Consumidor', 'Cod. Orden Produccion', 'Tipo Asistencia',
-  ...['Jueves', 'Viernes', 'Sábado', 'Domingo', 'Lunes', 'Martes', 'Miércoles'].map((dia, i) => `Dia ${String(i + 1).padStart(2, '0')} - ${dia} (S/)`), 'Total semanal (S/)']
+  ...Array.from({ length: 7 }, (_, i) => `Dia ${String(i + 1).padStart(2, '0')}`), 'Total semanal']
 
 export function semanaTareo(fecha) {
   const d = new Date(`${fecha}T12:00:00Z`)
