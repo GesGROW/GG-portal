@@ -43,7 +43,7 @@ export function tablaTareo(datos) {
     const suma = dias.reduce((a,b) => a+b,0)
     if (!Number.isFinite(r.totalSemanal) || Math.abs(suma / 100 - r.totalSemanal) > 1e-6)
       throw new Error('El total semanal no coincide con los bonos diarios.')
-    return [String(i+1).padStart(4,'0'), r.codigoTrabajador ?? '', r.nombre, r.periodo,
+    return [String(i+1).padStart(4,'0'), r.codigoTrabajador ?? '', r.nombre.toLocaleUpperCase('es-PE'), r.periodo,
       r.actividad ?? '', r.labor ?? '', r.consumidor ?? '', '', 'N', ...dias.map(n => n/100), suma/100]
   })
   const total = filas.reduce((s,r) => s + Math.round(r[16]*100),0)/100

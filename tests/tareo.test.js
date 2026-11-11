@@ -26,6 +26,7 @@ test('bonos jueves a miercoles, total exacto, dias vacios y rechazo de duplicado
   assert.equal(tabla[0].length, 17)
   assert.deepEqual(tabla[1].slice(9), [14, 0.3, 0, 0, 0, 0, 5.5, 19.8])
   assert.equal(tabla[1][1], '000123')
+  assert.equal(tabla[1][2], fila.nombre.toLocaleUpperCase('es-PE'))
   const zip = unzipSync(crearTareoXlsx(tabla)), sheet = strFromU8(zip['xl/worksheets/sheet1.xml'])
   assert.match(sheet, /A1:Q2/)
   assert.match(sheet, /<c r="Q2" s="2"><v>19.8<\/v>/)
