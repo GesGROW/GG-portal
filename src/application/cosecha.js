@@ -153,6 +153,7 @@ export function crearCosechaPortal({ puerto, scopePara, entitlements, impresion 
           dni: String(datos?.dni ?? '').trim(),
           nombres: String(datos?.nombres ?? '').trim(),
           apellidos: String(datos?.apellidos ?? '').trim(),
+          codigoExterno: String(datos?.codigoExterno ?? '').trim(),
           activo: datos?.activo
         }
         if (
@@ -161,6 +162,7 @@ export function crearCosechaPortal({ puerto, scopePara, entitlements, impresion 
           !d.apellidos ||
           d.nombres.length > 200 ||
           d.apellidos.length > 200 ||
+          d.codigoExterno.length > 40 ||
           typeof d.activo !== 'boolean'
         )
           throw new Error(

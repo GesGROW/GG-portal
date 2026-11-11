@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Carga, useCarga } from './GestionUi.jsx'
 import { Skeleton } from './Ui.jsx'
+import { ConsumidoresCampania } from './ConsumidoresCampania.jsx'
 import './configuracion-campania.css'
 
 export function ConfiguracionCampania({ servicio, campania, onGuardado }) {
   const consulta = useCarga(() => servicio.configuracionCampania(campania.id), [servicio, campania.id])
-  return <Carga consulta={consulta} skeleton={<Skeleton variant="form" />}>
+  return <><Carga consulta={consulta} skeleton={<Skeleton variant="form" />}>
     {(datos) => <EditorConfiguracion key={datos.revision} datos={datos} servicio={servicio}
       onGuardado={onGuardado} onRecargar={consulta.refrescar} />}
-  </Carga>
+  </Carga>{servicio.consumidoresCampania && <ConsumidoresCampania key={campania.id} servicio={servicio} campaniaId={campania.id} />}</>
 }
 
 function EditorConfiguracion({ datos, servicio, onGuardado, onRecargar }) {
